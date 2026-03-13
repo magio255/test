@@ -1,0 +1,8 @@
+me/jules/exploitfixer/listeners/PayloadListener.class
+me/jules/exploitfixer/listeners/EntityListener.class
+me/jules/exploitfixer/listeners/InventoryListener.class
+me/jules/exploitfixer/utils/ExploitUtil.class
+me/jules/exploitfixer/listeners/BookListener.class
+me/jules/exploitfixer/ExploitFixer.class
+me/jules/exploitfixer/listeners/SignListener.class
+me/jules/exploitfixer/listeners/LecternListener.class
