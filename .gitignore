@@ -1,6 +1,6 @@
 target/
 *.class
-*.jar
+# *.jar
 .mvn/
 .idea/
 *.iml
