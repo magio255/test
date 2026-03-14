@@ -46,6 +46,11 @@ payload-fix:
     - "voicechat:state"
     - "voicechat:secret"
     - "vv:server_details"
+    - "feather:client"
+    - "distant_horizons:message"
+    - "fabric:attachment_sync_v1"
+    - "appleskin:saturation"
+    - "essential:connection"
 
 # Frame Fix (Hustota entit)
 frame-fix:
