@@ -43,6 +43,9 @@ payload-fix:
     - "bungeecord:main"
     - "minecraft:bsign"
     - "minecraft:bedit"
+    - "voicechat:state"
+    - "voicechat:secret"
+    - "vv:server_details"
 
 # Frame Fix (Hustota entit)
 frame-fix:
