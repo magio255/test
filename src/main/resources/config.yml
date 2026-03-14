@@ -100,8 +100,8 @@ one-day-exploits:
 # Packet Limiter (Anti Netty Proxy / CPU Overload)
 packet-limiter:
   enabled: true
-  max-packets-per-second: 100
-  vl-threshold: 5
+  max-packets-per-second: 200
+  vl-threshold: 10
   printer-compatibility: true
 
 # Packet Logger
