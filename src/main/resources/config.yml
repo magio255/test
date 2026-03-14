@@ -61,3 +61,17 @@ frame-fix:
 packet-limiter:
   enabled: true
   max-packets-per-second: 100
+  vl-threshold: 5
+  printer-compatibility: true
+
+# Packet Logger
+packet-logger:
+  enabled: true
+  console: true
+  log-heavy-packets: true
+
+# Netty Crasher Protection
+netty-crasher:
+  enabled: true
+  # Block packets that take too long to process (simulated via size/depth)
+  max-packet-size: 32767
