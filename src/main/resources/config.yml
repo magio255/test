@@ -37,12 +37,12 @@ creative-fix:
 # Payload Fix
 payload-fix:
   enabled: true
-  # Povolit pouze vanilla a běžné kanály pluginů
+  # Povolit pouze vanilla a běžné kanály pluginů (musí být ve formátu namespace:key)
   allowed-channels:
     - "minecraft:brand"
-    - "BungeeCord"
-    - "MC|BSign"
-    - "MC|BEdit"
+    - "bungeecord:main"
+    - "minecraft:bsign"
+    - "minecraft:bedit"
 
 # Frame Fix (Hustota entit)
 frame-fix:
