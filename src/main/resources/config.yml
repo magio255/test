@@ -13,19 +13,19 @@ messages:
 
       &f❕ #fc9a54&lʏᴏᴜ'ʀᴇ ʙᴀɴɴᴇᴅ ꜰʀᴏᴍ ᴛʜᴇ sᴇʀᴠᴇʀ&r &f❕
 
-      #fc9a54👤 &fᴜsᴇʀɴᴀᴍᴇ &8→ #fc9a54%player% &8←
-      #fc9a54⌚ &fᴘᴜɴɪsʜᴇᴅ ᴏɴ &8→ #fc9a54%date% &8←
-      #fc9a54🛠 &fᴘᴜɴɪsʜᴇᴅ ʙʏ &8→ #fc9a54ExploitFixer &8←
-      #fc9a54✎ &fʀᴇᴀsᴏɴ &8→ #fc9a54%reason% &8←
+      #fc9a54👤 &fᴜsᴇʀɴᴀᴍᴇ &8→ #fc9a54$playerName &8←
+      #fc9a54⌚ &fᴘᴜɴɪsʜᴇᴅ ᴏɴ &8→ #fc9a54$dateStart &8←
+      #fc9a54🛠 &fᴘᴜɴɪsʜᴇᴅ ʙʏ &8→ #fc9a54$executor &8←
+      #fc9a54✎ &fʀᴇᴀsᴏɴ &8→ #fc9a54$reason &8←
 
       &f&m                                              &r
 
-      #fc9a54📆 &fᴇxᴘɪʀʏ ᴅᴀᴛᴇ &8→ #fc9a54Never &8←
-      #fc9a54⌛ &fᴇxᴘɪʀᴇs ɪɴ &8→ #fc9a54Permanent &8←
+      #fc9a54📆 &fᴇxᴘɪʀʏ ᴅᴀᴛᴇ &8→ #fc9a54$dateEnd &8←
+      #fc9a54⌛ &fᴇxᴘɪʀᴇs ɪɴ &8→ #fc9a54$duration &8←
 
       &f&m                                              &r
 
-      #fc9a54ℹ &fᴘᴜɴɪsʜᴍᴇɴᴛ ɪᴅ &8→ #fc9a54#%id% &8←
+      #fc9a54ℹ &fᴘᴜɴɪsʜᴍᴇɴᴛ ɪᴅ &8→ #fc9a54$id &8←
   notify-format: "&8[&cExploitFixer&8] &e%player% &7se pokusil o exploit: &c%reason%"
 
 # Sign Fix
