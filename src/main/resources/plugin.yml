@@ -1,7 +1,7 @@
 name: ExploitFixer
 version: 1.0
 main: me.jules.exploitfixer.ExploitFixer
-api-version: '1.20'
+api-version: '1.21'
 description: Anti-Crash and Anti-Dupe plugin.
 commands:
   exploitfixer:

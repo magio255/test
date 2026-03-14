@@ -48,3 +48,8 @@ payload-fix:
 frame-fix:
   enabled: true
   max-per-chunk: 50
+
+# Packet Limiter (Anti Netty Proxy / CPU Overload)
+packet-limiter:
+  enabled: true
+  max-packets-per-second: 100

@@ -1,8 +1,0 @@
-/app/src/main/java/me/jules/exploitfixer/ExploitFixer.java
-/app/src/main/java/me/jules/exploitfixer/listeners/BookListener.java
-/app/src/main/java/me/jules/exploitfixer/listeners/EntityListener.java
-/app/src/main/java/me/jules/exploitfixer/listeners/InventoryListener.java
-/app/src/main/java/me/jules/exploitfixer/listeners/LecternListener.java
-/app/src/main/java/me/jules/exploitfixer/listeners/PayloadListener.java
-/app/src/main/java/me/jules/exploitfixer/listeners/SignListener.java
-/app/src/main/java/me/jules/exploitfixer/utils/ExploitUtil.java
