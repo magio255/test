@@ -12,3 +12,6 @@ permissions:
   exploitfixer.admin:
     description: Allows use of ExploitFixer commands and receiving notifications.
     default: op
+  exploitfixer.printer:
+    description: Higher packet limits for Printer/Schematica.
+    default: false

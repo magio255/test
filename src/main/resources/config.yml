@@ -7,7 +7,25 @@ messages:
   reload: "&aKonfigurace byla úspěšně načtena."
   notifications-on: "&aUpozornění zapnuta."
   notifications-off: "&cUpozornění vypnuta."
-  kick-message: "&c[ExploitFixer] &7Byl jsi vyhozen za: &c%reason%"
+  kick-message: |
+    #FFEE59⚡  #fb6900&lczskSMP&r  #FFEE59⚡
+      &f&m                   &r
+
+      &f❕ #fc9a54&lʏᴏᴜ'ʀᴇ ʙᴀɴɴᴇᴅ ꜰʀᴏᴍ ᴛʜᴇ sᴇʀᴠᴇʀ&r &f❕
+
+      #fc9a54👤 &fᴜsᴇʀɴᴀᴍᴇ &8→ #fc9a54%player% &8←
+      #fc9a54⌚ &fᴘᴜɴɪsʜᴇᴅ ᴏɴ &8→ #fc9a54%date% &8←
+      #fc9a54🛠 &fᴘᴜɴɪsʜᴇᴅ ʙʏ &8→ #fc9a54ExploitFixer &8←
+      #fc9a54✎ &fʀᴇᴀsᴏɴ &8→ #fc9a54%reason% &8←
+
+      &f&m                                              &r
+
+      #fc9a54📆 &fᴇxᴘɪʀʏ ᴅᴀᴛᴇ &8→ #fc9a54Never &8←
+      #fc9a54⌛ &fᴇxᴘɪʀᴇs ɪɴ &8→ #fc9a54Permanent &8←
+
+      &f&m                                              &r
+
+      #fc9a54ℹ &fᴘᴜɴɪsʜᴍᴇɴᴛ ɪᴅ &8→ #fc9a54#%id% &8←
   notify-format: "&8[&cExploitFixer&8] &e%player% &7se pokusil o exploit: &c%reason%"
 
 # Sign Fix
@@ -56,6 +74,25 @@ payload-fix:
 frame-fix:
   enabled: true
   max-per-chunk: 50
+
+# Entity Fix
+entity-fix:
+  enabled: true
+
+# Anti-Forge
+anti-forge:
+  enabled: true
+  block-all: false # Set to true to block all Forge users
+
+# Specific Crasher Protection (Hypixel, PacketEvents, etc.)
+crasher-protection:
+  enabled: true
+  max-nbt-depth: 10
+  max-packet-size: 32767
+
+# One-Day Exploits
+one-day-exploits:
+  enabled: true
 
 # Packet Limiter (Anti Netty Proxy / CPU Overload)
 packet-limiter:
