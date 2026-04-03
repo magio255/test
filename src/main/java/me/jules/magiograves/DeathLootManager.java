@@ -1,4 +1,4 @@
-package me.jules.exploitfixer;
+package me.jules.magiograves;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,10 +16,10 @@ import java.util.UUID;
 
 public class DeathLootManager {
 
-    private final ExploitFixer plugin;
+    private final Magiograves plugin;
     private final Map<Location, DeathLoot> activeLoots = new HashMap<>();
 
-    public DeathLootManager(ExploitFixer plugin) {
+    public DeathLootManager(Magiograves plugin) {
         this.plugin = plugin;
         startCleanupTask();
     }
@@ -38,6 +38,15 @@ public class DeathLootManager {
 
     public DeathLoot getLoot(Location location) {
         return activeLoots.get(location.getBlock().getLocation());
+    }
+
+    public Location getLocationByInventory(Inventory inventory) {
+        for (Map.Entry<Location, DeathLoot> entry : activeLoots.entrySet()) {
+            if (entry.getValue().getInventory().equals(inventory)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     public void removeLoot(Location location) {

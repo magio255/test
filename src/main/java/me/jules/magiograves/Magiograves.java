@@ -1,8 +1,8 @@
-package me.jules.exploitfixer;
+package me.jules.magiograves;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class ExploitFixer extends JavaPlugin {
+public class Magiograves extends JavaPlugin {
 
     private DeathLootManager deathLootManager;
 
@@ -13,7 +13,7 @@ public class ExploitFixer extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DeathListener(this, deathLootManager), this);
         getServer().getPluginManager().registerEvents(new InteractionListener(this, deathLootManager), this);
 
-        getLogger().info("ExploitFixer has been enabled!");
+        getLogger().info("Magiograves has been enabled!");
     }
 
     @Override
@@ -21,7 +21,7 @@ public class ExploitFixer extends JavaPlugin {
         if (deathLootManager != null) {
             deathLootManager.cleanupAll();
         }
-        getLogger().info("ExploitFixer has been disabled!");
+        getLogger().info("Magiograves has been disabled!");
     }
 
     public DeathLootManager getDeathLootManager() {

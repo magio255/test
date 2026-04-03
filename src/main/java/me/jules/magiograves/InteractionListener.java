@@ -1,4 +1,4 @@
-package me.jules.exploitfixer;
+package me.jules.magiograves;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -13,10 +14,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class InteractionListener implements Listener {
 
-    private final ExploitFixer plugin;
+    private final Magiograves plugin;
     private final DeathLootManager deathLootManager;
 
-    public InteractionListener(ExploitFixer plugin, DeathLootManager deathLootManager) {
+    public InteractionListener(Magiograves plugin, DeathLootManager deathLootManager) {
         this.plugin = plugin;
         this.deathLootManager = deathLootManager;
     }
@@ -35,17 +36,28 @@ public class InteractionListener implements Listener {
     }
 
     @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Block block = event.getBlock();
+        if (block.getType() != Material.PLAYER_HEAD && block.getType() != Material.PLAYER_WALL_HEAD) return;
+
+        DeathLootManager.DeathLoot loot = deathLootManager.getLoot(block.getLocation());
+        if (loot != null) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("§cYou cannot break this grave! Right-click to loot it.");
+        }
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         Inventory inventory = event.getInventory();
         if (event.getView().getTitle().startsWith("Loot: ")) {
-            // Logic to check if inventory is empty after taking an item
             plugin.getServer().getScheduler().runTask(plugin, () -> {
                 if (isEmpty(inventory)) {
-                    // Find the location of the head by checking all active loots
-                    // (Slightly inefficient but works for now, alternatively store location in DeathLoot)
-                    // Let's refine DeathLoot to store its location if needed,
-                    // or just check if any player is still viewing the inventory.
-                    // For now, let's just let it expire or if it's empty, we could remove it.
+                    // Try to find the loot by checking all active loots (matching inventory)
+                    Location locToRemove = deathLootManager.getLocationByInventory(inventory);
+                    if (locToRemove != null) {
+                        deathLootManager.removeLoot(locToRemove);
+                    }
                 }
             });
         }

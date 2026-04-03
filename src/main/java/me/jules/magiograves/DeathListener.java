@@ -1,4 +1,4 @@
-package me.jules.exploitfixer;
+package me.jules.magiograves;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,10 +15,10 @@ import java.util.UUID;
 
 public class DeathListener implements Listener {
 
-    private final ExploitFixer plugin;
+    private final Magiograves plugin;
     private final DeathLootManager deathLootManager;
 
-    public DeathListener(ExploitFixer plugin, DeathLootManager deathLootManager) {
+    public DeathListener(Magiograves plugin, DeathLootManager deathLootManager) {
         this.plugin = plugin;
         this.deathLootManager = deathLootManager;
     }
