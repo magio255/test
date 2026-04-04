@@ -1,4 +1,4 @@
-package me.jules.magiograves;
+package me.jules.apexbuild;
 
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import net.kyori.adventure.text.Component;
@@ -24,12 +24,12 @@ import java.util.List;
 
 public class BuildGUI implements Listener {
 
-    private final Magiograves plugin;
+    private final ApexBuild plugin;
     private final NamespacedKey worldKey;
     private static final Component GUI_TITLE = Component.text("Build Menu", NamedTextColor.DARK_GRAY);
     private static final Component WORLDS_TITLE = Component.text("Existující světy", NamedTextColor.DARK_GRAY);
 
-    public BuildGUI(Magiograves plugin) {
+    public BuildGUI(ApexBuild plugin) {
         this.plugin = plugin;
         this.worldKey = new NamespacedKey(plugin, "world_name");
     }
@@ -111,6 +111,8 @@ public class BuildGUI implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (event.getClickedInventory() != event.getView().getTopInventory()) return;
+
         InventoryHolder holder = event.getInventory().getHolder();
 
         if (holder instanceof BuildHolder) {

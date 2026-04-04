@@ -1,4 +1,4 @@
-package me.jules.magiograves;
+package me.jules.apexbuild;
 
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
@@ -6,13 +6,14 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.WorldType;
 import org.bukkit.entity.Player;
 
 public class WorldManager {
 
     private static final long COOLDOWN_TIME = 5 * 60 * 1000; // 5 minut v ms
 
-    public static void createWorld(Magiograves plugin, Player player) {
+    public static void createWorld(ApexBuild plugin, Player player) {
         String worldName = "build_" + player.getName();
         MVWorldManager wm = plugin.getMultiverseCore().getMVWorldManager();
 
@@ -34,7 +35,8 @@ public class WorldManager {
 
         player.sendMessage(Component.text("Vytvářím tvůj svět... To může chvíli trvat.", NamedTextColor.GREEN));
 
-        boolean success = wm.addWorld(worldName, World.Environment.NORMAL, null, null, null, "FLAT", true);
+        // addWorld(String name, World.Environment env, String seed, WorldType type, Boolean generateStructures, String generator)
+        boolean success = wm.addWorld(worldName, World.Environment.NORMAL, null, WorldType.FLAT, true, null);
 
         if (success) {
             plugin.getCooldowns().put(player.getUniqueId(), now);
@@ -47,7 +49,7 @@ public class WorldManager {
         }
     }
 
-    public static void teleportToWorld(Magiograves plugin, Player player, String worldName) {
+    public static void teleportToWorld(ApexBuild plugin, Player player, String worldName) {
         MultiverseWorld mvWorld = plugin.getMultiverseCore().getMVWorldManager().getMVWorld(worldName);
         if (mvWorld != null) {
             player.teleport(mvWorld.getCBWorld().getSpawnLocation());
@@ -59,7 +61,7 @@ public class WorldManager {
         }
     }
 
-    public static void deleteWorld(Magiograves plugin, Player player) {
+    public static void deleteWorld(ApexBuild plugin, Player player) {
         String worldName = "build_" + player.getName();
         MVWorldManager wm = plugin.getMultiverseCore().getMVWorldManager();
 

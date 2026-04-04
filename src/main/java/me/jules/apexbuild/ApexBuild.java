@@ -1,4 +1,4 @@
-package me.jules.magiograves;
+package me.jules.apexbuild;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import net.kyori.adventure.text.Component;
@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Magiograves extends JavaPlugin {
+public class ApexBuild extends JavaPlugin {
 
     private MultiverseCore multiverseCore;
     private final HashMap<UUID, Long> cooldowns = new HashMap<>();
@@ -36,12 +36,12 @@ public class Magiograves extends JavaPlugin {
         // Registrace eventů
         Bukkit.getPluginManager().registerEvents(buildGUI, this);
 
-        getComponentLogger().info(Component.text("BuildManager (Magiograves) byl úspěšně zapnut."));
+        getComponentLogger().info(Component.text("Apex-Build byl úspěšně zapnut."));
     }
 
     @Override
     public void onDisable() {
-        getComponentLogger().info(Component.text("BuildManager (Magiograves) byl vypnut."));
+        getComponentLogger().info(Component.text("Apex-Build byl vypnut."));
     }
 
     public MultiverseCore getMultiverseCore() {

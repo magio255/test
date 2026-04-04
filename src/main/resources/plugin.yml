@@ -1,6 +1,6 @@
-name: Magiograves
+name: apex-build
 version: 1.0
-main: me.jules.magiograves.Magiograves
+main: me.jules.apexbuild.ApexBuild
 api-version: '1.21'
 depend: [Multiverse-Core]
 commands:

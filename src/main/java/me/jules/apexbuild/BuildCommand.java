@@ -1,4 +1,4 @@
-package me.jules.magiograves;
+package me.jules.apexbuild;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class BuildCommand implements CommandExecutor {
 
-    private final Magiograves plugin;
+    private final ApexBuild plugin;
 
-    public BuildCommand(Magiograves plugin) {
+    public BuildCommand(ApexBuild plugin) {
         this.plugin = plugin;
     }
 
