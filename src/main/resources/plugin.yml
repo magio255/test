@@ -1,7 +1,7 @@
 name: apex-build
 version: 1.0
 main: me.jules.apexbuild.ApexBuild
-api-version: '1.21'
+api-version: '1.20'
 depend: [Multiverse-Core]
 commands:
   build:

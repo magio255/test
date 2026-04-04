@@ -16,6 +16,8 @@ public class ApexBuild extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getComponentLogger().info(Component.text("Zapínám Apex-Build..."));
+
         // Kontrola Multiverse-Core
         if (Bukkit.getPluginManager().getPlugin("Multiverse-Core") instanceof MultiverseCore core) {
             this.multiverseCore = core;
@@ -31,6 +33,9 @@ public class ApexBuild extends JavaPlugin {
         // Registrace příkazů
         if (getCommand("build") != null) {
             getCommand("build").setExecutor(new BuildCommand(this));
+            getComponentLogger().info(Component.text("Příkaz /build byl registrován."));
+        } else {
+            getComponentLogger().error(Component.text("Příkaz /build se nepodařilo najít v plugin.yml!"));
         }
 
         // Registrace eventů
