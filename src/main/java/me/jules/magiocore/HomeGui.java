@@ -35,9 +35,12 @@ public class HomeGui implements Listener, InventoryHolder {
             Home home = homes.get(i);
 
             // Bed (Teleport)
-            ItemStack bed = new ItemStack(Material.RED_BED);
+            Material bedMaterial = (home != null) ? Material.BLUE_BED : Material.GREEN_BED;
+            String nameColor = (home != null) ? "§e" : "§a";
+
+            ItemStack bed = new ItemStack(bedMaterial);
             ItemMeta bedMeta = bed.getItemMeta();
-            bedMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§bDomov č. " + i));
+            bedMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(nameColor + "Domov č. " + i));
             if (home != null) {
                 bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7Klikni pro teleport.")));
             } else {
