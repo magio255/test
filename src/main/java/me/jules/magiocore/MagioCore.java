@@ -29,6 +29,12 @@ public class MagioCore extends JavaPlugin {
         getCommand("spawn").setExecutor(spawnCommands);
         getCommand("setspawn").setExecutor(spawnCommands);
 
+        GamemodeCommands gmCommands = new GamemodeCommands();
+        getCommand("gmc").setExecutor(gmCommands);
+        getCommand("gms").setExecutor(gmCommands);
+        getCommand("gmsp").setExecutor(gmCommands);
+        getCommand("gma").setExecutor(gmCommands);
+
         getServer().getPluginManager().registerEvents(homeGui, this);
 
         getLogger().info("MagioCore has been enabled!");
