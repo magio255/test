@@ -3,16 +3,32 @@
 # Join Message Settings
 join-message:
   show-head: true
-  format: "§8» §bWelcome §f%player% §bon the server!"
-  side-messages:
-    - ""
-    - "§b§lWELCOME"
-    - "§fWelcome on the server,"
-    - "§b%player%§f!"
-    - ""
-    - "§7Hope you enjoy your stay!"
-    - ""
-    - ""
+
+  # Global message shown when a player joins for the first time
+  first-join:
+    format: "§b%player% §7se poprvé připojil! Vítej na §bCZSK SMP§7!"
+    side-messages:
+      - ""
+      - "§b§lVÍTEJ"
+      - "§7Hráč §b%player%"
+      - "§7se poprvé"
+      - "§7připojil na"
+      - "§bCZSK SMP!"
+      - ""
+      - ""
+
+  # Private message shown to the player when they login
+  private-welcome:
+    format: "§7Vítej zpět, §b%player%§7! Doufáme, že si tu užiješ čas."
+    side-messages:
+      - ""
+      - "§b§lVÍTEJ ZPĚT"
+      - "§7Ahoj §b%player%§7!"
+      - "§7Doufáme, že si"
+      - "§7u nás na serveru"
+      - "§7užiješ spoustu"
+      - "§7zábavy!"
+      - ""
 
 # RTP GUI Settings
 rtp:
@@ -22,8 +38,6 @@ rtp:
     background: "BLACK_STAINED_GLASS_PANE"
     item:
       material: "PLAYER_HEAD"
-      # Base64 texture for the head. If material is not PLAYER_HEAD, this is ignored.
-      # Default: Overworld/Earth head texture
       texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmFhYmFmYmY2MTk0NWRmN2FjMWNkODkyYTcxNGRmZjdmYTE3OTFiOTQ5NjM2OTg0NWVlZDYyYWU0YmZkZjMifX19"
       slot: 13
       name: "§aOverworld"

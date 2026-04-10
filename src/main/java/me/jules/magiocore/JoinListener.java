@@ -20,10 +20,13 @@ public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        boolean firstJoin = !player.hasPlayedBefore();
 
         boolean showHead = plugin.getConfig().getBoolean("join-message.show-head", true);
-        String customJoinMessage = plugin.getConfig().getString("join-message.format", "§7Vítej na serveru, §b%player%§7!");
-        List<String> sideMessages = plugin.getConfig().getStringList("join-message.side-messages");
+
+        String configPath = firstJoin ? "join-message.first-join" : "join-message.private-welcome";
+        String format = plugin.getConfig().getString(configPath + ".format");
+        List<String> sideMessages = plugin.getConfig().getStringList(configPath + ".side-messages");
 
         // Disable default join message
         event.joinMessage(null);
@@ -36,16 +39,27 @@ public class JoinListener implements Listener {
                         String sideText = "";
                         if (i < sideMessages.size()) {
                             sideText = " " + sideMessages.get(i).replace("%player%", player.getName());
-                        } else if (i == 4) { // Default middle if no side messages
-                            sideText = " " + customJoinMessage.replace("%player%", player.getName());
+                        } else if (i == 4 && sideMessages.isEmpty()) {
+                            sideText = " " + format.replace("%player%", player.getName());
                         }
 
-                        Bukkit.broadcast(row.append(LegacyComponentSerializer.legacySection().deserialize(sideText)));
+                        Component finalRow = row.append(LegacyComponentSerializer.legacySection().deserialize(sideText));
+
+                        if (firstJoin) {
+                            Bukkit.broadcast(finalRow);
+                        } else {
+                            player.sendMessage(finalRow);
+                        }
                     }
                 });
             });
         } else {
-            Bukkit.broadcast(LegacyComponentSerializer.legacySection().deserialize(customJoinMessage.replace("%player%", player.getName())));
+            Component msg = LegacyComponentSerializer.legacySection().deserialize(format.replace("%player%", player.getName()));
+            if (firstJoin) {
+                Bukkit.broadcast(msg);
+            } else {
+                player.sendMessage(msg);
+            }
         }
     }
 }
