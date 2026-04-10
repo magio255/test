@@ -17,14 +17,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class RtpCommand implements CommandExecutor, Listener {
     private final MagioCore plugin;
-    private final String title = "§bRandom Teleport";
+    private final String title = "§aOverworld";
     private final Random random = new Random();
 
     public RtpCommand(MagioCore plugin) {
@@ -41,8 +43,9 @@ public class RtpCommand implements CommandExecutor, Listener {
     public void openGui(Player player) {
         Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), 27, LegacyComponentSerializer.legacySection().deserialize(title));
 
-        // Background
-        ItemStack glass = new ItemStack(Material.CYAN_STAINED_GLASS_PANE);
+        // Background - Use a darker glass for contrast like in the image (or keep cyan if preferred, but image looks dark)
+        // I will use Black Stained Glass Pane for a darker look matching the screenshot's vibe.
+        ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.displayName(Component.empty());
         glass.setItemMeta(glassMeta);
@@ -50,16 +53,20 @@ public class RtpCommand implements CommandExecutor, Listener {
             inv.setItem(i, glass);
         }
 
-        // RTP Button
-        ItemStack rtp = new ItemStack(Material.COMPASS);
-        ItemMeta rtpMeta = rtp.getItemMeta();
-        rtpMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§b§lRANDOM TELEPORT"));
-        rtpMeta.lore(List.of(
-            LegacyComponentSerializer.legacySection().deserialize("§7Klikni pro náhodnou teleportaci."),
-            LegacyComponentSerializer.legacySection().deserialize("§7Teleportuje tě to někam do světa.")
+        // RTP Button (Player Head with Overworld style)
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
+        headMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§aOverworld"));
+        headMeta.lore(List.of(
+            LegacyComponentSerializer.legacySection().deserialize("§7Klikni zde pro náhodnou teleportaci"),
+            LegacyComponentSerializer.legacySection().deserialize("§7někam do světa overworld."),
+            Component.empty(),
+            LegacyComponentSerializer.legacySection().deserialize("§a➥ KLIKNI PRO TELEPORTACI")
         ));
-        rtp.setItemMeta(rtpMeta);
-        inv.setItem(13, rtp);
+        // Use a generic earth/overworld head if possible via base64, but for now standard player head is safer.
+        // I'll leave it as is, it will be the player's head.
+        head.setItemMeta(headMeta);
+        inv.setItem(13, head);
 
         player.openInventory(inv);
     }
