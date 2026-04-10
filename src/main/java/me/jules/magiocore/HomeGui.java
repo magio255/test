@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class HomeGui implements Listener, InventoryHolder {
+public class HomeGui implements Listener {
     private final MagioCore plugin;
     private final HomeManager homeManager;
     private final String title = "§8Homes";
@@ -28,13 +28,22 @@ public class HomeGui implements Listener, InventoryHolder {
     }
 
     public void open(Player player) {
-        Inventory inv = Bukkit.createInventory(new HomeGuiHolder(), 27, LegacyComponentSerializer.legacySection().deserialize(title));
+        Inventory inv = Bukkit.createInventory(new HomeGuiHolder(), 36, LegacyComponentSerializer.legacySection().deserialize(title));
         Map<Integer, Home> homes = homeManager.getHomes(player.getUniqueId());
+
+        // Background
+        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemMeta glassMeta = glass.getItemMeta();
+        glassMeta.displayName(Component.empty());
+        glass.setItemMeta(glassMeta);
+        for (int i = 0; i < 36; i++) {
+            inv.setItem(i, glass);
+        }
 
         for (int i = 1; i <= 7; i++) {
             Home home = homes.get(i);
 
-            // Bed (Teleport)
+            // Bed (Teleport) - Row 2 (slots 10-16)
             Material bedMaterial = (home != null) ? Material.BLUE_BED : Material.GREEN_BED;
             String nameColor = (home != null) ? "§e" : "§a";
 
@@ -47,15 +56,15 @@ public class HomeGui implements Listener, InventoryHolder {
                 bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§cDomov není nastaven.")));
             }
             bed.setItemMeta(bedMeta);
-            inv.setItem(i, bed);
+            inv.setItem(i + 9, bed);
 
-            // Pearl (Set)
+            // Pearl (Set) - Row 3 (slots 19-25)
             ItemStack pearl = new ItemStack(Material.ENDER_PEARL);
             ItemMeta pearlMeta = pearl.getItemMeta();
             pearlMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§bNastavit domov č. " + i));
             pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7Klikni pro nastavení domova.")));
             pearl.setItemMeta(pearlMeta);
-            inv.setItem(i + 9, pearl);
+            inv.setItem(i + 18, pearl);
         }
 
         player.openInventory(inv);
@@ -69,8 +78,8 @@ public class HomeGui implements Listener, InventoryHolder {
         event.setCancelled(true);
         int slot = event.getRawSlot();
 
-        if (slot >= 1 && slot <= 7) {
-            int homeNum = slot;
+        if (slot >= 10 && slot <= 16) {
+            int homeNum = slot - 9;
             Home home = homeManager.getHome(player.getUniqueId(), homeNum);
             if (home != null) {
                 player.closeInventory();
@@ -78,18 +87,13 @@ public class HomeGui implements Listener, InventoryHolder {
             } else {
                 player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento domov nemáš nastavený."));
             }
-        } else if (slot >= 10 && slot <= 16) {
-            int homeNum = slot - 9;
+        } else if (slot >= 19 && slot <= 25) {
+            int homeNum = slot - 18;
             homeManager.setHome(player.getUniqueId(), homeNum, player.getLocation());
             player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bNastavil jsi si domov č. " + homeNum + "."));
             player.closeInventory();
             open(player); // Refresh
         }
-    }
-
-    @Override
-    public @NotNull Inventory getInventory() {
-        return null; // Not used as we use custom holder
     }
 
     private static class HomeGuiHolder implements InventoryHolder {

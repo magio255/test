@@ -47,6 +47,9 @@ commands:
   gma:
     description: Change gamemode to adventure.
     usage: /gma
+  rtp:
+    description: Random teleport.
+    usage: /rtp
 permissions:
   magiocore.home:
     description: Access to home commands.
@@ -72,3 +75,6 @@ permissions:
   magiocore.gma:
     description: Access to /gma.
     default: op
+  magiocore.rtp:
+    description: Access to /rtp.
+    default: true

@@ -36,7 +36,11 @@ public class MagioCore extends JavaPlugin {
         getCommand("gmsp").setExecutor(gmCommands);
         getCommand("gma").setExecutor(gmCommands);
 
+        RtpCommand rtpCommand = new RtpCommand(this);
+        getCommand("rtp").setExecutor(rtpCommand);
+
         getServer().getPluginManager().registerEvents(homeGui, this);
+        getServer().getPluginManager().registerEvents(rtpCommand, this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
         getLogger().info("MagioCore has been enabled!");
