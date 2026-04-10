@@ -50,6 +50,9 @@ commands:
   rtp:
     description: Random teleport.
     usage: /rtp
+  flyspeed:
+    description: Set your fly speed.
+    usage: /flyspeed [1-10]
 permissions:
   magiocore.home:
     description: Access to home commands.
@@ -78,3 +81,6 @@ permissions:
   magiocore.rtp:
     description: Access to /rtp.
     default: true
+  magiocore.flyspeed:
+    description: Access to /flyspeed.
+    default: op

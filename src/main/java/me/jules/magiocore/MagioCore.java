@@ -39,8 +39,12 @@ public class MagioCore extends JavaPlugin {
         RtpCommand rtpCommand = new RtpCommand(this);
         getCommand("rtp").setExecutor(rtpCommand);
 
+        FlySpeedCommand flySpeedCommand = new FlySpeedCommand();
+        getCommand("flyspeed").setExecutor(flySpeedCommand);
+
         getServer().getPluginManager().registerEvents(homeGui, this);
         getServer().getPluginManager().registerEvents(rtpCommand, this);
+        getServer().getPluginManager().registerEvents(flySpeedCommand, this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
         getLogger().info("MagioCore has been enabled!");
