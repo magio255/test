@@ -1,0 +1,18 @@
+# MagioCore Config
+
+# Join Message Settings
+join-message:
+  show-head: true
+  format: "§8» §bWelcome §f%player% §bon the server!"
+  side-messages:
+    - ""
+    - "§b§lWELCOME"
+    - "§fWelcome on the server,"
+    - "§b%player%§f!"
+    - ""
+    - "§7Hope you enjoy your stay!"
+    - ""
+    - ""
+
+# Spawn Location
+spawn: null

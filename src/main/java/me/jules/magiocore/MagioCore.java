@@ -9,6 +9,7 @@ public class MagioCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         homeManager = new HomeManager(this);
         homeGui = new HomeGui(this, homeManager);
         tpaManager = new TpaManager(this);
@@ -36,6 +37,7 @@ public class MagioCore extends JavaPlugin {
         getCommand("gma").setExecutor(gmCommands);
 
         getServer().getPluginManager().registerEvents(homeGui, this);
+        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
 
         getLogger().info("MagioCore has been enabled!");
     }
