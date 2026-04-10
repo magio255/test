@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,15 +19,20 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class RtpCommand implements CommandExecutor, Listener {
     private final MagioCore plugin;
-    private final String title = "§aOverworld";
     private final Random random = new Random();
 
     public RtpCommand(MagioCore plugin) {
@@ -41,34 +47,71 @@ public class RtpCommand implements CommandExecutor, Listener {
     }
 
     public void openGui(Player player) {
-        Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), 27, LegacyComponentSerializer.legacySection().deserialize(title));
+        ConfigurationSection config = plugin.getConfig().getConfigurationSection("rtp.gui");
+        if (config == null) return;
 
-        // Background - Use a darker glass for contrast like in the image (or keep cyan if preferred, but image looks dark)
-        // I will use Black Stained Glass Pane for a darker look matching the screenshot's vibe.
-        ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        String title = config.getString("title", "§aOverworld");
+        int rows = config.getInt("rows", 3);
+        Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), rows * 9, LegacyComponentSerializer.legacySection().deserialize(title));
+
+        // Background
+        Material bgMaterial;
+        try {
+            bgMaterial = Material.valueOf(config.getString("background", "BLACK_STAINED_GLASS_PANE"));
+        } catch (IllegalArgumentException e) {
+            bgMaterial = Material.BLACK_STAINED_GLASS_PANE;
+        }
+        ItemStack glass = new ItemStack(bgMaterial);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.displayName(Component.empty());
         glass.setItemMeta(glassMeta);
-        for (int i = 0; i < 27; i++) {
+        for (int i = 0; i < inv.getSize(); i++) {
             inv.setItem(i, glass);
         }
 
-        // RTP Button (Player Head with Overworld style)
-        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta headMeta = (SkullMeta) head.getItemMeta();
-        headMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§aOverworld"));
-        headMeta.lore(List.of(
-            LegacyComponentSerializer.legacySection().deserialize("§7Klikni zde pro náhodnou teleportaci"),
-            LegacyComponentSerializer.legacySection().deserialize("§7někam do světa overworld."),
-            Component.empty(),
-            LegacyComponentSerializer.legacySection().deserialize("§a➥ KLIKNI PRO TELEPORTACI")
-        ));
-        // Use a generic earth/overworld head if possible via base64, but for now standard player head is safer.
-        // I'll leave it as is, it will be the player's head.
-        head.setItemMeta(headMeta);
-        inv.setItem(13, head);
+        // RTP Button
+        ConfigurationSection itemConfig = config.getConfigurationSection("item");
+        if (itemConfig != null) {
+            Material material;
+            try {
+                material = Material.valueOf(itemConfig.getString("material", "PLAYER_HEAD"));
+            } catch (IllegalArgumentException e) {
+                material = Material.PLAYER_HEAD;
+            }
+            ItemStack item = new ItemStack(material);
+            ItemMeta meta = item.getItemMeta();
+
+            meta.displayName(LegacyComponentSerializer.legacySection().deserialize(itemConfig.getString("name", "§aOverworld")));
+            List<String> lore = itemConfig.getStringList("lore");
+            meta.lore(lore.stream().map(l -> LegacyComponentSerializer.legacySection().deserialize(l)).collect(Collectors.toList()));
+
+            if (material == Material.PLAYER_HEAD && itemConfig.contains("texture")) {
+                applyTexture((SkullMeta) meta, itemConfig.getString("texture"));
+            }
+
+            item.setItemMeta(meta);
+            inv.setItem(itemConfig.getInt("slot", 13), item);
+        }
 
         player.openInventory(inv);
+    }
+
+    private void applyTexture(SkullMeta meta, String base64) {
+        UUID uuid = UUID.nameUUIDFromBytes(base64.getBytes());
+        PlayerProfile profile = Bukkit.createProfile(uuid, "CustomHead");
+        PlayerTextures textures = profile.getTextures();
+
+        try {
+            String decoded = new String(Base64.getDecoder().decode(base64));
+            // Extract URL from json: {"textures":{"SKIN":{"url":"http://..."}}}
+            String urlStr = decoded.substring(decoded.indexOf("http"), decoded.lastIndexOf("\""));
+            textures.setSkin(new URL(urlStr));
+        } catch (Exception e) {
+            // Fallback or ignore
+        }
+
+        profile.setTextures(textures);
+        meta.setOwnerProfile(profile);
     }
 
     @EventHandler
@@ -77,7 +120,10 @@ public class RtpCommand implements CommandExecutor, Listener {
         if (!(event.getInventory().getHolder() instanceof RtpGuiHolder)) return;
 
         event.setCancelled(true);
-        if (event.getRawSlot() == 13) {
+        int slot = event.getRawSlot();
+        int rtpSlot = plugin.getConfig().getInt("rtp.gui.item.slot", 13);
+
+        if (slot == rtpSlot) {
             player.closeInventory();
             findRandomLocation(player);
         }
@@ -87,10 +133,10 @@ public class RtpCommand implements CommandExecutor, Listener {
         player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bHledám bezpečné místo..."));
 
         World world = player.getWorld();
-        int radius = 5000;
+        int radius = plugin.getConfig().getInt("rtp.settings.radius", 5000);
+        int maxAttempts = plugin.getConfig().getInt("rtp.settings.max-attempts", 10);
 
-        // Try 10 times to find a safe location
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < maxAttempts; i++) {
             int x = random.nextInt(radius * 2) - radius;
             int z = random.nextInt(radius * 2) - radius;
             int y = world.getHighestBlockYAt(x, z);
