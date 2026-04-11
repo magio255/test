@@ -53,6 +53,9 @@ commands:
   flyspeed:
     description: Set your fly speed.
     usage: /flyspeed [1-10]
+  playtime:
+    description: Show playtime.
+    usage: /playtime [player]
 permissions:
   magiocore.home:
     description: Access to home commands.
@@ -84,3 +87,6 @@ permissions:
   magiocore.flyspeed:
     description: Access to /flyspeed.
     default: op
+  magiocore.playtime:
+    description: Access to /playtime.
+    default: true

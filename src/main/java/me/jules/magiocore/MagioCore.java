@@ -42,6 +42,13 @@ public class MagioCore extends JavaPlugin {
         FlySpeedCommand flySpeedCommand = new FlySpeedCommand();
         getCommand("flyspeed").setExecutor(flySpeedCommand);
 
+        PlaytimeCommand playtimeCommand = new PlaytimeCommand();
+        getCommand("playtime").setExecutor(playtimeCommand);
+
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new MagioCoreExpansion(this).register();
+        }
+
         getServer().getPluginManager().registerEvents(homeGui, this);
         getServer().getPluginManager().registerEvents(rtpCommand, this);
         getServer().getPluginManager().registerEvents(flySpeedCommand, this);
