@@ -40,6 +40,11 @@ public class HomeCommands implements CommandExecutor {
                 return true;
             }
 
+            if (number > PlaytimeUtils.getMaxHomes(player)) {
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš oprávnění nastavit si tolik domovů. Tvůj limit je: " + PlaytimeUtils.getMaxHomes(player)));
+                return true;
+            }
+
             homeManager.setHome(player.getUniqueId(), number, player.getLocation());
             player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bNastavil jsi si domov č. " + number + "."));
             return true;
@@ -58,6 +63,11 @@ public class HomeCommands implements CommandExecutor {
                 Home home = homeManager.getHome(player.getUniqueId(), number);
                 if (home == null) {
                     player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento domov nemáš nastavený."));
+                    return true;
+                }
+
+                if (number > PlaytimeUtils.getMaxHomes(player)) {
+                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš oprávnění teleportovat se k tomuto domovu (limit: " + PlaytimeUtils.getMaxHomes(player) + ")."));
                     return true;
                 }
 

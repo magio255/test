@@ -43,6 +43,10 @@ public class MagioCoreExpansion extends PlaceholderExpansion {
             return PlaytimeUtils.formatPlaytime(player);
         }
 
+        if (params.equalsIgnoreCase("max_homes")) {
+            return String.valueOf(PlaytimeUtils.getMaxHomes(player));
+        }
+
         return null;
     }
 }
