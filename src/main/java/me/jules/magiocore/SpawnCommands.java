@@ -37,7 +37,7 @@ public class SpawnCommands implements CommandExecutor {
                 return true;
             }
 
-            TeleportUtils.startTeleportCountdown(player, spawn, 3, plugin, success -> {});
+            TeleportUtils.startTeleportCountdown(player, spawn, plugin, success -> {});
             return true;
         }
 

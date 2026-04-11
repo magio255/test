@@ -71,7 +71,7 @@ public class HomeCommands implements CommandExecutor {
                     return true;
                 }
 
-                TeleportUtils.startTeleportCountdown(player, home.getLocation(), 3, plugin, success -> {});
+                TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
                 return true;
             } else {
                 // Open GUI (this will be implemented in the next step, for now just a placeholder or keep as is)

@@ -50,5 +50,13 @@ rtp:
     radius: 5000
     max-attempts: 10
 
+# Anti Spam Settings
+anti-spam:
+  delay: 2 # Delay in seconds between messages
+
+# Teleport Settings
+teleport:
+  delay: 3
+
 # Spawn Location
 spawn: null

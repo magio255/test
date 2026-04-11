@@ -1,15 +1,25 @@
 package me.jules.magiocore;
 
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MagioCore extends JavaPlugin {
     private HomeManager homeManager;
     private HomeGui homeGui;
     private TpaManager tpaManager;
+    private Economy econ = null;
+    private CoinflipManager coinflipManager;
+    private CoinflipGui coinflipGui;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        if (!setupEconomy()) {
+            getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
         homeManager = new HomeManager(this);
         homeGui = new HomeGui(this, homeManager);
         tpaManager = new TpaManager(this);
@@ -53,8 +63,35 @@ public class MagioCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(rtpCommand, this);
         getServer().getPluginManager().registerEvents(flySpeedCommand, this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+
+        coinflipManager = new CoinflipManager();
+        coinflipGui = new CoinflipGui(this, coinflipManager);
+        CoinflipCommand coinflipCommand = new CoinflipCommand(this, coinflipManager);
+        getCommand("coinflip").setExecutor(coinflipCommand);
+        getServer().getPluginManager().registerEvents(coinflipGui, this);
 
         getLogger().info("MagioCore has been enabled!");
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    public Economy getEconomy() {
+        return econ;
+    }
+
+    public CoinflipGui getCoinflipGui() {
+        return coinflipGui;
     }
 
     public HomeGui getHomeGui() {

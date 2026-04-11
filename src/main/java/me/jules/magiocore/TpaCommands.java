@@ -147,7 +147,7 @@ public class TpaCommands implements CommandExecutor {
         Player toTeleport = req.type.equals("to") ? requester : player;
         Player targetLocPlayer = req.type.equals("to") ? player : requester;
 
-        TeleportUtils.startTeleportCountdown(toTeleport, targetLocPlayer, 3, plugin, success -> {
+        TeleportUtils.startTeleportCountdown(toTeleport, targetLocPlayer, plugin, success -> {
             if (success) {
                 // messages are already handled by TeleportUtils, but we can add more if needed
             }

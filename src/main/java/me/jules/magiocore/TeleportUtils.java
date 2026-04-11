@@ -16,12 +16,12 @@ import java.util.function.Consumer;
 public class TeleportUtils {
     private static final Map<UUID, BukkitRunnable> pendingTeleports = new HashMap<>();
 
-    public static void startTeleportCountdown(Player player, Location target, int seconds, MagioCore plugin, Consumer<Boolean> callback) {
-        startTeleportCountdown(player, target, null, seconds, plugin, callback);
+    public static void startTeleportCountdown(Player player, Location target, MagioCore plugin, Consumer<Boolean> callback) {
+        startTeleportCountdown(player, target, null, plugin.getConfig().getInt("teleport.delay", 2), plugin, callback);
     }
 
-    public static void startTeleportCountdown(Player player, Player targetPlayer, int seconds, MagioCore plugin, Consumer<Boolean> callback) {
-        startTeleportCountdown(player, null, targetPlayer, seconds, plugin, callback);
+    public static void startTeleportCountdown(Player player, Player targetPlayer, MagioCore plugin, Consumer<Boolean> callback) {
+        startTeleportCountdown(player, null, targetPlayer, plugin.getConfig().getInt("teleport.delay", 2), plugin, callback);
     }
 
     private static void startTeleportCountdown(Player player, Location targetLoc, Player targetPlayer, int seconds, MagioCore plugin, Consumer<Boolean> callback) {

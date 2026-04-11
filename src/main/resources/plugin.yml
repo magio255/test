@@ -56,6 +56,9 @@ commands:
   playtime:
     description: Show playtime.
     usage: /playtime [player]
+  coinflip:
+    description: Gamble money in a coinflip.
+    usage: /coinflip [amount]
 permissions:
   magiocore.home:
     description: Access to home commands.
@@ -89,4 +92,7 @@ permissions:
     default: op
   magiocore.playtime:
     description: Access to /playtime.
+    default: true
+  magiocore.coinflip:
+    description: Access to /coinflip.
     default: true

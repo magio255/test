@@ -1,0 +1,40 @@
+package me.jules.magiocore;
+
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class ChatListener implements Listener {
+    private final MagioCore plugin;
+    private final Map<UUID, Long> lastMessage = new HashMap<>();
+
+    public ChatListener(MagioCore plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onChat(AsyncChatEvent event) {
+        Player player = event.getPlayer();
+        if (player.isOp()) return;
+
+        long now = System.currentTimeMillis();
+        long delay = plugin.getConfig().getInt("anti-spam.delay", 2) * 1000L;
+
+        if (lastMessage.containsKey(player.getUniqueId())) {
+            long last = lastMessage.get(player.getUniqueId());
+            if (now - last < delay) {
+                event.setCancelled(true);
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPomalý! Musíš počkat před dalším posláním zprávy."));
+                return;
+            }
+        }
+
+        lastMessage.put(player.getUniqueId(), now);
+    }
+}

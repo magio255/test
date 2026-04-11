@@ -96,7 +96,7 @@ public class HomeGui implements Listener {
             Home home = homeManager.getHome(player.getUniqueId(), homeNum);
             if (home != null) {
                 player.closeInventory();
-                TeleportUtils.startTeleportCountdown(player, home.getLocation(), 3, plugin, success -> {});
+                TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
             } else {
                 player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento domov nemáš nastavený."));
             }

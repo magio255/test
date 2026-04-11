@@ -145,7 +145,7 @@ public class RtpCommand implements CommandExecutor, Listener {
             Material block = world.getBlockAt(x, y, z).getType();
 
             if (block != Material.LAVA && block != Material.WATER && block != Material.AIR) {
-                TeleportUtils.startTeleportCountdown(player, loc, 3, plugin, success -> {});
+                TeleportUtils.startTeleportCountdown(player, loc, plugin, success -> {});
                 return;
             }
         }
