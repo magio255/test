@@ -54,9 +54,6 @@ rtp:
 anti-spam:
   delay: 2 # Delay in seconds between messages
 
-# Teleport Settings
-teleport:
-  delay: 3
 
 # Spawn Location
 spawn: null
