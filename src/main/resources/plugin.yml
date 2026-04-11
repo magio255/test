@@ -59,6 +59,7 @@ commands:
   coinflip:
     description: Gamble money in a coinflip.
     usage: /coinflip [amount]
+    aliases: [cf]
 permissions:
   magiocore.home:
     description: Access to home commands.

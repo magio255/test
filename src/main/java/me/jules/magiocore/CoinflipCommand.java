@@ -1,14 +1,18 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class CoinflipCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CoinflipCommand implements CommandExecutor, TabCompleter {
     private final MagioCore plugin;
     private final CoinflipManager manager;
 
@@ -38,12 +42,20 @@ public class CoinflipCommand implements CommandExecutor {
                 manager.addBet(player, amount);
                 player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bVytvořil jsi coinflip o §f" + amount + " §b$."));
             } catch (NumberFormatException e) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPoužití: /coinflip [částka]"));
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPoužití: /cf [částka] (Příklady: 100, 500, 1000, 3000, 8000)"));
             }
             return true;
         }
 
         plugin.getCoinflipGui().open(player);
         return true;
+    }
+
+    @Override
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 1) {
+            return List.of("100", "500", "1000", "3000", "8000");
+        }
+        return new ArrayList<>();
     }
 }

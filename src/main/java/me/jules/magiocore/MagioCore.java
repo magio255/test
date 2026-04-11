@@ -69,6 +69,7 @@ public class MagioCore extends JavaPlugin {
         coinflipGui = new CoinflipGui(this, coinflipManager);
         CoinflipCommand coinflipCommand = new CoinflipCommand(this, coinflipManager);
         getCommand("coinflip").setExecutor(coinflipCommand);
+        getCommand("coinflip").setTabCompleter(coinflipCommand);
         getServer().getPluginManager().registerEvents(coinflipGui, this);
 
         getLogger().info("MagioCore has been enabled!");

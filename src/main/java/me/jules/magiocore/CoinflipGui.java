@@ -28,10 +28,19 @@ public class CoinflipGui implements Listener {
     }
 
     public void open(Player player) {
-        Inventory inv = Bukkit.createInventory(new CoinflipGuiHolder(), 54, LegacyComponentSerializer.legacySection().deserialize(title));
+        Inventory inv = Bukkit.createInventory(new CoinflipGuiHolder(), 36, LegacyComponentSerializer.legacySection().deserialize(title));
+
+        // Background for empty slots
+        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemMeta glassMeta = glass.getItemMeta();
+        glassMeta.displayName(Component.empty());
+        glass.setItemMeta(glassMeta);
+        for (int i = 27; i < 36; i++) {
+            inv.setItem(i, glass);
+        }
 
         List<CoinflipManager.CoinflipBet> bets = manager.getActiveBets();
-        for (int i = 0; i < bets.size() && i < 54; i++) {
+        for (int i = 0; i < bets.size() && i < 27; i++) {
             CoinflipManager.CoinflipBet bet = bets.get(i);
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) head.getItemMeta();
@@ -46,6 +55,20 @@ public class CoinflipGui implements Listener {
             inv.setItem(i, head);
         }
 
+        // Tutorial Book
+        ItemStack book = new ItemStack(Material.BOOK);
+        ItemMeta bookMeta = book.getItemMeta();
+        bookMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§e§lJak vytvořit Coinflip?"));
+        bookMeta.lore(List.of(
+            LegacyComponentSerializer.legacySection().deserialize("§7Příkaz: §f/cf <částka>"),
+            LegacyComponentSerializer.legacySection().deserialize("§7Příklad: §f/cf 1000"),
+            LegacyComponentSerializer.legacySection().deserialize(""),
+            LegacyComponentSerializer.legacySection().deserialize("§7Tvůj coinflip se pak zobrazí"),
+            LegacyComponentSerializer.legacySection().deserialize("§7zde v tomto menu pro ostatní.")
+        ));
+        book.setItemMeta(bookMeta);
+        inv.setItem(31, book);
+
         player.openInventory(inv);
     }
 
@@ -58,7 +81,7 @@ public class CoinflipGui implements Listener {
         int slot = event.getRawSlot();
         List<CoinflipManager.CoinflipBet> bets = manager.getActiveBets();
 
-        if (slot >= 0 && slot < bets.size()) {
+        if (slot >= 0 && slot < bets.size() && slot < 27) {
             CoinflipManager.CoinflipBet bet = bets.get(slot);
             if (bet.creator.equals(player.getUniqueId())) {
                 player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemůžeš hrát proti sobě."));
