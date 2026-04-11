@@ -20,7 +20,7 @@ import java.util.Map;
 public class HomeGui implements Listener {
     private final MagioCore plugin;
     private final HomeManager homeManager;
-    private final String title = "§8Homes";
+    private final String title = "§8» " + FontUtils.toSmallCaps("Home Menu");
 
     public HomeGui(MagioCore plugin, HomeManager homeManager) {
         this.plugin = plugin;
@@ -32,13 +32,16 @@ public class HomeGui implements Listener {
         Map<Integer, Home> homes = homeManager.getHomes(player.getUniqueId());
         int maxHomes = PlaytimeUtils.getMaxHomes(player);
 
-        // Background
-        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        // Border Design
+        ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.displayName(Component.empty());
         glass.setItemMeta(glassMeta);
+
         for (int i = 0; i < 36; i++) {
-            inv.setItem(i, glass);
+            if (i < 9 || i >= 27 || i % 9 == 0 || i % 9 == 8) {
+                inv.setItem(i, glass);
+            }
         }
 
         for (int i = 1; i <= 7; i++) {
@@ -47,17 +50,17 @@ public class HomeGui implements Listener {
 
             // Bed (Teleport) - Row 2 (slots 10-16)
             Material bedMaterial = isLocked ? Material.BARRIER : ((home != null) ? Material.BLUE_BED : Material.GREEN_BED);
-            String nameColor = isLocked ? "§8" : ((home != null) ? "§e" : "§a");
+            String nameColor = isLocked ? "§8" : ((home != null) ? "§b" : "§a");
 
             ItemStack bed = new ItemStack(bedMaterial);
             ItemMeta bedMeta = bed.getItemMeta();
-            bedMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(nameColor + "Domov č. " + i + (isLocked ? " (Zamčeno)" : "")));
+            bedMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(nameColor + FontUtils.toSmallCaps("Home #" + i) + (isLocked ? " §7(" + FontUtils.toSmallCaps("Locked") + ")" : "")));
             if (isLocked) {
-                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§cTvůj limit domovů je: " + maxHomes)));
+                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Limit is " + maxHomes))));
             } else if (home != null) {
-                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7Klikni pro teleport.")));
+                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Click to teleport"))));
             } else {
-                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§cDomov není nastaven.")));
+                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Home not set"))));
             }
             bed.setItemMeta(bedMeta);
             inv.setItem(i + 9, bed);
@@ -65,11 +68,11 @@ public class HomeGui implements Listener {
             // Pearl (Set) - Row 3 (slots 19-25)
             ItemStack pearl = new ItemStack(isLocked ? Material.BARRIER : Material.ENDER_PEARL);
             ItemMeta pearlMeta = pearl.getItemMeta();
-            pearlMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(isLocked ? "§8Nastavit domov č. " + i + " (Zamčeno)" : "§bNastavit domov č. " + i));
+            pearlMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(isLocked ? "§8" + FontUtils.toSmallCaps("Set Home #" + i) + " §7(" + FontUtils.toSmallCaps("Locked") + ")" : "§3" + FontUtils.toSmallCaps("Set Home #" + i)));
             if (isLocked) {
-                pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§cTvůj limit domovů je: " + maxHomes)));
+                pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Limit is " + maxHomes))));
             } else {
-                pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7Klikni pro nastavení domova.")));
+                pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Click to set home"))));
             }
             pearl.setItemMeta(pearlMeta);
             inv.setItem(i + 18, pearl);
@@ -90,7 +93,7 @@ public class HomeGui implements Listener {
         if (slot >= 10 && slot <= 16) {
             int homeNum = slot - 9;
             if (homeNum > maxHomes) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento slot je zamčený (Tvůj limit: " + maxHomes + ")."));
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("This slot is locked") + " §7(" + FontUtils.toSmallCaps("Limit") + ": " + maxHomes + ")."));
                 return;
             }
             Home home = homeManager.getHome(player.getUniqueId(), homeNum);
@@ -98,16 +101,16 @@ public class HomeGui implements Listener {
                 player.closeInventory();
                 TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
             } else {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento domov nemáš nastavený."));
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Home not set") + "."));
             }
         } else if (slot >= 19 && slot <= 25) {
             int homeNum = slot - 18;
             if (homeNum > maxHomes) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento slot je zamčený (Tvůj limit: " + maxHomes + ")."));
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("This slot is locked") + " §7(" + FontUtils.toSmallCaps("Limit") + ": " + maxHomes + ")."));
                 return;
             }
             homeManager.setHome(player.getUniqueId(), homeNum, player.getLocation());
-            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bNastavil jsi si domov č. " + homeNum + "."));
+            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Home #" + homeNum + " set") + "."));
             player.closeInventory();
             open(player); // Refresh
         }

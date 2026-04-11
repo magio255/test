@@ -20,7 +20,7 @@ import java.util.List;
 public class CoinflipGui implements Listener {
     private final MagioCore plugin;
     private final CoinflipManager manager;
-    private final String title = "§bCoinflip Menu";
+    private final String title = "§8» §b" + FontUtils.toSmallCaps("Coinflip Menu");
 
     public CoinflipGui(MagioCore plugin, CoinflipManager manager) {
         this.plugin = plugin;
@@ -30,8 +30,8 @@ public class CoinflipGui implements Listener {
     public void open(Player player) {
         Inventory inv = Bukkit.createInventory(new CoinflipGuiHolder(), 36, LegacyComponentSerializer.legacySection().deserialize(title));
 
-        // Background for empty slots
-        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        // Border
+        ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.displayName(Component.empty());
         glass.setItemMeta(glassMeta);
@@ -45,11 +45,11 @@ public class CoinflipGui implements Listener {
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setOwningPlayer(Bukkit.getOfflinePlayer(bet.creator));
-            meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§bHráč: §f" + bet.creatorName));
+            meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Player: ") + "§f" + bet.creatorName));
             meta.lore(List.of(
-                LegacyComponentSerializer.legacySection().deserialize("§7Sázka: §f" + bet.amount + " $"),
+                LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Amount: ") + "§f" + bet.amount + " $"),
                 LegacyComponentSerializer.legacySection().deserialize(""),
-                LegacyComponentSerializer.legacySection().deserialize("§aKlikni pro sázku!")
+                LegacyComponentSerializer.legacySection().deserialize("§a" + FontUtils.toSmallCaps("Click to bet!"))
             ));
             head.setItemMeta(meta);
             inv.setItem(i, head);
@@ -58,13 +58,13 @@ public class CoinflipGui implements Listener {
         // Tutorial Book
         ItemStack book = new ItemStack(Material.BOOK);
         ItemMeta bookMeta = book.getItemMeta();
-        bookMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§e§lJak vytvořit Coinflip?"));
+        bookMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§e§l" + FontUtils.toSmallCaps("How to create Coinflip?")));
         bookMeta.lore(List.of(
-            LegacyComponentSerializer.legacySection().deserialize("§7Příkaz: §f/cf <částka>"),
-            LegacyComponentSerializer.legacySection().deserialize("§7Příklad: §f/cf 1000"),
+            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Command: ") + "§f/cf <amount>"),
+            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Example: ") + "§f/cf 1000"),
             LegacyComponentSerializer.legacySection().deserialize(""),
-            LegacyComponentSerializer.legacySection().deserialize("§7Tvůj coinflip se pak zobrazí"),
-            LegacyComponentSerializer.legacySection().deserialize("§7zde v tomto menu pro ostatní.")
+            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Your bet will appear here")),
+            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("for others to accept."))
         ));
         book.setItemMeta(bookMeta);
         inv.setItem(31, book);
@@ -84,12 +84,12 @@ public class CoinflipGui implements Listener {
         if (slot >= 0 && slot < bets.size() && slot < 27) {
             CoinflipManager.CoinflipBet bet = bets.get(slot);
             if (bet.creator.equals(player.getUniqueId())) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemůžeš hrát proti sobě."));
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("You cannot play against yourself.")));
                 return;
             }
 
             if (plugin.getEconomy().getBalance(player) < bet.amount) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš dostatek peněz na tuto sázku."));
+                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Not enough money.")));
                 return;
             }
 

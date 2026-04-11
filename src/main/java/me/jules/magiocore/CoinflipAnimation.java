@@ -24,7 +24,7 @@ public class CoinflipAnimation {
         this.p1 = p1;
         this.p2 = p2;
         this.amount = amount;
-        this.inv = Bukkit.createInventory(null, 27, LegacyComponentSerializer.legacySection().deserialize("§bCoinflip: " + (p1 != null ? p1.getName() : "Offline") + " vs " + p2.getName()));
+        this.inv = Bukkit.createInventory(null, 27, LegacyComponentSerializer.legacySection().deserialize("§8» §b" + FontUtils.toSmallCaps("Coinflip: " + (p1 != null ? p1.getName() : "Offline") + " vs " + p2.getName())));
     }
 
     public void start() {
@@ -45,7 +45,7 @@ public class CoinflipAnimation {
                 Material mat = (ticks % 2 == 0) ? Material.ORANGE_STAINED_GLASS_PANE : Material.YELLOW_STAINED_GLASS_PANE;
                 ItemStack glass = new ItemStack(mat);
                 ItemMeta meta = glass.getItemMeta();
-                meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§7Losování..."));
+                meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Rolling...")));
                 glass.setItemMeta(meta);
 
                 for (int i = 0; i < 27; i++) {
@@ -64,7 +64,7 @@ public class CoinflipAnimation {
         double prize = amount * 2;
         plugin.getEconomy().depositPlayer(winner, prize);
 
-        String msg = "§bHráč §f" + winner.getName() + " §bvyhrál v coinflipu o §f" + prize + " §b$!";
+        String msg = "§b" + FontUtils.toSmallCaps("Player ") + "§f" + winner.getName() + " §b" + FontUtils.toSmallCaps("won the Coinflip for ") + "§f" + prize + " §b$!";
         Bukkit.broadcast(LegacyComponentSerializer.legacySection().deserialize(msg));
 
         if (p1 != null) p1.closeInventory();

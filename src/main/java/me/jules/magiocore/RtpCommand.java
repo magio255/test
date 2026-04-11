@@ -23,7 +23,6 @@ import org.bukkit.profile.PlayerProfile;
 import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
 import java.util.List;
@@ -50,21 +49,23 @@ public class RtpCommand implements CommandExecutor, Listener {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("rtp.gui");
         if (config == null) return;
 
-        String title = config.getString("title", "§aOverworld");
+        String titleStr = config.getString("title", "Overworld");
         int rows = config.getInt("rows", 3);
-        Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), rows * 9, LegacyComponentSerializer.legacySection().deserialize(title));
+        Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), rows * 9, LegacyComponentSerializer.legacySection().deserialize("§8» §b" + FontUtils.toSmallCaps(titleStr)));
 
-        // Background
+        // Background - Improved with Border
         Material bgMaterial;
         try {
             bgMaterial = Material.valueOf(config.getString("background", "BLACK_STAINED_GLASS_PANE"));
         } catch (IllegalArgumentException e) {
             bgMaterial = Material.BLACK_STAINED_GLASS_PANE;
         }
+
         ItemStack glass = new ItemStack(bgMaterial);
         ItemMeta glassMeta = glass.getItemMeta();
         glassMeta.displayName(Component.empty());
         glass.setItemMeta(glassMeta);
+
         for (int i = 0; i < inv.getSize(); i++) {
             inv.setItem(i, glass);
         }
@@ -81,9 +82,9 @@ public class RtpCommand implements CommandExecutor, Listener {
             ItemStack item = new ItemStack(material);
             ItemMeta meta = item.getItemMeta();
 
-            meta.displayName(LegacyComponentSerializer.legacySection().deserialize(itemConfig.getString("name", "§aOverworld")));
+            meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps(itemConfig.getString("name", "Overworld"))));
             List<String> lore = itemConfig.getStringList("lore");
-            meta.lore(lore.stream().map(l -> LegacyComponentSerializer.legacySection().deserialize(l)).collect(Collectors.toList()));
+            meta.lore(lore.stream().map(l -> LegacyComponentSerializer.legacySection().deserialize(FontUtils.toSmallCaps(l))).collect(Collectors.toList()));
 
             if (material == Material.PLAYER_HEAD && itemConfig.contains("texture")) {
                 applyTexture((SkullMeta) meta, itemConfig.getString("texture"));
@@ -103,11 +104,10 @@ public class RtpCommand implements CommandExecutor, Listener {
 
         try {
             String decoded = new String(Base64.getDecoder().decode(base64));
-            // Extract URL from json: {"textures":{"SKIN":{"url":"http://..."}}}
             String urlStr = decoded.substring(decoded.indexOf("http"), decoded.lastIndexOf("\""));
             textures.setSkin(new URL(urlStr));
         } catch (Exception e) {
-            // Fallback or ignore
+            // ignore
         }
 
         profile.setTextures(textures);
@@ -130,7 +130,7 @@ public class RtpCommand implements CommandExecutor, Listener {
     }
 
     private void findRandomLocation(Player player) {
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bHledám bezpečné místo..."));
+        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Finding safe location...")));
 
         World world = player.getWorld();
         int radius = plugin.getConfig().getInt("rtp.settings.radius", 5000);
@@ -150,7 +150,7 @@ public class RtpCommand implements CommandExecutor, Listener {
             }
         }
 
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNepodařilo se najít bezpečné místo, zkus to znovu."));
+        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Failed to find safe location, try again.")));
     }
 
     private static class RtpGuiHolder implements InventoryHolder {
