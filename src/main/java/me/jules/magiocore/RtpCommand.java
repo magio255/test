@@ -1,7 +1,6 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,7 +50,7 @@ public class RtpCommand implements CommandExecutor, Listener {
 
         String titleStr = config.getString("title", "Overworld");
         int rows = config.getInt("rows", 3);
-        Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), rows * 9, LegacyComponentSerializer.legacySection().deserialize("§8» §b" + FontUtils.toSmallCaps(titleStr)));
+        Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), rows * 9, FontUtils.parse("§8» §b" + titleStr));
 
         // Background - Improved with Border
         Material bgMaterial;
@@ -82,9 +81,9 @@ public class RtpCommand implements CommandExecutor, Listener {
             ItemStack item = new ItemStack(material);
             ItemMeta meta = item.getItemMeta();
 
-            meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps(itemConfig.getString("name", "Overworld"))));
+            meta.displayName(FontUtils.parse("§b" + itemConfig.getString("name", "Overworld")));
             List<String> lore = itemConfig.getStringList("lore");
-            meta.lore(lore.stream().map(l -> LegacyComponentSerializer.legacySection().deserialize(FontUtils.toSmallCaps(l))).collect(Collectors.toList()));
+            meta.lore(lore.stream().map(l -> FontUtils.parse(l)).collect(Collectors.toList()));
 
             if (material == Material.PLAYER_HEAD && itemConfig.contains("texture")) {
                 applyTexture((SkullMeta) meta, itemConfig.getString("texture"));
@@ -130,7 +129,7 @@ public class RtpCommand implements CommandExecutor, Listener {
     }
 
     private void findRandomLocation(Player player) {
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Finding safe location...")));
+        player.sendMessage(FontUtils.parse("§b" + "Finding safe location..."));
 
         World world = player.getWorld();
         int radius = plugin.getConfig().getInt("rtp.settings.radius", 5000);
@@ -150,7 +149,7 @@ public class RtpCommand implements CommandExecutor, Listener {
             }
         }
 
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Failed to find safe location, try again.")));
+        player.sendMessage(FontUtils.parse("§c" + "Failed to find safe location, try again."));
     }
 
     private static class RtpGuiHolder implements InventoryHolder {

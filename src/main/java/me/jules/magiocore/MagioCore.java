@@ -55,6 +55,9 @@ public class MagioCore extends JavaPlugin {
         PlaytimeCommand playtimeCommand = new PlaytimeCommand();
         getCommand("playtime").setExecutor(playtimeCommand);
 
+        InvseeCommand invseeCommand = new InvseeCommand();
+        getCommand("invsee").setExecutor(invseeCommand);
+
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new MagioCoreExpansion(this).register();
         }

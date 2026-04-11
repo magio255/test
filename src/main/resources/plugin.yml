@@ -60,6 +60,9 @@ commands:
     description: Gamble money in a coinflip.
     usage: /coinflip [amount]
     aliases: [cf]
+  invsee:
+    description: View another player's inventory.
+    usage: /invsee <player>
 permissions:
   magiocore.home:
     description: Access to home commands.
@@ -97,3 +100,6 @@ permissions:
   magiocore.coinflip:
     description: Access to /coinflip.
     default: true
+  magiocore.invsee:
+    description: Access to /invsee.
+    default: op

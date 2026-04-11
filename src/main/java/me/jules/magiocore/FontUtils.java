@@ -1,6 +1,7 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.HashMap;
@@ -13,10 +14,22 @@ public class FontUtils {
     private static final Pattern CODE_PATTERN = Pattern.compile("(&#[A-Fa-f0-9]{6}|&[0-9a-fk-orA-FK-OR]|§[0-9a-fk-orA-FK-OR])");
 
     static {
-        String normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String smallCaps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
-        for (int i = 0; i < normal.length(); i++) {
+        String normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZáčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ";
+        String smallCaps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
+        // Diacritics mapping to base Small Caps
+        String czech = "áčďéěíňóřšťúůýž";
+        String base = "acdeeinorstuuuz";
+
+        for (int i = 0; i < 52; i++) { // a-z A-Z
             SMALL_CAPS.put(normal.charAt(i), smallCaps.charAt(i));
+        }
+
+        for (int i = 0; i < czech.length(); i++) {
+            char lower = czech.charAt(i);
+            char upper = Character.toUpperCase(lower);
+            char target = toSmallCaps(String.valueOf(base.charAt(i))).charAt(0);
+            SMALL_CAPS.put(lower, target);
+            SMALL_CAPS.put(upper, target);
         }
     }
 
@@ -36,11 +49,9 @@ public class FontUtils {
         StringBuilder sb = new StringBuilder();
         int lastEnd = 0;
         while (matcher.find()) {
-            // Transform text before the code
             String before = input.substring(lastEnd, matcher.start());
             sb.append(toSmallCaps(before));
 
-            // Append the code as is (but handle hex conversion for legacy serializer)
             String code = matcher.group();
             if (code.startsWith("&#")) {
                 String hex = code.substring(2);
@@ -53,9 +64,9 @@ public class FontUtils {
             }
             lastEnd = matcher.end();
         }
-        // Transform the remaining text
         sb.append(toSmallCaps(input.substring(lastEnd)));
 
-        return LegacyComponentSerializer.legacySection().deserialize(sb.toString());
+        return LegacyComponentSerializer.legacySection().deserialize(sb.toString())
+                .decoration(TextDecoration.ITALIC, false);
     }
 }
