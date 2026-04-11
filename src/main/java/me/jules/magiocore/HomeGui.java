@@ -1,7 +1,6 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +19,7 @@ import java.util.Map;
 public class HomeGui implements Listener {
     private final MagioCore plugin;
     private final HomeManager homeManager;
-    private final String title = "§8» " + FontUtils.toSmallCaps("Home Menu");
+    private final String title = "&#EA427F&l» " + "ᴍᴇɴᴜ ᴅᴏᴍᴏᴠů";
 
     public HomeGui(MagioCore plugin, HomeManager homeManager) {
         this.plugin = plugin;
@@ -28,7 +27,7 @@ public class HomeGui implements Listener {
     }
 
     public void open(Player player) {
-        Inventory inv = Bukkit.createInventory(new HomeGuiHolder(), 36, LegacyComponentSerializer.legacySection().deserialize(title));
+        Inventory inv = Bukkit.createInventory(new HomeGuiHolder(), 36, FontUtils.parse(title));
         Map<Integer, Home> homes = homeManager.getHomes(player.getUniqueId());
         int maxHomes = PlaytimeUtils.getMaxHomes(player);
 
@@ -50,17 +49,17 @@ public class HomeGui implements Listener {
 
             // Bed (Teleport) - Row 2 (slots 10-16)
             Material bedMaterial = isLocked ? Material.BARRIER : ((home != null) ? Material.BLUE_BED : Material.GREEN_BED);
-            String nameColor = isLocked ? "§8" : ((home != null) ? "§b" : "§a");
+            String nameColor = isLocked ? "§8" : ((home != null) ? "&#00fbff&l" : "&#00ff44&l");
 
             ItemStack bed = new ItemStack(bedMaterial);
             ItemMeta bedMeta = bed.getItemMeta();
-            bedMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(nameColor + FontUtils.toSmallCaps("Home #" + i) + (isLocked ? " §7(" + FontUtils.toSmallCaps("Locked") + ")" : "")));
+            bedMeta.displayName(FontUtils.parse(nameColor + "ᴅᴏᴍᴏᴠ #" + i + (isLocked ? " §7(ᴢᴀᴍčᴇɴᴏ)" : "")));
             if (isLocked) {
-                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Limit is " + maxHomes))));
+                bedMeta.lore(List.of(FontUtils.parse("§c" + "ʟɪᴍɪᴛ ᴊᴇ " + maxHomes)));
             } else if (home != null) {
-                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Click to teleport"))));
+                bedMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛᴀᴄɪ ✈")));
             } else {
-                bedMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Home not set"))));
+                bedMeta.lore(List.of(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ ✖")));
             }
             bed.setItemMeta(bedMeta);
             inv.setItem(i + 9, bed);
@@ -68,11 +67,11 @@ public class HomeGui implements Listener {
             // Pearl (Set) - Row 3 (slots 19-25)
             ItemStack pearl = new ItemStack(isLocked ? Material.BARRIER : Material.ENDER_PEARL);
             ItemMeta pearlMeta = pearl.getItemMeta();
-            pearlMeta.displayName(LegacyComponentSerializer.legacySection().deserialize(isLocked ? "§8" + FontUtils.toSmallCaps("Set Home #" + i) + " §7(" + FontUtils.toSmallCaps("Locked") + ")" : "§3" + FontUtils.toSmallCaps("Set Home #" + i)));
+            pearlMeta.displayName(FontUtils.parse(isLocked ? "§8" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ #" + i : "&#EA427F&l" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ #" + i));
             if (isLocked) {
-                pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Limit is " + maxHomes))));
+                pearlMeta.lore(List.of(FontUtils.parse("§c" + "ʟɪᴍɪᴛ ᴊᴇ " + maxHomes)));
             } else {
-                pearlMeta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Click to set home"))));
+                pearlMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ᴅᴏᴍᴏᴠᴀ ✍")));
             }
             pearl.setItemMeta(pearlMeta);
             inv.setItem(i + 18, pearl);
@@ -93,7 +92,7 @@ public class HomeGui implements Listener {
         if (slot >= 10 && slot <= 16) {
             int homeNum = slot - 9;
             if (homeNum > maxHomes) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("This slot is locked") + " §7(" + FontUtils.toSmallCaps("Limit") + ": " + maxHomes + ")."));
+                player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ sʟᴏᴛ ᴊᴇ ᴢᴀᴍčᴇɴý" + " §7(" + "ʟɪᴍɪᴛ" + ": " + maxHomes + ")."));
                 return;
             }
             Home home = homeManager.getHome(player.getUniqueId(), homeNum);
@@ -101,16 +100,16 @@ public class HomeGui implements Listener {
                 player.closeInventory();
                 TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
             } else {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Home not set") + "."));
+                player.sendMessage(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ" + "."));
             }
         } else if (slot >= 19 && slot <= 25) {
             int homeNum = slot - 18;
             if (homeNum > maxHomes) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("This slot is locked") + " §7(" + FontUtils.toSmallCaps("Limit") + ": " + maxHomes + ")."));
+                player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ sʟᴏᴛ ᴊᴇ ᴢᴀᴍčᴇɴý" + " §7(" + "ʟɪᴍɪᴛ" + ": " + maxHomes + ")."));
                 return;
             }
             homeManager.setHome(player.getUniqueId(), homeNum, player.getLocation());
-            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Home #" + homeNum + " set") + "."));
+            player.sendMessage(FontUtils.parse("&#00ff44&l" + "ᴅᴏᴍᴏᴠ #" + homeNum + " ɴᴀsᴛᴀᴠᴇɴ ✔"));
             player.closeInventory();
             open(player); // Refresh
         }

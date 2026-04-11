@@ -1,7 +1,7 @@
 package me.jules.magiocore;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -30,23 +30,23 @@ public class HomeCommands implements CommandExecutor {
                 try {
                     number = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPoužití: /sethome [1-7]"));
+                    player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /sᴇᴛʜᴏᴍᴇ [1-7] ✖"));
                     return true;
                 }
             }
 
             if (number < 1 || number > 7) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cČíslo domova musí být mezi 1 a 7."));
+                player.sendMessage(FontUtils.parse("§c" + "čísʟᴏ ᴅᴏᴍᴏᴠᴀ ᴍᴜsí ʙýᴛ ᴍᴇᴢɪ 1 ᴀ 7 ✖"));
                 return true;
             }
 
             if (number > PlaytimeUtils.getMaxHomes(player)) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš oprávnění nastavit si tolik domovů. Tvůj limit je: " + PlaytimeUtils.getMaxHomes(player)));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ɴᴀsᴛᴀᴠɪᴛ sɪ ᴛᴏʟɪᴋ ᴅᴏᴍᴏᴠů. ᴛᴠůᴊ ʟɪᴍɪᴛ ᴊᴇ: " + PlaytimeUtils.getMaxHomes(player) + " ✖"));
                 return true;
             }
 
             homeManager.setHome(player.getUniqueId(), number, player.getLocation());
-            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bNastavil jsi si domov č. " + number + "."));
+            player.sendMessage(FontUtils.parse("&#00ff44&l" + "ᴅᴏᴍᴏᴠ #" + number + " ʙʏʟ ɴᴀsᴛᴀᴠᴇɴ ✔"));
             return true;
         }
 
@@ -56,27 +56,24 @@ public class HomeCommands implements CommandExecutor {
                 try {
                     number = Integer.parseInt(args[0]);
                 } catch (NumberFormatException e) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPoužití: /home [1-7]"));
+                    player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ʜᴏᴍᴇ [1-7] ✖"));
                     return true;
                 }
 
                 Home home = homeManager.getHome(player.getUniqueId(), number);
                 if (home == null) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento domov nemáš nastavený."));
+                    player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ ᴅᴏᴍᴏᴠ ɴᴇᴍáš ɴᴀsᴛᴀᴠᴇɴý ✖"));
                     return true;
                 }
 
                 if (number > PlaytimeUtils.getMaxHomes(player)) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš oprávnění teleportovat se k tomuto domovu (limit: " + PlaytimeUtils.getMaxHomes(player) + ")."));
+                    player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ᴛᴇʟᴇᴘᴏʀᴛᴏᴠᴀᴛ sᴇ ᴋ ᴛᴏᴍᴜᴛᴏ ᴅᴏᴍᴏᴠᴜ. ʟɪᴍɪᴛ: " + PlaytimeUtils.getMaxHomes(player) + " ✖"));
                     return true;
                 }
 
                 TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
                 return true;
             } else {
-                // Open GUI (this will be implemented in the next step, for now just a placeholder or keep as is)
-                // Actually I can call a GUI opening method here if I implement it in MagioCore or a separate class.
-                // I will add a GUI open call once I have the GUI class.
                 plugin.getHomeGui().open(player);
                 return true;
             }

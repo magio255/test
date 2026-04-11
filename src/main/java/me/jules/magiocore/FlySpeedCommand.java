@@ -1,6 +1,5 @@
 package me.jules.magiocore;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,14 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class FlySpeedCommand implements CommandExecutor, Listener {
-    private final String title = "§8» §b" + FontUtils.toSmallCaps("Fly Speed Selection");
+    private final String title = "&#EA427F&l» " + "ʀʏᴄʜʟᴏsᴛ ʟéᴛáɴí";
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
 
         if (!player.hasPermission("magiocore.flyspeed") && !player.isOp()) {
-            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("No permission.")));
+            player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
             return true;
         }
 
@@ -35,12 +34,12 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
             try {
                 int speed = Integer.parseInt(args[0]);
                 if (speed < 1 || speed > 10) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Speed must be 1-10.")));
+                    player.sendMessage(FontUtils.parse("§c" + "ʀʏᴄʜʟᴏsᴛ ᴍᴜsí ʙýᴛ 1-10 ✖"));
                     return true;
                 }
                 setFlySpeed(player, speed);
             } catch (NumberFormatException e) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Usage: /flyspeed [1-10]")));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ꜰʟʏsᴘᴇᴇᴅ [1-10] ✖"));
             }
         } else {
             openGui(player);
@@ -50,12 +49,12 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
     }
 
     private void openGui(Player player) {
-        Inventory inv = Bukkit.createInventory(new FlySpeedGuiHolder(), 18, LegacyComponentSerializer.legacySection().deserialize(title));
+        Inventory inv = Bukkit.createInventory(new FlySpeedGuiHolder(), 18, FontUtils.parse(title));
 
         // Background
         ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
-        glassMeta.displayName(Component.empty());
+        glassMeta.displayName(net.kyori.adventure.text.Component.empty());
         glass.setItemMeta(glassMeta);
         for (int i = 0; i < 18; i++) {
             inv.setItem(i, glass);
@@ -72,8 +71,8 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
     private ItemStack createFeather(int speed) {
         ItemStack item = new ItemStack(Material.FEATHER);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Fly Speed " + speed)));
-        meta.lore(List.of(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Click to set speed to " + speed))));
+        meta.displayName(FontUtils.parse("&#00fbff&lʀʏᴄʜʟᴏsᴛ " + speed + " ✈"));
+        meta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ʀʏᴄʜʟᴏsᴛɪ ɴᴀ " + speed)));
         item.setItemMeta(meta);
         return item;
     }
@@ -81,7 +80,7 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
     private void setFlySpeed(Player player, int speed) {
         float fSpeed = (float) speed / 10.0f;
         player.setFlySpeed(fSpeed);
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Fly speed set to " + speed + ".")));
+        player.sendMessage(FontUtils.parse("&#00fbff&lᴛᴠᴏᴊᴇ ʀʏᴄʜʟᴏsᴛ ʟéᴛáɴí ʙʏʟᴀ ɴᴀsᴛᴀᴠᴇɴᴀ ɴᴀ " + speed + " ✔"));
     }
 
     @EventHandler

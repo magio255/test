@@ -30,7 +30,7 @@ public class ChatListener implements Listener {
             long last = lastMessage.get(player.getUniqueId());
             if (now - last < delay) {
                 event.setCancelled(true);
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPomalý! Musíš počkat před dalším posláním zprávy."));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴍᴀʟʏ! ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴘřᴇᴅ ᴅᴀʟšíᴍ ᴘᴏsʟáɴíᴍ ᴢᴘʀáᴠʏ ✖"));
                 return;
             }
         }

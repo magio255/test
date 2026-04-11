@@ -6,54 +6,53 @@ join-message:
 
   # Global message shown when a player joins for the first time
   first-join:
-    format: "§b%player% §7se poprvé připojil! Vítej na §bCZSK SMP§7!"
+    format: "&#00fbff&l%player% §7se poprvé připojil! Vítej na &#00fbff&lCZSK SMP! 🎉"
     side-messages:
       - ""
-      - "§b§lVÍTEJ"
-      - "§7Hráč §b%player%"
+      - "&#00fbff&lVÍTEJ"
+      - "§7Hráč &#00fbff&l%player%"
       - "§7se poprvé"
       - "§7připojil na"
-      - "§bCZSK SMP!"
+      - "&#00fbff&lCZSK SMP!"
       - ""
-      - ""
+      - "§7Užij si to! 🎈"
 
   # Private message shown to the player when they login
   private-welcome:
-    format: "§7Vítej zpět, §b%player%§7! Doufáme, že si tu užiješ čas."
+    format: "§7Vítej zpět, &#00fbff&l%player%§7! Doufáme, že si tu užiješ čas. 👋"
     side-messages:
       - ""
-      - "§b§lVÍTEJ ZPĚT"
-      - "§7Ahoj §b%player%§7!"
+      - "&#00fbff&lVÍTEJ ZPĚT"
+      - "§7Ahoj &#00fbff&l%player%§7!"
       - "§7Doufáme, že si"
       - "§7u nás na serveru"
       - "§7užiješ spoustu"
       - "§7zábavy!"
-      - ""
+      - "§7Šťastné hraní! 🎮"
+
+# Anti Spam Settings
+anti-spam:
+  delay: 2 # Delay in seconds between messages
 
 # RTP GUI Settings
 rtp:
   gui:
-    title: "§aOverworld"
+    title: "ᴏᴠᴇʀᴡᴏʀʟᴅ"
     rows: 3
     background: "BLACK_STAINED_GLASS_PANE"
     item:
       material: "PLAYER_HEAD"
       texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmFhYmFmYmY2MTk0NWRmN2FjMWNkODkyYTcxNGRmZjdmYTE3OTFiOTQ5NjM2OTg0NWVlZDYyYWU0YmZkZjMifX19"
       slot: 13
-      name: "§aOverworld"
+      name: "ᴏᴠᴇʀᴡᴏʀʟᴅ"
       lore:
         - "§7Klikni zde pro náhodnou teleportaci"
         - "§7někam do světa overworld."
         - ""
-        - "§a➥ KLIKNI PRO TELEPORTACI"
+        - "&#00ff44&l➥ KLIKNI PRO TELEPORTACI ✈"
   settings:
     radius: 5000
     max-attempts: 10
-
-# Anti Spam Settings
-anti-spam:
-  delay: 2 # Delay in seconds between messages
-
 
 # Spawn Location
 spawn: null

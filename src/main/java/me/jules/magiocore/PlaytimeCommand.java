@@ -1,6 +1,5 @@
 package me.jules.magiocore;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,10 +14,10 @@ public class PlaytimeCommand implements CommandExecutor {
         if (args.length > 0) {
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                sender.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cTento hráč není online."));
+                sender.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ ʜʀáč ɴᴇɴí ᴏɴʟɪɴᴇ ✖"));
                 return true;
             }
-            sender.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bHrac §f" + target.getName() + " §bnahral: §f" + PlaytimeUtils.formatPlaytime(target)));
+            sender.sendMessage(FontUtils.parse("&#00fbff&lʜʀáč §f" + target.getName() + " &#00fbff&lɴᴀʜʀáʟ: §f" + PlaytimeUtils.formatPlaytime(target) + " ⌚"));
             return true;
         }
 
@@ -27,7 +26,7 @@ public class PlaytimeCommand implements CommandExecutor {
             return true;
         }
 
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bTvuj odehrany cas: §f" + PlaytimeUtils.formatPlaytime(player)));
+        player.sendMessage(FontUtils.parse("&#00fbff&lᴛᴠůᴊ ᴏᴅᴇʜʀᴀɴý čᴀs: §f" + PlaytimeUtils.formatPlaytime(player) + " ⌚"));
         return true;
     }
 }

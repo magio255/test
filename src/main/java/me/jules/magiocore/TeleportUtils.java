@@ -42,7 +42,7 @@ public class TeleportUtils {
                 }
 
                 if (player.getLocation().distanceSquared(startLocation) > 0.25) { // 0.5 distance limit
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢʀᴜšᴇɴᴀ! ᴘᴏʜɴᴜʟ ᴊsɪ sᴇ."));
+                    player.sendMessage(FontUtils.parse("§c" + "ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢʀᴜšᴇɴᴀ! ᴘᴏʜɴᴜʟ ᴊsɪ sᴇ ✖"));
                     cancel();
                     pendingTeleports.remove(player.getUniqueId());
                     callback.accept(false);
@@ -50,7 +50,7 @@ public class TeleportUtils {
                 }
 
                 if (targetPlayer != null && !targetPlayer.isOnline()) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢʀᴜšᴇɴᴀ! ʜʀáč sᴇ ᴏᴅᴘᴏᴊɪʟ."));
+                    player.sendMessage(FontUtils.parse("§c" + "ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢʀᴜšᴇɴᴀ! ʜʀáč sᴇ ᴏᴅᴘᴏᴊɪʟ ✖"));
                     cancel();
                     pendingTeleports.remove(player.getUniqueId());
                     callback.accept(false);
@@ -63,14 +63,14 @@ public class TeleportUtils {
                     } else {
                         player.teleport(targetLoc);
                     }
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bʙʏʟ ᴊsɪ ᴛᴇʟᴇᴘᴏʀᴛᴏᴠáɴ."));
+                    player.sendMessage(FontUtils.parse("&#00fbff&l" + "ʙʏʟ ᴊsɪ ᴛᴇʟᴇᴘᴏʀᴛᴏᴠáɴ ✔"));
                     cancel();
                     pendingTeleports.remove(player.getUniqueId());
                     callback.accept(true);
                     return;
                 }
 
-                player.sendActionBar(LegacyComponentSerializer.legacySection().deserialize("§bᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢᴀ " + remaining + "s..."));
+                player.sendActionBar(FontUtils.parse("&#00fbff&l" + "ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢᴀ " + remaining + "s... ✈"));
                 remaining--;
             }
         };

@@ -1,6 +1,8 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,20 +31,20 @@ public class CoinflipCommand implements CommandExecutor, TabCompleter {
             try {
                 double amount = Double.parseDouble(args[0]);
                 if (amount <= 0) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cSázka musí být kladná."));
+                    player.sendMessage(FontUtils.parse("§c" + "sázᴋᴀ ᴍᴜsí ʙýᴛ ᴋʟᴀᴅɴá ✖"));
                     return true;
                 }
 
                 if (plugin.getEconomy().getBalance(player) < amount) {
-                    player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš dostatek peněz."));
+                    player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ ᴘᴇɴěᴢ ✖"));
                     return true;
                 }
 
                 plugin.getEconomy().withdrawPlayer(player, amount);
                 manager.addBet(player, amount);
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bVytvořil jsi coinflip o §f" + amount + " §b$."));
+                player.sendMessage(FontUtils.parse("&#00ff44&l" + "ᴠʏᴛᴠᴏřɪʟ ᴊsɪ ᴄᴏɪɴꜰʟɪᴘ ᴏ §f" + amount + " $ ✔"));
             } catch (NumberFormatException e) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cPoužití: /cf [částka] (Příklady: 100, 500, 1000, 3000, 8000)"));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ᴄꜰ <čásᴛᴋᴀ> ✖"));
             }
             return true;
         }

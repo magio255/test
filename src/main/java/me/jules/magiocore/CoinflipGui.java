@@ -1,7 +1,6 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +19,7 @@ import java.util.List;
 public class CoinflipGui implements Listener {
     private final MagioCore plugin;
     private final CoinflipManager manager;
-    private final String title = "§8» §b" + FontUtils.toSmallCaps("Coinflip Menu");
+    private final String title = "&#EA427F&l» " + "ᴄᴏɪɴꜰʟɪᴘ ᴍᴇɴᴜ";
 
     public CoinflipGui(MagioCore plugin, CoinflipManager manager) {
         this.plugin = plugin;
@@ -28,7 +27,7 @@ public class CoinflipGui implements Listener {
     }
 
     public void open(Player player) {
-        Inventory inv = Bukkit.createInventory(new CoinflipGuiHolder(), 36, LegacyComponentSerializer.legacySection().deserialize(title));
+        Inventory inv = Bukkit.createInventory(new CoinflipGuiHolder(), 36, FontUtils.parse(title));
 
         // Border
         ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
@@ -45,11 +44,11 @@ public class CoinflipGui implements Listener {
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setOwningPlayer(Bukkit.getOfflinePlayer(bet.creator));
-            meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§b" + FontUtils.toSmallCaps("Player: ") + "§f" + bet.creatorName));
+            meta.displayName(FontUtils.parse("&#00fbff&lʜʀáč: §f" + bet.creatorName));
             meta.lore(List.of(
-                LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Amount: ") + "§f" + bet.amount + " $"),
-                LegacyComponentSerializer.legacySection().deserialize(""),
-                LegacyComponentSerializer.legacySection().deserialize("§a" + FontUtils.toSmallCaps("Click to bet!"))
+                FontUtils.parse("§7sázᴋᴀ: &#00ff44&l" + bet.amount + " $"),
+                Component.empty(),
+                FontUtils.parse("&#EA427F&lᴋʟɪᴋɴɪ ᴘʀᴏ sázᴋᴜ! 🎲")
             ));
             head.setItemMeta(meta);
             inv.setItem(i, head);
@@ -58,13 +57,13 @@ public class CoinflipGui implements Listener {
         // Tutorial Book
         ItemStack book = new ItemStack(Material.BOOK);
         ItemMeta bookMeta = book.getItemMeta();
-        bookMeta.displayName(LegacyComponentSerializer.legacySection().deserialize("§e§l" + FontUtils.toSmallCaps("How to create Coinflip?")));
+        bookMeta.displayName(FontUtils.parse("&#ffbb00&lᴊᴀᴋ ᴠʏᴛᴠᴏřɪᴛ ᴄᴏɪɴꜰʟɪᴘ? ❓"));
         bookMeta.lore(List.of(
-            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Command: ") + "§f/cf <amount>"),
-            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Example: ") + "§f/cf 1000"),
-            LegacyComponentSerializer.legacySection().deserialize(""),
-            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Your bet will appear here")),
-            LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("for others to accept."))
+            FontUtils.parse("§7ᴘříᴋᴀᴢ: &#00fbff&l/ᴄꜰ <čásᴛᴋᴀ>"),
+            FontUtils.parse("§7ᴘříᴋʟᴀᴅ: &#00fbff&l/ᴄꜰ 1000"),
+            Component.empty(),
+            FontUtils.parse("§7ᴛᴠá sázᴋᴀ sᴇ ᴘᴏᴛé"),
+            FontUtils.parse("§7ᴢᴏʙʀᴀᴢí ᴢᴅᴇ ᴠ ᴍᴇɴᴜ.")
         ));
         book.setItemMeta(bookMeta);
         inv.setItem(31, book);
@@ -84,12 +83,12 @@ public class CoinflipGui implements Listener {
         if (slot >= 0 && slot < bets.size() && slot < 27) {
             CoinflipManager.CoinflipBet bet = bets.get(slot);
             if (bet.creator.equals(player.getUniqueId())) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("You cannot play against yourself.")));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍůžᴇš ʜʀáᴛ ᴘʀᴏᴛɪ sᴏʙě ✖"));
                 return;
             }
 
             if (plugin.getEconomy().getBalance(player) < bet.amount) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§c" + FontUtils.toSmallCaps("Not enough money.")));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ ᴘᴇɴěᴢ ✖"));
                 return;
             }
 

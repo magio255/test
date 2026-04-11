@@ -1,6 +1,5 @@
 package me.jules.magiocore;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -24,7 +23,7 @@ public class CoinflipAnimation {
         this.p1 = p1;
         this.p2 = p2;
         this.amount = amount;
-        this.inv = Bukkit.createInventory(null, 27, LegacyComponentSerializer.legacySection().deserialize("§8» §b" + FontUtils.toSmallCaps("Coinflip: " + (p1 != null ? p1.getName() : "Offline") + " vs " + p2.getName())));
+        this.inv = Bukkit.createInventory(null, 27, FontUtils.parse("&#EA427F&lᴄᴏɪɴꜰʟɪᴘ: " + (p1 != null ? p1.getName() : "ᴏꜰꜰʟɪɴᴇ") + " vs " + p2.getName()));
     }
 
     public void start() {
@@ -45,7 +44,7 @@ public class CoinflipAnimation {
                 Material mat = (ticks % 2 == 0) ? Material.ORANGE_STAINED_GLASS_PANE : Material.YELLOW_STAINED_GLASS_PANE;
                 ItemStack glass = new ItemStack(mat);
                 ItemMeta meta = glass.getItemMeta();
-                meta.displayName(LegacyComponentSerializer.legacySection().deserialize("§7" + FontUtils.toSmallCaps("Rolling...")));
+                meta.displayName(FontUtils.parse("§7" + "ʟᴏsᴏᴠáɴí... 🎲"));
                 glass.setItemMeta(meta);
 
                 for (int i = 0; i < 27; i++) {
@@ -64,8 +63,8 @@ public class CoinflipAnimation {
         double prize = amount * 2;
         plugin.getEconomy().depositPlayer(winner, prize);
 
-        String msg = "§b" + FontUtils.toSmallCaps("Player ") + "§f" + winner.getName() + " §b" + FontUtils.toSmallCaps("won the Coinflip for ") + "§f" + prize + " §b$!";
-        Bukkit.broadcast(LegacyComponentSerializer.legacySection().deserialize(msg));
+        String msg = "&#EA427F&lʜʀáč §f" + winner.getName() + " &#EA427F&lᴠʏʜʀáʟ ᴠ ᴄᴏɪɴꜰɪʟᴘᴜ ᴏ &#00ff44&l" + prize + " $! 🎉";
+        Bukkit.broadcast(FontUtils.parse(msg));
 
         if (p1 != null) p1.closeInventory();
         p2.closeInventory();

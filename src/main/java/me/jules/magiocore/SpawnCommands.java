@@ -1,6 +1,5 @@
 package me.jules.magiocore;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,20 +19,20 @@ public class SpawnCommands implements CommandExecutor {
         if (!(sender instanceof Player player)) return true;
 
         if (command.getName().equalsIgnoreCase("setspawn")) {
-            if (!player.hasPermission("magiocore.admin")) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cNemáš oprávnění."));
+            if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
                 return true;
             }
             plugin.getConfig().set("spawn", player.getLocation());
             plugin.saveConfig();
-            player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§bSpawn byl nastaven."));
+            player.sendMessage(FontUtils.parse("&#00ff44&l" + "sᴘᴀᴡɴ ʙʏʟ ɴᴀsᴛᴀᴠᴇɴ ✔"));
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("spawn")) {
             Location spawn = plugin.getConfig().getLocation("spawn");
             if (spawn == null) {
-                player.sendMessage(LegacyComponentSerializer.legacySection().deserialize("§cSpawn není nastaven."));
+                player.sendMessage(FontUtils.parse("§c" + "sᴘᴀᴡɴ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ ✖"));
                 return true;
             }
 
