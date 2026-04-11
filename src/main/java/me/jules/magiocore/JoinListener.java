@@ -43,7 +43,7 @@ public class JoinListener implements Listener {
                             sideText = " " + format.replace("%player%", player.getName());
                         }
 
-                        Component finalRow = row.append(LegacyComponentSerializer.legacySection().deserialize(sideText));
+                        Component finalRow = row.append(FontUtils.parse(sideText));
 
                         if (firstJoin) {
                             Bukkit.broadcast(finalRow);
@@ -54,7 +54,7 @@ public class JoinListener implements Listener {
                 });
             });
         } else {
-            Component msg = LegacyComponentSerializer.legacySection().deserialize(format.replace("%player%", player.getName()));
+            Component msg = FontUtils.parse(format.replace("%player%", player.getName()));
             if (firstJoin) {
                 Bukkit.broadcast(msg);
             } else {
