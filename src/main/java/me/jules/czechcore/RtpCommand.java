@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -30,10 +30,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class RtpCommand implements CommandExecutor, Listener {
-    private final MagioCore plugin;
+    private final CzechCore plugin;
     private final Random random = new Random();
 
-    public RtpCommand(MagioCore plugin) {
+    public RtpCommand(CzechCore plugin) {
         this.plugin = plugin;
     }
 

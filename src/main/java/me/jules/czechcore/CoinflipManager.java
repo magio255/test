@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;

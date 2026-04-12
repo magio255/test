@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -25,7 +25,7 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
 
-        if (!player.hasPermission("magiocore.flyspeed") && !player.isOp()) {
+        if (!player.hasPermission("czechcore.flyspeed") && !player.isOp()) {
             player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
             return true;
         }

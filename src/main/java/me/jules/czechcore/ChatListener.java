@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ChatListener implements Listener {
-    private final MagioCore plugin;
+    private final CzechCore plugin;
     private final Map<UUID, Long> lastMessage = new HashMap<>();
 
-    public ChatListener(MagioCore plugin) {
+    public ChatListener(CzechCore plugin) {
         this.plugin = plugin;
     }
 

@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class PlaytimeUtils {
     public static int getMaxHomes(Player player) {
         if (player.isOp()) return 7;
         for (int i = 7; i >= 1; i--) {
-            if (player.hasPermission("magiocore.home." + i)) {
+            if (player.hasPermission("czechcore.home." + i)) {
                 return i;
             }
         }

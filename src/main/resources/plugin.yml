@@ -1,105 +1,121 @@
-name: MagioCore
+name: CzechCore
 version: 1.0
-main: me.jules.magiocore.MagioCore
+main: me.jules.czechcore.CzechCore
 api-version: 1.21
 commands:
   home:
-    description: Open the home GUI or teleport to a home.
-    usage: /home [number]
+    description: Otevře menu domovů nebo tě teleportuje.
+    usage: /home [číslo]
   sethome:
-    description: Set a home.
-    usage: /sethome [number]
+    description: Nastaví domov.
+    usage: /sethome [číslo]
   tpa:
-    description: Request to teleport to a player.
-    usage: /tpa <player>
+    description: Žádost o teleport k hráči.
+    usage: /tpa <hráč>
   tpahere:
-    description: Request a player to teleport to you.
-    usage: /tpahere <player>
+    description: Žádost, aby se hráč teleportoval k tobě.
+    usage: /tpahere <hráč>
   tpacancel:
-    description: Cancel your sent TPA request.
+    description: Zruší tvou odeslanou žádost o teleport.
     usage: /tpacancel
   tpaoff:
-    description: Toggle TPA requests.
+    description: Přepne přijímání žádostí o teleport.
     usage: /tpaoff
   tpaccept:
-    description: Accept a TPA request.
+    description: Přijme žádost o teleport.
     usage: /tpaccept
     aliases: [tpaaccept]
   tpadeny:
-    description: Deny a TPA request.
+    description: Odmítne žádost o teleport.
     usage: /tpadeny
     aliases: [tpdeny, tpa-deny]
   spawn:
-    description: Teleport to spawn.
+    description: Teleport na spawn.
     usage: /spawn
   setspawn:
-    description: Set the spawn location.
+    description: Nastaví lokaci spawnu.
     usage: /setspawn
   gmc:
-    description: Change gamemode to creative.
+    description: Změní herní mód na kreativní.
     usage: /gmc
   gms:
-    description: Change gamemode to survival.
+    description: Změní herní mód na survival.
     usage: /gms
   gmsp:
-    description: Change gamemode to spectator.
+    description: Změní herní mód na spectator.
     usage: /gmsp
   gma:
-    description: Change gamemode to adventure.
+    description: Změní herní mód na adventure.
     usage: /gma
   rtp:
-    description: Random teleport.
+    description: Náhodný teleport.
     usage: /rtp
   flyspeed:
-    description: Set your fly speed.
+    description: Nastaví tvou rychlost létání.
     usage: /flyspeed [1-10]
   playtime:
-    description: Show playtime.
-    usage: /playtime [player]
+    description: Ukáže odehraný čas.
+    usage: /playtime [hráč]
   coinflip:
-    description: Gamble money in a coinflip.
-    usage: /coinflip [amount]
+    description: Hazardní hra coinflip.
+    usage: /coinflip [částka]
     aliases: [cf]
   invsee:
-    description: View another player's inventory.
-    usage: /invsee <player>
+    description: Zobrazí inventář jiného hráče.
+    usage: /invsee <hráč>
 permissions:
-  magiocore.home:
-    description: Access to home commands.
+  czechcore.home:
+    description: Přístup k příkazům domovů.
     default: true
-  magiocore.tpa:
-    description: Access to TPA commands.
+  czechcore.tpa:
+    description: Přístup k TPA příkazům.
     default: true
-  magiocore.spawn:
-    description: Access to spawn commands.
+  czechcore.spawn:
+    description: Přístup k příkazům spawnu.
     default: true
-  magiocore.admin:
-    description: Access to admin commands like /setspawn.
+  czechcore.admin:
+    description: Přístup k administrátorským příkazům.
     default: op
-  magiocore.gmc:
-    description: Access to /gmc.
+  czechcore.gmc:
+    description: Přístup k /gmc.
     default: op
-  magiocore.gms:
-    description: Access to /gms.
+  czechcore.gms:
+    description: Přístup k /gms.
     default: op
-  magiocore.gmsp:
-    description: Access to /gmsp.
+  czechcore.gmsp:
+    description: Přístup k /gmsp.
     default: op
-  magiocore.gma:
-    description: Access to /gma.
+  czechcore.gma:
+    description: Přístup k /gma.
     default: op
-  magiocore.rtp:
-    description: Access to /rtp.
+  czechcore.rtp:
+    description: Přístup k /rtp.
     default: true
-  magiocore.flyspeed:
-    description: Access to /flyspeed.
+  czechcore.flyspeed:
+    description: Přístup k /flyspeed.
     default: op
-  magiocore.playtime:
-    description: Access to /playtime.
+  czechcore.playtime:
+    description: Přístup k /playtime.
     default: true
-  magiocore.coinflip:
-    description: Access to /coinflip.
+  czechcore.coinflip:
+    description: Přístup k /coinflip.
     default: true
-  magiocore.invsee:
-    description: Access to /invsee.
+  czechcore.invsee:
+    description: Přístup k /invsee.
+    default: op
+  czechcore.home.0:
+    default: true
+  czechcore.home.1:
+    default: true
+  czechcore.home.2:
+    default: false
+  czechcore.home.3:
+    default: false
+  czechcore.home.4:
+    default: false
+  czechcore.home.5:
+    default: false
+  czechcore.home.6:
+    default: false
+  czechcore.home.7:
     default: op

@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 public class HomeGui implements Listener {
-    private final MagioCore plugin;
+    private final CzechCore plugin;
     private final HomeManager homeManager;
     private final String title = "&#EA427F&l» " + "ᴍᴇɴᴜ ᴅᴏᴍᴏᴠů";
 
-    public HomeGui(MagioCore plugin, HomeManager homeManager) {
+    public HomeGui(CzechCore plugin, HomeManager homeManager) {
         this.plugin = plugin;
         this.homeManager = homeManager;
     }

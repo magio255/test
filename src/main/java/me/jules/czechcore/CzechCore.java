@@ -1,10 +1,10 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class MagioCore extends JavaPlugin {
+public class CzechCore extends JavaPlugin {
     private HomeManager homeManager;
     private HomeGui homeGui;
     private TpaManager tpaManager;
@@ -59,7 +59,7 @@ public class MagioCore extends JavaPlugin {
         getCommand("invsee").setExecutor(invseeCommand);
 
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new MagioCoreExpansion(this).register();
+            new CzechCoreExpansion(this).register();
         }
 
         getServer().getPluginManager().registerEvents(homeGui, this);
@@ -75,7 +75,7 @@ public class MagioCore extends JavaPlugin {
         getCommand("coinflip").setTabCompleter(coinflipCommand);
         getServer().getPluginManager().registerEvents(coinflipGui, this);
 
-        getLogger().info("MagioCore has been enabled!");
+        getLogger().info("CzechCore has been enabled!");
     }
 
     private boolean setupEconomy() {
@@ -104,6 +104,6 @@ public class MagioCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getLogger().info("MagioCore has been disabled!");
+        getLogger().info("CzechCore has been disabled!");
     }
 }

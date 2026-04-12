@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;

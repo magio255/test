@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,12 +12,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HomeManager {
-    private final MagioCore plugin;
+    private final CzechCore plugin;
     private final File file;
     private final FileConfiguration config;
     private final Map<UUID, Map<Integer, Home>> playerHomes = new HashMap<>();
 
-    public HomeManager(MagioCore plugin) {
+    public HomeManager(CzechCore plugin) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "homes.yml");
         if (!file.exists()) {

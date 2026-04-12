@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Location;
@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class HomeCommands implements CommandExecutor {
-    private final MagioCore plugin;
+    private final CzechCore plugin;
     private final HomeManager homeManager;
 
-    public HomeCommands(MagioCore plugin, HomeManager homeManager) {
+    public HomeCommands(CzechCore plugin, HomeManager homeManager) {
         this.plugin = plugin;
         this.homeManager = homeManager;
     }

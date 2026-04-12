@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -11,9 +11,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.List;
 
 public class JoinListener implements Listener {
-    private final MagioCore plugin;
+    private final CzechCore plugin;
 
-    public JoinListener(MagioCore plugin) {
+    public JoinListener(CzechCore plugin) {
         this.plugin = plugin;
     }
 

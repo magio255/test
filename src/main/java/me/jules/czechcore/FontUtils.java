@@ -1,4 +1,4 @@
-package me.jules.magiocore;
+package me.jules.czechcore;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -14,23 +14,29 @@ public class FontUtils {
     private static final Pattern CODE_PATTERN = Pattern.compile("(&#[A-Fa-f0-9]{6}|&[0-9a-fk-orA-FK-OR]|§[0-9a-fk-orA-FK-OR])");
 
     static {
-        String normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZáčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ";
-        String smallCaps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
-        // Diacritics mapping to base Small Caps
-        String czech = "áčďéěíňóřšťúůýž";
-        String base = "acdeeinorstuuuz";
+        String normal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String smallCaps = "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ";
 
-        for (int i = 0; i < 52; i++) { // a-z A-Z
+        for (int i = 0; i < normal.length(); i++) {
             SMALL_CAPS.put(normal.charAt(i), smallCaps.charAt(i));
         }
 
-        for (int i = 0; i < czech.length(); i++) {
-            char lower = czech.charAt(i);
-            char upper = Character.toUpperCase(lower);
-            char target = toSmallCaps(String.valueOf(base.charAt(i))).charAt(0);
-            SMALL_CAPS.put(lower, target);
-            SMALL_CAPS.put(upper, target);
-        }
+        // Czech diacritics mapping to base small caps
+        SMALL_CAPS.put('á', 'ᴀ'); SMALL_CAPS.put('Á', 'ᴀ');
+        SMALL_CAPS.put('č', 'ᴄ'); SMALL_CAPS.put('Č', 'ᴄ');
+        SMALL_CAPS.put('ď', 'ᴅ'); SMALL_CAPS.put('Ď', 'ᴅ');
+        SMALL_CAPS.put('é', 'ᴇ'); SMALL_CAPS.put('É', 'ᴇ');
+        SMALL_CAPS.put('ě', 'ᴇ'); SMALL_CAPS.put('Ě', 'ᴇ');
+        SMALL_CAPS.put('í', 'ɪ'); SMALL_CAPS.put('Í', 'ɪ');
+        SMALL_CAPS.put('ň', 'ɴ'); SMALL_CAPS.put('Ň', 'ɴ');
+        SMALL_CAPS.put('ó', 'ᴏ'); SMALL_CAPS.put('Ó', 'ᴏ');
+        SMALL_CAPS.put('ř', 'ʀ'); SMALL_CAPS.put('Ř', 'ʀ');
+        SMALL_CAPS.put('š', 's'); SMALL_CAPS.put('Š', 's');
+        SMALL_CAPS.put('ť', 'ᴛ'); SMALL_CAPS.put('Ť', 'ᴛ');
+        SMALL_CAPS.put('ú', 'ᴜ'); SMALL_CAPS.put('Ú', 'ᴜ');
+        SMALL_CAPS.put('ů', 'ᴜ'); SMALL_CAPS.put('Ů', 'ᴜ');
+        SMALL_CAPS.put('ý', 'ʏ'); SMALL_CAPS.put('Ý', 'ʏ');
+        SMALL_CAPS.put('ž', 'ᴢ'); SMALL_CAPS.put('Ž', 'ᴢ');
     }
 
     public static String toSmallCaps(String input) {
