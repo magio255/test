@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -13,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class TpaCommands implements CommandExecutor {
-    private final CzechCore plugin;
+    private final MagioCore plugin;
     private final TpaManager tpaManager;
 
     private final String prefix = "&#00fbff&lᴛᴘᴀ &#888888» §7";
     private final String errorPrefix = "§cᴛᴘᴀ &#888888» §7";
     private final String color = "&#00fbff&l";
 
-    public TpaCommands(CzechCore plugin, TpaManager tpaManager) {
+    public TpaCommands(MagioCore plugin, TpaManager tpaManager) {
         this.plugin = plugin;
         this.tpaManager = tpaManager;
     }

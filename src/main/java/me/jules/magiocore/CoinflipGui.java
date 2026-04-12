@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -17,11 +17,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class CoinflipGui implements Listener {
-    private final CzechCore plugin;
+    private final MagioCore plugin;
     private final CoinflipManager manager;
     private final String title = "&#EA427F&l» " + "ᴄᴏɪɴꜰʟɪᴘ ᴍᴇɴᴜ";
 
-    public CoinflipGui(CzechCore plugin, CoinflipManager manager) {
+    public CoinflipGui(MagioCore plugin, CoinflipManager manager) {
         this.plugin = plugin;
         this.manager = manager;
     }

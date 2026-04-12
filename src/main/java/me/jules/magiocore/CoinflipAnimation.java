@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -11,14 +11,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Random;
 
 public class CoinflipAnimation {
-    private final CzechCore plugin;
+    private final MagioCore plugin;
     private final Player p1;
     private final Player p2;
     private final double amount;
     private final Inventory inv;
     private final Random random = new Random();
 
-    public CoinflipAnimation(CzechCore plugin, Player p1, Player p2, double amount) {
+    public CoinflipAnimation(MagioCore plugin, Player p1, Player p2, double amount) {
         this.plugin = plugin;
         this.p1 = p1;
         this.p2 = p2;

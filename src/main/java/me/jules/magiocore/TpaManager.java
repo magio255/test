@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,14 +12,14 @@ import java.util.Set;
 import java.util.UUID;
 
 public class TpaManager {
-    private final CzechCore plugin;
+    private final MagioCore plugin;
     private final File file;
     private final FileConfiguration config;
     private final Map<UUID, TpaRequest> pendingRequests = new HashMap<>(); // Key: target (receiver)
     private final Map<UUID, UUID> sentRequests = new HashMap<>(); // Key: requester, Value: target
     private final Set<UUID> tpaOff = new HashSet<>();
 
-    public TpaManager(CzechCore plugin) {
+    public TpaManager(MagioCore plugin) {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "tpa.yml");
         if (!file.exists()) {

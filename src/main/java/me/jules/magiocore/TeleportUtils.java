@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -16,15 +16,15 @@ import java.util.function.Consumer;
 public class TeleportUtils {
     private static final Map<UUID, BukkitRunnable> pendingTeleports = new HashMap<>();
 
-    public static void startTeleportCountdown(Player player, Location target, CzechCore plugin, Consumer<Boolean> callback) {
+    public static void startTeleportCountdown(Player player, Location target, MagioCore plugin, Consumer<Boolean> callback) {
         startTeleportCountdown(player, target, null, 3, plugin, callback);
     }
 
-    public static void startTeleportCountdown(Player player, Player targetPlayer, CzechCore plugin, Consumer<Boolean> callback) {
+    public static void startTeleportCountdown(Player player, Player targetPlayer, MagioCore plugin, Consumer<Boolean> callback) {
         startTeleportCountdown(player, null, targetPlayer, 3, plugin, callback);
     }
 
-    private static void startTeleportCountdown(Player player, Location targetLoc, Player targetPlayer, int seconds, CzechCore plugin, Consumer<Boolean> callback) {
+    private static void startTeleportCountdown(Player player, Location targetLoc, Player targetPlayer, int seconds, MagioCore plugin, Consumer<Boolean> callback) {
         cancelPendingTeleport(player);
 
         Location startLocation = player.getLocation().clone();

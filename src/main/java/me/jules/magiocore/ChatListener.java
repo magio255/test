@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -6,15 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatListener implements Listener {
-    private final CzechCore plugin;
-    private final Map<UUID, Long> lastMessage = new HashMap<>();
+    private final MagioCore plugin;
+    private final Map<UUID, Long> lastMessage = new ConcurrentHashMap<>();
 
-    public ChatListener(CzechCore plugin) {
+    public ChatListener(MagioCore plugin) {
         this.plugin = plugin;
     }
 

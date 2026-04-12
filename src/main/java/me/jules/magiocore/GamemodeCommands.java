@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -20,19 +20,19 @@ public class GamemodeCommands implements CommandExecutor {
         switch (cmd) {
             case "gmc":
                 gm = GameMode.CREATIVE;
-                perm = "czechcore.gmc";
+                perm = "magiocore.gmc";
                 break;
             case "gms":
                 gm = GameMode.SURVIVAL;
-                perm = "czechcore.gms";
+                perm = "magiocore.gms";
                 break;
             case "gmsp":
                 gm = GameMode.SPECTATOR;
-                perm = "czechcore.gmsp";
+                perm = "magiocore.gmsp";
                 break;
             case "gma":
                 gm = GameMode.ADVENTURE;
-                perm = "czechcore.gma";
+                perm = "magiocore.gma";
                 break;
         }
 

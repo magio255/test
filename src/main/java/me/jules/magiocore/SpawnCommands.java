@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnCommands implements CommandExecutor {
-    private final CzechCore plugin;
+    private final MagioCore plugin;
 
-    public SpawnCommands(CzechCore plugin) {
+    public SpawnCommands(MagioCore plugin) {
         this.plugin = plugin;
     }
 
@@ -19,7 +19,7 @@ public class SpawnCommands implements CommandExecutor {
         if (!(sender instanceof Player player)) return true;
 
         if (command.getName().equalsIgnoreCase("setspawn")) {
-            if (!player.hasPermission("czechcore.admin") && !player.isOp()) {
+            if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
                 player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
                 return true;
             }

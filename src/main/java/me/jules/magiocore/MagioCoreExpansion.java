@@ -1,21 +1,21 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CzechCoreExpansion extends PlaceholderExpansion {
+public class MagioCoreExpansion extends PlaceholderExpansion {
 
-    private final CzechCore plugin;
+    private final MagioCore plugin;
 
-    public CzechCoreExpansion(CzechCore plugin) {
+    public MagioCoreExpansion(MagioCore plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public @NotNull String getIdentifier() {
-        return "czechcore";
+        return "magiocore";
     }
 
     @Override

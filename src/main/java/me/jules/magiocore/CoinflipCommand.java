@@ -1,4 +1,4 @@
-package me.jules.czechcore;
+package me.jules.magiocore;
 
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoinflipCommand implements CommandExecutor, TabCompleter {
-    private final CzechCore plugin;
+    private final MagioCore plugin;
     private final CoinflipManager manager;
 
-    public CoinflipCommand(CzechCore plugin, CoinflipManager manager) {
+    public CoinflipCommand(MagioCore plugin, CoinflipManager manager) {
         this.plugin = plugin;
         this.manager = manager;
     }
