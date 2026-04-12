@@ -21,22 +21,26 @@ public class FontUtils {
             SMALL_CAPS.put(normal.charAt(i), smallCaps.charAt(i));
         }
 
-        // Czech diacritics mapping to base small caps
-        SMALL_CAPS.put('á', 'ᴀ'); SMALL_CAPS.put('Á', 'ᴀ');
-        SMALL_CAPS.put('č', 'ᴄ'); SMALL_CAPS.put('Č', 'ᴄ');
-        SMALL_CAPS.put('ď', 'ᴅ'); SMALL_CAPS.put('Ď', 'ᴅ');
-        SMALL_CAPS.put('é', 'ᴇ'); SMALL_CAPS.put('É', 'ᴇ');
-        SMALL_CAPS.put('ě', 'ᴇ'); SMALL_CAPS.put('Ě', 'ᴇ');
-        SMALL_CAPS.put('í', 'ɪ'); SMALL_CAPS.put('Í', 'ɪ');
-        SMALL_CAPS.put('ň', 'ɴ'); SMALL_CAPS.put('Ň', 'ɴ');
-        SMALL_CAPS.put('ó', 'ᴏ'); SMALL_CAPS.put('Ó', 'ᴏ');
-        SMALL_CAPS.put('ř', 'ʀ'); SMALL_CAPS.put('Ř', 'ʀ');
-        SMALL_CAPS.put('š', 's'); SMALL_CAPS.put('Š', 's');
-        SMALL_CAPS.put('ť', 'ᴛ'); SMALL_CAPS.put('Ť', 'ᴛ');
-        SMALL_CAPS.put('ú', 'ᴜ'); SMALL_CAPS.put('Ú', 'ᴜ');
-        SMALL_CAPS.put('ů', 'ᴜ'); SMALL_CAPS.put('Ů', 'ᴜ');
-        SMALL_CAPS.put('ý', 'ʏ'); SMALL_CAPS.put('Ý', 'ʏ');
-        SMALL_CAPS.put('ž', 'ᴢ'); SMALL_CAPS.put('Ž', 'ᴢ');
+        // Czech diacritics mapping to accented small caps equivalents as requested
+        SMALL_CAPS.put('á', 'á'); SMALL_CAPS.put('Á', 'á');
+        SMALL_CAPS.put('č', 'č'); SMALL_CAPS.put('Č', 'č');
+        SMALL_CAPS.put('ď', 'ď'); SMALL_CAPS.put('Ď', 'ď');
+        SMALL_CAPS.put('é', 'é'); SMALL_CAPS.put('É', 'é');
+        SMALL_CAPS.put('ě', 'ě'); SMALL_CAPS.put('Ě', 'ě');
+        SMALL_CAPS.put('í', 'í'); SMALL_CAPS.put('Í', 'í');
+        SMALL_CAPS.put('ň', 'ň'); SMALL_CAPS.put('Ň', 'ň');
+        SMALL_CAPS.put('ó', 'ó'); SMALL_CAPS.put('Ó', 'ó');
+        SMALL_CAPS.put('ř', 'ř'); SMALL_CAPS.put('Ř', 'ř');
+        SMALL_CAPS.put('š', 'š'); SMALL_CAPS.put('Š', 'š');
+        SMALL_CAPS.put('ť', 'ť'); SMALL_CAPS.put('Ť', 'ť');
+        SMALL_CAPS.put('ú', 'ú'); SMALL_CAPS.put('Ú', 'ú');
+        SMALL_CAPS.put('ů', 'ů'); SMALL_CAPS.put('Ů', 'ů');
+        SMALL_CAPS.put('ý', 'ý'); SMALL_CAPS.put('Ý', 'ý');
+        SMALL_CAPS.put('ž', 'ž'); SMALL_CAPS.put('Ž', 'ž');
+
+        // Ensure they are small caps where possible if the user meant specific small-caps with accents
+        // but often 'ᴍáᴍ' just uses standard accented chars if small-caps accented ones don't exist in unicode.
+        // User example 'ᴍáᴍ ʀáᴅé' uses standard 'á' and 'é'.
     }
 
     public static String toSmallCaps(String input) {
