@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,14 +14,28 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatListener implements Listener {
     private final MagioCore plugin;
     private final Map<UUID, Long> lastMessage = new ConcurrentHashMap<>();
+    private final Map<UUID, Boolean> searchMode = new ConcurrentHashMap<>();
 
     public ChatListener(MagioCore plugin) {
         this.plugin = plugin;
     }
 
+    public void setSearchMode(UUID uuid, boolean mode) {
+        if (mode) searchMode.put(uuid, true);
+        else searchMode.remove(uuid);
+    }
+
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
+
+        if (searchMode.getOrDefault(player.getUniqueId(), false)) {
+            event.setCancelled(true);
+            setSearchMode(player.getUniqueId(), false);
+            handleBaltopSearch(player, LegacyComponentSerializer.legacySection().serialize(event.originalMessage()));
+            return;
+        }
+
         if (player.isOp()) return;
 
         long now = System.currentTimeMillis();
@@ -36,5 +51,25 @@ public class ChatListener implements Listener {
         }
 
         lastMessage.put(player.getUniqueId(), now);
+    }
+
+    private void handleBaltopSearch(Player player, String message) {
+        List<BaltopManager.BaltopEntry> top = plugin.getBaltopManager().getCachedTop();
+        int rank = 0;
+        boolean found = false;
+
+        for (int i = 0; i < top.size(); i++) {
+            BaltopManager.BaltopEntry entry = top.get(i);
+            if (entry.name().equalsIgnoreCase(message)) {
+                found = true;
+                rank = i + 1;
+                player.sendMessage(FontUtils.parse("&#EA427F&lʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00&l" + entry.name() + " §fᴊᴇ ɴᴀ &#00fbff&l" + rank + ". §fᴍísᴛě s ʙᴀʟᴀɴᴄí &#00ff44&l" + entry.balance() + " $"));
+                break;
+            }
+        }
+
+        if (!found) {
+            player.sendMessage(FontUtils.parse("&#EA427F&lʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00&l" + message + " §fɴᴇʙʏʟ ɴᴀʟᴇᴢᴇɴ ᴠ ʙᴀʟᴛᴏᴘᴜ ✖"));
+        }
     }
 }

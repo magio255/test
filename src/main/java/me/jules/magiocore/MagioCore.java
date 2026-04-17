@@ -11,6 +11,9 @@ public class MagioCore extends JavaPlugin {
     private Economy econ = null;
     private CoinflipManager coinflipManager;
     private CoinflipGui coinflipGui;
+    private BaltopManager baltopManager;
+    private BaltopGui baltopGui;
+    private ChatListener chatListener;
 
     @Override
     public void onEnable() {
@@ -66,7 +69,8 @@ public class MagioCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(rtpCommand, this);
         getServer().getPluginManager().registerEvents(flySpeedCommand, this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        chatListener = new ChatListener(this);
+        getServer().getPluginManager().registerEvents(chatListener, this);
 
         coinflipManager = new CoinflipManager();
         coinflipGui = new CoinflipGui(this, coinflipManager);
@@ -74,6 +78,11 @@ public class MagioCore extends JavaPlugin {
         getCommand("coinflip").setExecutor(coinflipCommand);
         getCommand("coinflip").setTabCompleter(coinflipCommand);
         getServer().getPluginManager().registerEvents(coinflipGui, this);
+
+        baltopManager = new BaltopManager(this);
+        baltopGui = new BaltopGui(this, baltopManager);
+        getCommand("baltop").setExecutor(new BaltopCommand(this));
+        getServer().getPluginManager().registerEvents(baltopGui, this);
 
         getLogger().info("MagioCore has been enabled!");
     }
@@ -96,6 +105,18 @@ public class MagioCore extends JavaPlugin {
 
     public CoinflipGui getCoinflipGui() {
         return coinflipGui;
+    }
+
+    public BaltopManager getBaltopManager() {
+        return baltopManager;
+    }
+
+    public BaltopGui getBaltopGui() {
+        return baltopGui;
+    }
+
+    public ChatListener getChatListener() {
+        return chatListener;
     }
 
     public HomeGui getHomeGui() {

@@ -63,6 +63,9 @@ commands:
   invsee:
     description: Zobrazí inventář jiného hráče.
     usage: /invsee <hráč>
+  baltop:
+    description: Zobrazí žebříček nejbohatších hráčů.
+    usage: /baltop [strana]
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.
@@ -103,6 +106,9 @@ permissions:
   magiocore.invsee:
     description: Přístup k /invsee.
     default: op
+  magiocore.baltop:
+    description: Access to /baltop.
+    default: true
   magiocore.home.0:
     default: true
   magiocore.home.1:
