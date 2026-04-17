@@ -30,6 +30,11 @@ join-message:
       - "§7zábavy!"
       - "§7Šťastné hraní! 🎮"
 
+# AFK Zone Settings
+afk-zone:
+  region-name: "afk"
+  reward-command: "eco give %player% 10" # Command to run every minute
+
 # Anti Spam Settings
 anti-spam:
   delay: 2 # Delay in seconds between messages
@@ -42,7 +47,7 @@ rtp:
     background: "BLACK_STAINED_GLASS_PANE"
     item:
       material: "PLAYER_HEAD"
-      texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmFhYmFmYmY2MTk0NWRmN2FjMWNkODkyYTcxNGRmZjdmYTE3OTFiOTQ5NjM2OTg0NWVlZDYyYWU0YmZkZjMifX19"
+      texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2U1MTA4YzljMjljNzRjM2FmMzk2MWI4ZTAyY2NkZjFkNTE3ZmZiOTYwMzUwNTVmNTIzZTc1MzM5Nzk1ZDEzMyJ9fX0="
       slot: 13
       name: "ᴏᴠᴇʀᴡᴏʀʟᴅ"
       lore:

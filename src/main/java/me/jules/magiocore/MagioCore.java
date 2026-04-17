@@ -84,6 +84,8 @@ public class MagioCore extends JavaPlugin {
         getCommand("baltop").setExecutor(new BaltopCommand(this));
         getServer().getPluginManager().registerEvents(baltopGui, this);
 
+        new AfkZoneTask(this).runTaskTimerAsynchronously(this, 1200L, 1200L); // Every 60 seconds
+
         getLogger().info("MagioCore has been enabled!");
     }
 
