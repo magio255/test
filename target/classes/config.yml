@@ -44,7 +44,7 @@ rtp:
   gui:
     title: "ᴡᴏʀʟᴅ sᴇʟᴇᴄᴛɪᴏɴ"
     rows: 3
-    background: "BLACK_STAINED_GLASS_PANE"
+    background: "AIR"
     worlds:
       overworld:
         material: "PLAYER_HEAD"

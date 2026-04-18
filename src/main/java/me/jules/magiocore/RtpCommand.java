@@ -57,18 +57,22 @@ public class RtpCommand implements CommandExecutor, Listener {
 
         Material bgMaterial;
         try {
-            bgMaterial = Material.valueOf(config.getString("background", "BLACK_STAINED_GLASS_PANE"));
+            bgMaterial = Material.valueOf(config.getString("background", "AIR"));
         } catch (IllegalArgumentException e) {
-            bgMaterial = Material.BLACK_STAINED_GLASS_PANE;
+            bgMaterial = Material.AIR;
         }
 
-        ItemStack glass = new ItemStack(bgMaterial);
-        ItemMeta glassMeta = glass.getItemMeta();
-        glassMeta.displayName(Component.empty());
-        glass.setItemMeta(glassMeta);
+        if (bgMaterial != Material.AIR) {
+            ItemStack glass = new ItemStack(bgMaterial);
+            ItemMeta glassMeta = glass.getItemMeta();
+            if (glassMeta != null) {
+                glassMeta.displayName(Component.empty());
+                glass.setItemMeta(glassMeta);
+            }
 
-        for (int i = 0; i < inv.getSize(); i++) {
-            inv.setItem(i, glass);
+            for (int i = 0; i < inv.getSize(); i++) {
+                inv.setItem(i, glass);
+            }
         }
 
         slotToWorld.clear();

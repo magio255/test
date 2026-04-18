@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class AfkZoneTask extends BukkitRunnable {
     private final MagioCore plugin;
+    private int secondsRemaining = 60;
 
     public AfkZoneTask(MagioCore plugin) {
         this.plugin = plugin;
@@ -19,18 +20,25 @@ public class AfkZoneTask extends BukkitRunnable {
 
     @Override
     public void run() {
+        secondsRemaining--;
+
         String regionName = plugin.getConfig().getString("afk-zone.region-name", "afk");
         String command = plugin.getConfig().getString("afk-zone.reward-command");
 
-        if (command == null || command.isEmpty()) return;
-
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (isInRegion(player, regionName)) {
-                String finalCmd = command.replace("%player%", player.getName());
-                Bukkit.getScheduler().runTask(plugin, () -> {
+                // Show action bar
+                player.sendActionBar(FontUtils.parse("&#00fbffᴏᴅᴍěɴᴀ ᴢᴀ: " + secondsRemaining + "s"));
+
+                if (secondsRemaining <= 0 && command != null && !command.isEmpty()) {
+                    String finalCmd = command.replace("%player%", player.getName());
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
-                });
+                }
             }
+        }
+
+        if (secondsRemaining <= 0) {
+            secondsRemaining = 60;
         }
     }
 
