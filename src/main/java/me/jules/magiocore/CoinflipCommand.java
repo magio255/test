@@ -31,20 +31,20 @@ public class CoinflipCommand implements CommandExecutor, TabCompleter {
             try {
                 double amount = Double.parseDouble(args[0]);
                 if (amount <= 0) {
-                    player.sendMessage(FontUtils.parse("§c" + "sázᴋᴀ ᴍᴜsí ʙýᴛ ᴋʟᴀᴅɴá ✖"));
+                    player.sendMessage(FontUtils.parse("§c" + "sázᴋᴀ ᴍᴜsí ʙýᴛ ᴋʟᴀᴅɴá"));
                     return true;
                 }
 
                 if (plugin.getEconomy().getBalance(player) < amount) {
-                    player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ ᴘᴇɴěᴢ ✖"));
+                    player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ ᴘᴇɴěᴢ"));
                     return true;
                 }
 
                 plugin.getEconomy().withdrawPlayer(player, amount);
                 manager.addBet(player, amount);
-                player.sendMessage(FontUtils.parse("&#00ff44&l" + "ᴠʏᴛᴠᴏřɪʟ ᴊsɪ ᴄᴏɪɴꜰʟɪᴘ ᴏ §f" + amount + " $ ✔"));
+                player.sendMessage(FontUtils.parse("&#00ff44" + "ᴠʏᴛᴠᴏřɪʟ ᴊsɪ ᴄᴏɪɴꜰʟɪᴘ ᴏ §f" + amount + " $"));
             } catch (NumberFormatException e) {
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ᴄꜰ <čásᴛᴋᴀ> ✖"));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ᴄꜰ <čásᴛᴋᴀ>"));
             }
             return true;
         }

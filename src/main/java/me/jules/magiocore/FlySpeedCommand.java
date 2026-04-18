@@ -19,14 +19,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class FlySpeedCommand implements CommandExecutor, Listener {
-    private final String title = "&#EA427F&l» " + "ʀʏᴄʜʟᴏsᴛ ʟéᴛáɴí";
+    private final String title = "&#EA427F» " + "ʀʏᴄʜʟᴏsᴛ ʟéᴛáɴí";
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
 
         if (!player.hasPermission("magiocore.flyspeed") && !player.isOp()) {
-            player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
+            player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí"));
             return true;
         }
 
@@ -34,12 +34,12 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
             try {
                 int speed = Integer.parseInt(args[0]);
                 if (speed < 1 || speed > 10) {
-                    player.sendMessage(FontUtils.parse("§c" + "ʀʏᴄʜʟᴏsᴛ ᴍᴜsí ʙýᴛ 1-10 ✖"));
+                    player.sendMessage(FontUtils.parse("§c" + "ʀʏᴄʜʟᴏsᴛ ᴍᴜsí ʙýᴛ 1-10"));
                     return true;
                 }
                 setFlySpeed(player, speed);
             } catch (NumberFormatException e) {
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ꜰʟʏsᴘᴇᴇᴅ [1-10] ✖"));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ꜰʟʏsᴘᴇᴇᴅ [1-10]"));
             }
         } else {
             openGui(player);
@@ -71,7 +71,7 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
     private ItemStack createFeather(int speed) {
         ItemStack item = new ItemStack(Material.FEATHER);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(FontUtils.parse("&#00fbff&lʀʏᴄʜʟᴏsᴛ " + speed + " ✈"));
+        meta.displayName(FontUtils.parse("&#00fbffʀʏᴄʜʟᴏsᴛ " + speed + ""));
         meta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ʀʏᴄʜʟᴏsᴛɪ ɴᴀ " + speed)));
         item.setItemMeta(meta);
         return item;
@@ -80,7 +80,7 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
     private void setFlySpeed(Player player, int speed) {
         float fSpeed = (float) speed / 10.0f;
         player.setFlySpeed(fSpeed);
-        player.sendMessage(FontUtils.parse("&#00fbff&lᴛᴠᴏᴊᴇ ʀʏᴄʜʟᴏsᴛ ʟéᴛáɴí ʙʏʟᴀ ɴᴀsᴛᴀᴠᴇɴᴀ ɴᴀ " + speed + " ✔"));
+        player.sendMessage(FontUtils.parse("&#00fbffᴛᴠᴏᴊᴇ ʀʏᴄʜʟᴏsᴛ ʟéᴛáɴí ʙʏʟᴀ ɴᴀsᴛᴀᴠᴇɴᴀ ɴᴀ " + speed + ""));
     }
 
     @EventHandler

@@ -14,23 +14,23 @@ public class InvseeCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) return true;
 
         if (!player.hasPermission("magiocore.invsee") && !player.isOp()) {
-            player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
+            player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí"));
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ɪɴᴠsᴇᴇ <ʜʀáč> ✖"));
+            player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ɪɴᴠsᴇᴇ <ʜʀáč>"));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ ʜʀáč ɴᴇɴí ᴏɴʟɪɴᴇ ✖"));
+            player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ ʜʀáč ɴᴇɴí ᴏɴʟɪɴᴇ"));
             return true;
         }
 
         player.openInventory(target.getInventory());
-        player.sendMessage(FontUtils.parse("&#00fbff&l» " + "ᴏᴛᴠᴇᴠřᴇɴ ɪɴᴠᴇɴᴛář ʜʀáčᴇ " + target.getName()));
+        player.sendMessage(FontUtils.parse("&#00fbff» " + "ᴏᴛᴠᴇᴠřᴇɴ ɪɴᴠᴇɴᴛář ʜʀáčᴇ " + target.getName()));
 
         return true;
     }

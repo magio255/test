@@ -19,7 +19,7 @@ import java.util.List;
 public class CoinflipGui implements Listener {
     private final MagioCore plugin;
     private final CoinflipManager manager;
-    private final String title = "&#EA427F&l» " + "ᴄᴏɪɴꜰʟɪᴘ ᴍᴇɴᴜ";
+    private final String title = "&#EA427F» " + "ᴄᴏɪɴꜰʟɪᴘ ᴍᴇɴᴜ";
 
     public CoinflipGui(MagioCore plugin, CoinflipManager manager) {
         this.plugin = plugin;
@@ -44,11 +44,11 @@ public class CoinflipGui implements Listener {
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = (SkullMeta) head.getItemMeta();
             meta.setOwningPlayer(Bukkit.getOfflinePlayer(bet.creator));
-            meta.displayName(FontUtils.parse("&#00fbff&lʜʀáč: §f" + bet.creatorName));
+            meta.displayName(FontUtils.parse("&#00fbffʜʀáč: §f" + bet.creatorName));
             meta.lore(List.of(
-                FontUtils.parse("§7sázᴋᴀ: &#00ff44&l" + bet.amount + " $"),
+                FontUtils.parse("§7sázᴋᴀ: &#00ff44" + bet.amount + " $"),
                 Component.empty(),
-                FontUtils.parse("&#EA427F&lᴋʟɪᴋɴɪ ᴘʀᴏ sázᴋᴜ! 🎲")
+                FontUtils.parse("&#EA427Fᴋʟɪᴋɴɪ ᴘʀᴏ sázᴋᴜ!")
             ));
             head.setItemMeta(meta);
             inv.setItem(i, head);
@@ -57,10 +57,12 @@ public class CoinflipGui implements Listener {
         // Tutorial Book
         ItemStack book = new ItemStack(Material.BOOK);
         ItemMeta bookMeta = book.getItemMeta();
-        bookMeta.displayName(FontUtils.parse("&#ffbb00&lᴊᴀᴋ ᴠʏᴛᴠᴏřɪᴛ ᴄᴏɪɴꜰʟɪᴘ? ❓"));
+        // Remove duplicate question mark and bold from book title
+        bookMeta.displayName(FontUtils.parse("&#ffbb00ᴊᴀᴋ ᴠʏᴛᴠᴏřɪᴛ ᴄᴏɪɴꜰʟɪᴘ?"));
+        // Remove bold from command examples in book lore
         bookMeta.lore(List.of(
-            FontUtils.parse("§7ᴘříᴋᴀᴢ: &#00fbff&l/ᴄꜰ <čásᴛᴋᴀ>"),
-            FontUtils.parse("§7ᴘříᴋʟᴀᴅ: &#00fbff&l/ᴄꜰ 1000"),
+            FontUtils.parse("§7ᴘříᴋᴀᴢ: &#00fbff/ᴄꜰ <čásᴛᴋᴀ>"),
+            FontUtils.parse("§7ᴘříᴋʟᴀᴅ: &#00fbff/ᴄꜰ 1000"),
             Component.empty(),
             FontUtils.parse("§7ᴛᴠá sázᴋᴀ sᴇ ᴘᴏᴛé"),
             FontUtils.parse("§7ᴢᴏʙʀᴀᴢí ᴢᴅᴇ ᴠ ᴍᴇɴᴜ.")
@@ -83,12 +85,12 @@ public class CoinflipGui implements Listener {
         if (slot >= 0 && slot < bets.size() && slot < 27) {
             CoinflipManager.CoinflipBet bet = bets.get(slot);
             if (bet.creator.equals(player.getUniqueId())) {
-                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍůžᴇš ʜʀáᴛ ᴘʀᴏᴛɪ sᴏʙě ✖"));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍůžᴇš ʜʀáᴛ ᴘʀᴏᴛɪ sᴏʙě"));
                 return;
             }
 
             if (plugin.getEconomy().getBalance(player) < bet.amount) {
-                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ ᴘᴇɴěᴢ ✖"));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ ᴘᴇɴěᴢ"));
                 return;
             }
 

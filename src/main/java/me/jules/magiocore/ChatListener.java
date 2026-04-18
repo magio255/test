@@ -45,7 +45,7 @@ public class ChatListener implements Listener {
             long last = lastMessage.get(player.getUniqueId());
             if (now - last < delay) {
                 event.setCancelled(true);
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴍᴀʟʏ! ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴘřᴇᴅ ᴅᴀʟšíᴍ ᴘᴏsʟáɴíᴍ ᴢᴘʀáᴠʏ ✖"));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴍᴀʟʏ! ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴘřᴇᴅ ᴅᴀʟšíᴍ ᴘᴏsʟáɴíᴍ ᴢᴘʀáᴠʏ"));
                 return;
             }
         }
@@ -63,13 +63,13 @@ public class ChatListener implements Listener {
             if (entry.name().equalsIgnoreCase(message)) {
                 found = true;
                 rank = i + 1;
-                player.sendMessage(FontUtils.parse("&#EA427F&lʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00&l" + entry.name() + " §fᴊᴇ ɴᴀ &#00fbff&l" + rank + ". §fᴍísᴛě s ʙᴀʟᴀɴᴄí &#00ff44&l" + entry.balance() + " $"));
+                player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00" + entry.name() + " §fᴊᴇ ɴᴀ &#00fbff" + rank + ". §fᴍísᴛě s ʙᴀʟᴀɴᴄí &#00ff44" + entry.balance() + " $"));
                 break;
             }
         }
 
         if (!found) {
-            player.sendMessage(FontUtils.parse("&#EA427F&lʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00&l" + message + " §fɴᴇʙʏʟ ɴᴀʟᴇᴢᴇɴ ᴠ ʙᴀʟᴛᴏᴘᴜ ✖"));
+            player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00" + message + " §fɴᴇʙʏʟ ɴᴀʟᴇᴢᴇɴ ᴠ ʙᴀʟᴛᴏᴘᴜ"));
         }
     }
 }

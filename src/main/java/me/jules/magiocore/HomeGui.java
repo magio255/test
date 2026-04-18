@@ -19,7 +19,7 @@ import java.util.Map;
 public class HomeGui implements Listener {
     private final MagioCore plugin;
     private final HomeManager homeManager;
-    private final String title = "&#EA427F&l» " + "ᴍᴇɴᴜ ᴅᴏᴍᴏᴠů";
+    private final String title = "&#EA427F» " + "ᴍᴇɴᴜ ᴅᴏᴍᴏᴠů";
 
     public HomeGui(MagioCore plugin, HomeManager homeManager) {
         this.plugin = plugin;
@@ -49,17 +49,18 @@ public class HomeGui implements Listener {
 
             // Bed (Teleport) - Row 2 (slots 10-16)
             Material bedMaterial = isLocked ? Material.BARRIER : ((home != null) ? Material.BLUE_BED : Material.GREEN_BED);
-            String nameColor = isLocked ? "§8" : ((home != null) ? "&#00fbff&l" : "&#00ff44&l");
+            String nameColor = isLocked ? "§8" : ((home != null) ? "&#00fbff" : "&#00ff44");
 
             ItemStack bed = new ItemStack(bedMaterial);
             ItemMeta bedMeta = bed.getItemMeta();
-            bedMeta.displayName(FontUtils.parse(nameColor + "ᴅᴏᴍᴏᴠ #" + i + (isLocked ? " §7(ᴢᴀᴍčᴇɴᴏ)" : "")));
+            // User requested '#' not to be highlighted. We'll use §7 for it.
+            bedMeta.displayName(FontUtils.parse(nameColor + "ᴅᴏᴍᴏᴠ §7#" + i + (isLocked ? " (ᴢᴀᴍčᴇɴᴏ)" : "")));
             if (isLocked) {
                 bedMeta.lore(List.of(FontUtils.parse("§c" + "ʟɪᴍɪᴛ ᴊᴇ " + maxHomes)));
             } else if (home != null) {
-                bedMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛᴀᴄɪ ✈")));
+                bedMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛᴀᴄɪ")));
             } else {
-                bedMeta.lore(List.of(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ ✖")));
+                bedMeta.lore(List.of(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ")));
             }
             bed.setItemMeta(bedMeta);
             inv.setItem(i + 9, bed);
@@ -67,11 +68,11 @@ public class HomeGui implements Listener {
             // Pearl (Set) - Row 3 (slots 19-25)
             ItemStack pearl = new ItemStack(isLocked ? Material.BARRIER : Material.ENDER_PEARL);
             ItemMeta pearlMeta = pearl.getItemMeta();
-            pearlMeta.displayName(FontUtils.parse(isLocked ? "§8" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ #" + i : "&#EA427F&l" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ #" + i));
+            pearlMeta.displayName(FontUtils.parse(isLocked ? "§8" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ §7#" + i : "&#EA427F" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ §7#" + i));
             if (isLocked) {
                 pearlMeta.lore(List.of(FontUtils.parse("§c" + "ʟɪᴍɪᴛ ᴊᴇ " + maxHomes)));
             } else {
-                pearlMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ᴅᴏᴍᴏᴠᴀ ✍")));
+                pearlMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ᴅᴏᴍᴏᴠᴀ")));
             }
             pearl.setItemMeta(pearlMeta);
             inv.setItem(i + 18, pearl);
@@ -109,7 +110,7 @@ public class HomeGui implements Listener {
                 return;
             }
             homeManager.setHome(player.getUniqueId(), homeNum, player.getLocation());
-            player.sendMessage(FontUtils.parse("&#00ff44&l" + "ᴅᴏᴍᴏᴠ #" + homeNum + " ɴᴀsᴛᴀᴠᴇɴ ✔"));
+            player.sendMessage(FontUtils.parse("&#00ff44" + "ᴅᴏᴍᴏᴠ #" + homeNum + " ɴᴀsᴛᴀᴠᴇɴ"));
             player.closeInventory();
             open(player); // Refresh
         }

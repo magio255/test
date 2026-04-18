@@ -24,7 +24,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.URL;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 public class RtpCommand implements CommandExecutor, Listener {
     private final MagioCore plugin;
     private final Random random = new Random();
+    private final Map<Integer, String> slotToWorld = new HashMap<>();
 
     public RtpCommand(MagioCore plugin) {
         this.plugin = plugin;
@@ -48,11 +51,10 @@ public class RtpCommand implements CommandExecutor, Listener {
         ConfigurationSection config = plugin.getConfig().getConfigurationSection("rtp.gui");
         if (config == null) return;
 
-        String titleStr = config.getString("title", "Overworld");
+        String titleStr = config.getString("title", "World Selection");
         int rows = config.getInt("rows", 3);
         Inventory inv = Bukkit.createInventory(new RtpGuiHolder(), rows * 9, FontUtils.parse("§8» §b" + titleStr));
 
-        // Background - Improved with Border
         Material bgMaterial;
         try {
             bgMaterial = Material.valueOf(config.getString("background", "BLACK_STAINED_GLASS_PANE"));
@@ -69,28 +71,36 @@ public class RtpCommand implements CommandExecutor, Listener {
             inv.setItem(i, glass);
         }
 
-        // RTP Button
-        ConfigurationSection itemConfig = config.getConfigurationSection("item");
-        if (itemConfig != null) {
-            Material material;
-            try {
-                material = Material.valueOf(itemConfig.getString("material", "PLAYER_HEAD"));
-            } catch (IllegalArgumentException e) {
-                material = Material.PLAYER_HEAD;
+        slotToWorld.clear();
+        ConfigurationSection worldsConfig = config.getConfigurationSection("worlds");
+        if (worldsConfig != null) {
+            for (String worldKey : worldsConfig.getKeys(false)) {
+                ConfigurationSection itemConfig = worldsConfig.getConfigurationSection(worldKey);
+                if (itemConfig == null) continue;
+
+                Material material;
+                try {
+                    material = Material.valueOf(itemConfig.getString("material", "PLAYER_HEAD"));
+                } catch (IllegalArgumentException e) {
+                    material = Material.PLAYER_HEAD;
+                }
+
+                ItemStack item = new ItemStack(material);
+                ItemMeta meta = item.getItemMeta();
+
+                meta.displayName(FontUtils.parse("§b" + itemConfig.getString("name", worldKey)));
+                List<String> lore = itemConfig.getStringList("lore");
+                meta.lore(lore.stream().map(FontUtils::parse).collect(Collectors.toList()));
+
+                if (material == Material.PLAYER_HEAD && itemConfig.contains("texture")) {
+                    applyTexture((SkullMeta) meta, itemConfig.getString("texture"));
+                }
+
+                item.setItemMeta(meta);
+                int slot = itemConfig.getInt("slot");
+                inv.setItem(slot, item);
+                slotToWorld.put(slot, worldKey);
             }
-            ItemStack item = new ItemStack(material);
-            ItemMeta meta = item.getItemMeta();
-
-            meta.displayName(FontUtils.parse("§b" + itemConfig.getString("name", "Overworld")));
-            List<String> lore = itemConfig.getStringList("lore");
-            meta.lore(lore.stream().map(l -> FontUtils.parse(l)).collect(Collectors.toList()));
-
-            if (material == Material.PLAYER_HEAD && itemConfig.contains("texture")) {
-                applyTexture((SkullMeta) meta, itemConfig.getString("texture"));
-            }
-
-            item.setItemMeta(meta);
-            inv.setItem(itemConfig.getInt("slot", 13), item);
         }
 
         player.openInventory(inv);
@@ -120,18 +130,34 @@ public class RtpCommand implements CommandExecutor, Listener {
 
         event.setCancelled(true);
         int slot = event.getRawSlot();
-        int rtpSlot = plugin.getConfig().getInt("rtp.gui.item.slot", 13);
 
-        if (slot == rtpSlot) {
+        if (slotToWorld.containsKey(slot)) {
+            String worldName = slotToWorld.get(slot);
             player.closeInventory();
-            findRandomLocation(player);
+            findRandomLocation(player, worldName);
         }
     }
 
-    private void findRandomLocation(Player player) {
-        player.sendMessage(FontUtils.parse("§b" + "Finding safe location..."));
+    private void findRandomLocation(Player player, String worldName) {
+        player.sendMessage(FontUtils.parse("§b" + "Hledám bezpečné místo..."));
 
-        World world = player.getWorld();
+        World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            // Fallback to world environment mapping if exact name fails
+            for (World w : Bukkit.getWorlds()) {
+                if (w.getName().toLowerCase().contains(worldName.toLowerCase()) ||
+                    w.getEnvironment().name().equalsIgnoreCase(worldName)) {
+                    world = w;
+                    break;
+                }
+            }
+        }
+
+        if (world == null) {
+            player.sendMessage(FontUtils.parse("§c" + "Svět nebyl nalezen."));
+            return;
+        }
+
         int radius = plugin.getConfig().getInt("rtp.settings.radius", 5000);
         int maxAttempts = plugin.getConfig().getInt("rtp.settings.max-attempts", 10);
 
@@ -139,6 +165,11 @@ public class RtpCommand implements CommandExecutor, Listener {
             int x = random.nextInt(radius * 2) - radius;
             int z = random.nextInt(radius * 2) - radius;
             int y = world.getHighestBlockYAt(x, z);
+
+            if (world.getEnvironment() == World.Environment.NETHER) {
+                // Better nether rtp logic needed but keep it simple for now
+                y = 32 + random.nextInt(64);
+            }
 
             Location loc = new Location(world, x + 0.5, y + 1, z + 0.5);
             Material block = world.getBlockAt(x, y, z).getType();
@@ -149,7 +180,7 @@ public class RtpCommand implements CommandExecutor, Listener {
             }
         }
 
-        player.sendMessage(FontUtils.parse("§c" + "Failed to find safe location, try again."));
+        player.sendMessage(FontUtils.parse("§c" + "Nepodařilo se najít bezpečné místo, zkus to znovu."));
     }
 
     private static class RtpGuiHolder implements InventoryHolder {

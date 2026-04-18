@@ -38,11 +38,11 @@ public class GamemodeCommands implements CommandExecutor {
 
         if (gm != null) {
             if (!player.hasPermission(perm) && !player.isOp()) {
-                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ✖"));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí"));
                 return true;
             }
             player.setGameMode(gm);
-            player.sendMessage(FontUtils.parse("&#00fbff&l" + "ᴛᴠůᴊ ʜᴇʀɴí ᴍóᴅ ʙʏʟ ᴢᴍěɴěɴ ɴᴀ " + gm.name().toLowerCase() + " ✔"));
+            player.sendMessage(FontUtils.parse("&#00fbff" + "ᴛᴠůᴊ ʜᴇʀɴí ᴍóᴅ ʙʏʟ ᴢᴍěɴěɴ ɴᴀ " + gm.name().toLowerCase() + ""));
         }
 
         return true;

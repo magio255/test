@@ -21,7 +21,7 @@ import java.util.UUID;
 public class BaltopGui implements Listener {
     private final MagioCore plugin;
     private final BaltopManager manager;
-    private final String title = "&#EA427F&l» " + "ʙᴀʟᴛᴏᴘ";
+    private final String title = "&#EA427F» " + "ʙᴀʟᴛᴏᴘ";
     private final Map<UUID, Integer> playerPages = new HashMap<>();
 
     public BaltopGui(MagioCore plugin, BaltopManager manager) {
@@ -47,8 +47,8 @@ public class BaltopGui implements Listener {
                 ItemStack head = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) head.getItemMeta();
                 meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.name()));
-                meta.displayName(FontUtils.parse("&#ffbb00&l" + (index + 1) + ". §f" + entry.name()));
-                meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44&l" + entry.balance() + " $")));
+                meta.displayName(FontUtils.parse("&#ffbb00" + (index + 1) + ". §f" + entry.name()));
+                meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44" + entry.balance() + " $")));
                 head.setItemMeta(meta);
                 inv.setItem(i, head);
             }
@@ -56,8 +56,8 @@ public class BaltopGui implements Listener {
 
         // Navigation
         inv.setItem(45, createNav("§c" + "ᴢᴘěᴛ", Material.ARROW));
-        inv.setItem(49, createNav("&#ffbb00&l" + "ʜʟᴇᴅᴀᴛ ʜʀáčᴇ", Material.OAK_SIGN));
-        inv.setItem(53, createNav("&#00ff44&l" + "ᴅᴀʟší", Material.ARROW));
+        inv.setItem(49, createNav("&#ffbb00" + "ʜʟᴇᴅᴀᴛ ʜʀáčᴇ", Material.OAK_SIGN));
+        inv.setItem(53, createNav("&#00ff44" + "ᴅᴀʟší", Material.ARROW));
 
         player.openInventory(inv);
     }
@@ -85,7 +85,7 @@ public class BaltopGui implements Listener {
             if (page * 45 < manager.getCachedTop().size()) open(player, page + 1);
         } else if (slot == 49) { // Search
             player.closeInventory();
-            player.sendMessage(FontUtils.parse("&#EA427F&lʙᴀʟᴛᴏᴘ &#888888» §f" + "ɴᴀᴘɪš ᴊᴍéɴᴏ ʜʀáčᴇ ᴅᴏ ᴄʜᴀᴛᴜ:"));
+            player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ɴᴀᴘɪš ᴊᴍéɴᴏ ʜʀáčᴇ ᴅᴏ ᴄʜᴀᴛᴜ:"));
             plugin.getChatListener().setSearchMode(player.getUniqueId(), true);
         }
     }
