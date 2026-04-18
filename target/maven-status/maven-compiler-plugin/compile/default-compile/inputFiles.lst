@@ -1,5 +1,6 @@
 /app/src/main/java/me/jules/magiocore/MagioCoreExpansion.java
 /app/src/main/java/me/jules/magiocore/TeleportUtils.java
+/app/src/main/java/me/jules/magiocore/UtilityCommands.java
 /app/src/main/java/me/jules/magiocore/BaltopManager.java
 /app/src/main/java/me/jules/magiocore/FlySpeedCommand.java
 /app/src/main/java/me/jules/magiocore/ChatListener.java
@@ -15,6 +16,7 @@
 /app/src/main/java/me/jules/magiocore/InvseeCommand.java
 /app/src/main/java/me/jules/magiocore/FontUtils.java
 /app/src/main/java/me/jules/magiocore/TpaCommands.java
+/app/src/main/java/me/jules/magiocore/GuiUtilityCommands.java
 /app/src/main/java/me/jules/magiocore/JoinListener.java
 /app/src/main/java/me/jules/magiocore/RtpCommand.java
 /app/src/main/java/me/jules/magiocore/Home.java

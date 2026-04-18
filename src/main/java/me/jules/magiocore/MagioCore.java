@@ -84,6 +84,25 @@ public class MagioCore extends JavaPlugin {
         getCommand("baltop").setExecutor(new BaltopCommand(this));
         getServer().getPluginManager().registerEvents(baltopGui, this);
 
+        UtilityCommands utilityCommands = new UtilityCommands();
+        getCommand("broadcast").setExecutor(utilityCommands);
+        getCommand("feed").setExecutor(utilityCommands);
+        getCommand("fly").setExecutor(utilityCommands);
+        getCommand("hat").setExecutor(utilityCommands);
+        getCommand("heal").setExecutor(utilityCommands);
+        getCommand("repair").setExecutor(utilityCommands);
+        getCommand("suicide").setExecutor(utilityCommands);
+        getCommand("ptime").setExecutor(utilityCommands);
+        getCommand("pweather").setExecutor(utilityCommands);
+
+        GuiUtilityCommands guiUtilityCommands = new GuiUtilityCommands();
+        getCommand("anvil").setExecutor(guiUtilityCommands);
+        getCommand("disposal").setExecutor(guiUtilityCommands);
+        getCommand("grindstone").setExecutor(guiUtilityCommands);
+        getCommand("loom").setExecutor(guiUtilityCommands);
+        getCommand("smithingtable").setExecutor(guiUtilityCommands);
+        getCommand("workbench").setExecutor(guiUtilityCommands);
+
         new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
 
         getLogger().info("MagioCore has been enabled!");

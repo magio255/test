@@ -66,6 +66,64 @@ commands:
   baltop:
     description: Zobrazí žebříček nejbohatších hráčů.
     usage: /baltop [strana]
+  broadcast:
+    description: Odešle zprávu všem hráčům.
+    usage: /broadcast <zpráva>
+  anvil:
+    description: Otevře kovadlinu.
+    usage: /anvil
+  disposal:
+    description: Otevře odpadkový koš.
+    usage: /disposal
+    aliases: [trash, etrash, edisposal]
+  feed:
+    description: Doplní hlad.
+    usage: /feed [hráč]
+    aliases: [eat, eeat, efeed]
+  fly:
+    description: Přepne létání.
+    usage: /fly [hráč] [on|off]
+    aliases: [efly]
+  grindstone:
+    description: Otevře brusku.
+    usage: /grindstone
+    aliases: [egrindstone]
+  hat:
+    description: Nasadí si předmět na hlavu.
+    usage: /hat [remove]
+    aliases: [head, ehat, ehead]
+  heal:
+    description: Vyléčí hráče.
+    usage: /heal [hráč]
+    aliases: [eheal]
+  loom:
+    description: Otevře tkalcovský stav.
+    usage: /loom
+    aliases: [eloom]
+  ptime:
+    description: Nastaví tvůj klientský čas.
+    usage: /ptime [list|reset|day|night|dawn|ticks] [hráč]
+    aliases: [playertime, eptime, eplayertime]
+  pweather:
+    description: Nastaví tvé klientské počasí.
+    usage: /pweather [list|reset|storm|sun|clear] [hráč]
+    aliases: [playerweather, epweather, eplayerweather]
+  repair:
+    description: Opraví předmět.
+    usage: /repair [hand|all]
+    aliases: [fix, efix, erepair]
+  smithingtable:
+    description: Otevře kovářský stůl.
+    usage: /smithingtable
+    aliases: [smithtable, esmithtable, esmithingtable]
+  suicide:
+    description: Ukončí tvůj život.
+    usage: /suicide
+    aliases: [esuicide]
+  workbench:
+    description: Otevře pracovní stůl.
+    usage: /workbench
+    aliases: [wb, craft, wbench]
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.
@@ -109,6 +167,48 @@ permissions:
   magiocore.baltop:
     description: Access to /baltop.
     default: true
+  magiocore.broadcast:
+    description: Přístup k /broadcast.
+    default: op
+  magiocore.anvil:
+    description: Přístup k /anvil.
+    default: op
+  magiocore.disposal:
+    description: Přístup k /disposal.
+    default: op
+  magiocore.feed:
+    description: Přístup k /feed.
+    default: op
+  magiocore.fly:
+    description: Přístup k /fly.
+    default: op
+  magiocore.grindstone:
+    description: Přístup k /grindstone.
+    default: op
+  magiocore.hat:
+    description: Přístup k /hat.
+    default: true
+  magiocore.heal:
+    description: Přístup k /heal.
+    default: op
+  magiocore.loom:
+    description: Přístup k /loom.
+    default: op
+  magiocore.ptime:
+    description: Přístup k /ptime.
+    default: true
+  magiocore.pweather:
+    description: Přístup k /pweather.
+    default: true
+  magiocore.repair:
+    description: Přístup k /repair.
+    default: op
+  magiocore.smithingtable:
+    description: Přístup k /smithingtable.
+    default: op
+  magiocore.workbench:
+    description: Přístup k /workbench.
+    default: op
   magiocore.home.0:
     default: true
   magiocore.home.1:

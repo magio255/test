@@ -1,6 +1,7 @@
 me/jules/magiocore/CoinflipCommand.class
 me/jules/magiocore/CoinflipManager.class
 me/jules/magiocore/GamemodeCommands.class
+me/jules/magiocore/UtilityCommands.class
 me/jules/magiocore/CoinflipAnimation.class
 me/jules/magiocore/MagioCoreExpansion.class
 me/jules/magiocore/CoinflipGui$CoinflipGuiHolder.class
@@ -35,4 +36,5 @@ me/jules/magiocore/RtpCommand$RtpGuiHolder.class
 me/jules/magiocore/BaltopGui$BaltopGuiHolder.class
 me/jules/magiocore/TpaCommands.class
 me/jules/magiocore/FlySpeedCommand.class
+me/jules/magiocore/GuiUtilityCommands.class
 me/jules/magiocore/HomeManager.class
