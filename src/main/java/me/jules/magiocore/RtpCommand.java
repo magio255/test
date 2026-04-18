@@ -163,28 +163,56 @@ public class RtpCommand implements CommandExecutor, Listener {
         }
 
         int radius = plugin.getConfig().getInt("rtp.settings.radius", 5000);
-        int maxAttempts = plugin.getConfig().getInt("rtp.settings.max-attempts", 10);
+        int maxAttempts = plugin.getConfig().getInt("rtp.settings.max-attempts", 25);
 
         for (int i = 0; i < maxAttempts; i++) {
             int x = random.nextInt(radius * 2) - radius;
             int z = random.nextInt(radius * 2) - radius;
-            int y = world.getHighestBlockYAt(x, z);
 
+            Location loc = null;
             if (world.getEnvironment() == World.Environment.NETHER) {
-                // Better nether rtp logic needed but keep it simple for now
-                y = 32 + random.nextInt(64);
+                loc = findSafeNetherLocation(world, x, z);
+            } else {
+                int y = world.getHighestBlockYAt(x, z);
+                loc = new Location(world, x + 0.5, y + 1, z + 0.5);
             }
 
-            Location loc = new Location(world, x + 0.5, y + 1, z + 0.5);
-            Material block = world.getBlockAt(x, y, z).getType();
-
-            if (block != Material.LAVA && block != Material.WATER && block != Material.AIR) {
+            if (loc != null && isSafe(loc)) {
                 TeleportUtils.startTeleportCountdown(player, loc, plugin, success -> {});
                 return;
             }
         }
 
         player.sendMessage(FontUtils.parse("§c" + "Nepodařilo se najít bezpečné místo, zkus to znovu."));
+    }
+
+    private Location findSafeNetherLocation(World world, int x, int z) {
+        // Scan from Y=120 down to 30
+        for (int y = 120; y > 30; y--) {
+            Material block = world.getBlockAt(x, y, z).getType();
+            if (block.isSolid()) {
+                Location loc = new Location(world, x + 0.5, y + 1, z + 0.5);
+                if (isSafe(loc)) return loc;
+            }
+        }
+        return null;
+    }
+
+    private boolean isSafe(Location loc) {
+        Material feet = loc.getBlock().getType();
+        Material head = loc.clone().add(0, 1, 0).getBlock().getType();
+        Material ground = loc.clone().add(0, -1, 0).getBlock().getType();
+
+        // Check if there is space for the player
+        if (feet != Material.AIR && feet != Material.CAVE_AIR && feet != Material.TALL_GRASS && feet != Material.SHORT_GRASS) return false;
+        if (head != Material.AIR && head != Material.CAVE_AIR) return false;
+
+        // Check if ground is safe
+        if (!ground.isSolid()) return false;
+        if (ground == Material.LAVA || ground == Material.MAGMA_BLOCK || ground == Material.CACTUS || ground == Material.SWEET_BERRY_BUSH) return false;
+        if (ground == Material.WATER) return false;
+
+        return true;
     }
 
     private static class RtpGuiHolder implements InventoryHolder {
