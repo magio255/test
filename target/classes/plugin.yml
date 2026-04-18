@@ -66,6 +66,12 @@ commands:
   baltop:
     description: Zobrazí žebříček nejbohatších hráčů.
     usage: /baltop [strana]
+  dailyrewards:
+    description: Otevře menu denních odměn.
+    usage: /dailyrewards
+  playtimerewards:
+    description: Otevře menu odměn za odehraný čas.
+    usage: /playtimerewards
   broadcast:
     description: Odešle zprávu všem hráčům.
     usage: /broadcast <zpráva>
@@ -166,6 +172,9 @@ permissions:
     default: op
   magiocore.baltop:
     description: Access to /baltop.
+    default: true
+  magiocore.rewards:
+    description: Přístup k odměnám.
     default: true
   magiocore.broadcast:
     description: Přístup k /broadcast.

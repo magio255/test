@@ -14,6 +14,9 @@ public class MagioCore extends JavaPlugin {
     private BaltopManager baltopManager;
     private BaltopGui baltopGui;
     private ChatListener chatListener;
+    private RewardManager rewardManager;
+    private DailyRewardGui dailyRewardGui;
+    private PlaytimeRewardGui playtimeRewardGui;
 
     @Override
     public void onEnable() {
@@ -102,6 +105,17 @@ public class MagioCore extends JavaPlugin {
         getCommand("loom").setExecutor(guiUtilityCommands);
         getCommand("smithingtable").setExecutor(guiUtilityCommands);
         getCommand("workbench").setExecutor(guiUtilityCommands);
+
+        rewardManager = new RewardManager(this);
+        dailyRewardGui = new DailyRewardGui(this, rewardManager);
+        playtimeRewardGui = new PlaytimeRewardGui(this, rewardManager);
+
+        RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
+        getCommand("dailyrewards").setExecutor(rewardCommands);
+        getCommand("playtimerewards").setExecutor(rewardCommands);
+
+        getServer().getPluginManager().registerEvents(dailyRewardGui, this);
+        getServer().getPluginManager().registerEvents(playtimeRewardGui, this);
 
         new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
 

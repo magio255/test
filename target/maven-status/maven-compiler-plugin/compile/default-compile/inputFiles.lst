@@ -11,7 +11,9 @@
 /app/src/main/java/me/jules/magiocore/SkinUtils.java
 /app/src/main/java/me/jules/magiocore/BaltopGui.java
 /app/src/main/java/me/jules/magiocore/CoinflipAnimation.java
+/app/src/main/java/me/jules/magiocore/PlaytimeRewardGui.java
 /app/src/main/java/me/jules/magiocore/CoinflipCommand.java
+/app/src/main/java/me/jules/magiocore/RewardCommands.java
 /app/src/main/java/me/jules/magiocore/HomeManager.java
 /app/src/main/java/me/jules/magiocore/InvseeCommand.java
 /app/src/main/java/me/jules/magiocore/FontUtils.java
@@ -22,6 +24,8 @@
 /app/src/main/java/me/jules/magiocore/Home.java
 /app/src/main/java/me/jules/magiocore/PlaytimeCommand.java
 /app/src/main/java/me/jules/magiocore/CoinflipManager.java
+/app/src/main/java/me/jules/magiocore/DailyRewardGui.java
+/app/src/main/java/me/jules/magiocore/RewardManager.java
 /app/src/main/java/me/jules/magiocore/BaltopCommand.java
 /app/src/main/java/me/jules/magiocore/PlaytimeUtils.java
 /app/src/main/java/me/jules/magiocore/SpawnCommands.java

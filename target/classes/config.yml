@@ -80,3 +80,32 @@ rtp:
 
 # Spawn Location
 spawn: null
+
+# Daily Rewards
+daily-rewards:
+  command: "eco give %player% 1000"
+  gui:
+    title: "ᴅᴇɴɴí ᴏᴅᴍěɴᴀ"
+    chest-name: "&#ffbb00ᴋʟɪᴋɴɪ ᴘʀᴏ ᴏᴅᴍěɴᴜ!"
+    chest-lore:
+      - "§7Získej svou denní odměnu."
+      - ""
+      - "&#00ff44➥ KLIKNI PRO ZÍSKÁNÍ"
+    cooldown-lore:
+      - "§cOdměnu si můžeš vybrat"
+      - "§cza %time%."
+
+# Playtime Rewards
+playtime-rewards:
+  gui:
+    title: "ᴏᴅᴇʜʀᴀɴý čᴀs - úʀᴏᴠɴě"
+  levels:
+    # Example levels, will be expanded in code to 147
+    level-1:
+      hours: 1
+      command: "eco give %player% 500"
+      name: "úʀᴏᴠᴇň 1"
+    level-147:
+      hours: 1300
+      command: "eco give %player% 100000"
+      name: "úʀᴏᴠᴇň 147"
