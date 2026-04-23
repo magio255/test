@@ -48,32 +48,46 @@ rtp:
     worlds:
       overworld:
         material: "PLAYER_HEAD"
-        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2U1MTA4YzljMjljNzRjM2FmMzk2MWI4ZTAyY2NkZjFkNTE3ZmZiOTYwMzUwNTVmNTIzZTc1MzM5Nzk1ZDEzMyJ9fX0="
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2QwMGFlZTI5NWQ5Y2Y1YjUxOGM0NjU5N2U5Y2I1NzY1MTRjN2Y0N2I0YTAzOTU2YjIyZDE2ZGE5MGY3In19fQ=="
         slot: 11
-        name: "ᴏᴠᴇʀᴡᴏʀʟᴅ"
+        name: "&#37FF00ᴏᴠᴇʀᴡᴏʀʟᴅ"
         lore:
-          - "§7Klikni zde pro náhodnou teleportaci"
-          - "§7někam do světa overworld."
           - ""
-          - "&#00ff44> KLIKNI PRO TELEPORTACI"
+          - " &8| &fStatus: &#2ECC71Online"
+          - " &8| &fType: &7Dimension"
+          - ""
+          - " &#2ECC71> &7Teleport to a random location"
+          - " &#2ECC71> &7in the primary resource world."
+          - ""
+          - "&#2ECC71LEFT-CLICK &8• &fTo Teleport"
       nether:
-        material: "NETHERRACK"
+        material: "PLAYER_HEAD"
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzAzNDQzY2M1ZjVlZjQyMzM3Nzg0ZTIxZGYxYzYzZDA1NDA0ZjkwYzJlY2Q1ZDk3MGU4ZjVlYjY3YzU5In19fQ=="
         slot: 13
-        name: "ɴᴇᴛʜᴇʀ"
+        name: "&#E74C3Cᴛʜᴇ ɴᴇᴛʜᴇʀ"
         lore:
-          - "§7Klikni zde pro náhodnou teleportaci"
-          - "§7někam do pekla."
           - ""
-          - "&#ff4444> KLIKNI PRO TELEPORTACI"
+          - " &8| &fStatus: &#E74C3COnline"
+          - " &8| &fType: &7Dimension"
+          - ""
+          - " &#E74C3C> &7Teleport to a random location"
+          - " &#E74C3C> &7in the hostile nether realm."
+          - ""
+          - "&#E74C3CLEFT-CLICK &8• &fTo Teleport"
       end:
-        material: "END_STONE"
+        material: "PLAYER_HEAD"
+        texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzFlYTMxMTNiNmY5MGVjZGM5ZjA5MTc4ZDUyOTg4ZWIwMTYwNDk2ZDRkYTcxMWE5Y2I2MjU3YmUyOTFkNmM2In19fQ=="
         slot: 15
-        name: "ᴇɴᴅ"
+        name: "&#A569BDᴛʜᴇ ᴇɴᴅ"
         lore:
-          - "§7Klikni zde pro náhodnou teleportaci"
-          - "§7někam do endu."
           - ""
-          - "&#ff00ff> KLIKNI PRO TELEPORTACI"
+          - " &8| &fStatus: &#A569BDOnline"
+          - " &8| &fType: &7Dimension"
+          - ""
+          - " &#A569BD> &7Teleport to a random location"
+          - " &#A569BD> &7in the void islands."
+          - ""
+          - "&#A569BDLEFT-CLICK &8• &fTo Teleport"
   settings:
     radius: 5000
     max-attempts: 10

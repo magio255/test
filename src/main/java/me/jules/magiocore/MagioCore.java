@@ -113,6 +113,7 @@ public class MagioCore extends JavaPlugin {
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);
         getCommand("playtimerewards").setExecutor(rewardCommands);
+        getCommand("itemedit").setExecutor(new ItemEditCommand());
 
         getServer().getPluginManager().registerEvents(dailyRewardGui, this);
         getServer().getPluginManager().registerEvents(playtimeRewardGui, this);

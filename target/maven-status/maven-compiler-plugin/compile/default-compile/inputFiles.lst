@@ -6,6 +6,7 @@
 /app/src/main/java/me/jules/magiocore/ChatListener.java
 /app/src/main/java/me/jules/magiocore/TpaManager.java
 /app/src/main/java/me/jules/magiocore/AfkZoneTask.java
+/app/src/main/java/me/jules/magiocore/ItemEditCommand.java
 /app/src/main/java/me/jules/magiocore/GamemodeCommands.java
 /app/src/main/java/me/jules/magiocore/MagioCore.java
 /app/src/main/java/me/jules/magiocore/SkinUtils.java

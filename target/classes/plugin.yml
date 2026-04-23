@@ -72,6 +72,10 @@ commands:
   playtimerewards:
     description: Otevře menu odměn za odehraný čas.
     usage: /playtimerewards
+  itemedit:
+    description: Upraví předmět v ruce.
+    usage: /itemedit <subpříkaz>
+    aliases: [ie]
   broadcast:
     description: Odešle zprávu všem hráčům.
     usage: /broadcast <zpráva>
@@ -176,6 +180,54 @@ permissions:
   magiocore.rewards:
     description: Přístup k odměnám.
     default: true
+  itemedit.itemedit.rename:
+    default: op
+  itemedit.itemedit.lore:
+    default: op
+  itemedit.itemedit.enchant:
+    default: op
+  itemedit.itemedit.hide:
+    default: op
+  itemedit.itemedit.hideall:
+    default: op
+  itemedit.itemedit.unbreakable:
+    default: op
+  itemedit.itemedit.repaircost:
+    default: op
+  itemedit.itemedit.amount:
+    default: op
+  itemedit.itemedit.durability:
+    default: op
+  itemedit.itemedit.banner:
+    default: op
+  itemedit.itemedit.leathercolor:
+    default: op
+  itemedit.itemedit.skullowner:
+    default: op
+  itemedit.itemedit.fireworkpower:
+    default: op
+  itemedit.itemedit.potioneffect:
+    default: op
+  itemedit.itemedit.potioncolor:
+    default: op
+  itemedit.itemedit.bookauthor:
+    default: op
+  itemedit.itemedit.booktype:
+    default: op
+  itemedit.itemedit.tropicalfish:
+    default: op
+  itemedit.itemedit.attribute:
+    default: op
+  itemedit.itemedit.custommodeldata:
+    default: op
+  itemedit.itemedit.compass:
+    default: op
+  itemedit.itemedit.type:
+    default: op
+  itemedit.itemedit.spawnereggtype:
+    default: op
+  itemedit.itemedit.listaliases:
+    default: op
   magiocore.broadcast:
     description: Přístup k /broadcast.
     default: op

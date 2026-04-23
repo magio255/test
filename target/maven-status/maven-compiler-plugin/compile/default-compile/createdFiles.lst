@@ -34,6 +34,7 @@ me/jules/magiocore/TeleportUtils$1.class
 me/jules/magiocore/PlaytimeRewardGui$PlaytimeRewardHolder.class
 me/jules/magiocore/PlaytimeRewardGui.class
 me/jules/magiocore/RewardCommands.class
+me/jules/magiocore/ItemEditCommand.class
 me/jules/magiocore/RtpCommand.class
 me/jules/magiocore/CoinflipGui.class
 me/jules/magiocore/BaltopManager.class
