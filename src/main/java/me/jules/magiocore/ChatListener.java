@@ -2,6 +2,7 @@ package me.jules.magiocore;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,11 +29,21 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
+        String message = LegacyComponentSerializer.legacySection().serialize(event.originalMessage());
+
+        if (ItemEditListener.pendingInput.containsKey(player.getUniqueId())) {
+            event.setCancelled(true);
+            String type = ItemEditListener.pendingInput.remove(player.getUniqueId());
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                player.performCommand("ie " + type.replace("_", " ") + " " + message);
+            });
+            return;
+        }
 
         if (searchMode.getOrDefault(player.getUniqueId(), false)) {
             event.setCancelled(true);
             setSearchMode(player.getUniqueId(), false);
-            handleBaltopSearch(player, LegacyComponentSerializer.legacySection().serialize(event.originalMessage()));
+            handleBaltopSearch(player, message);
             return;
         }
 

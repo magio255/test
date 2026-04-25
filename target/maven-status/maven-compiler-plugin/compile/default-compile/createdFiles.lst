@@ -20,6 +20,8 @@ me/jules/magiocore/CoinflipCommand.class
 me/jules/magiocore/UtilityCommands.class
 me/jules/magiocore/CoinflipAnimation.class
 me/jules/magiocore/MagioCoreExpansion.class
+me/jules/magiocore/ItemEditListener.class
+me/jules/magiocore/ItemEditGui.class
 me/jules/magiocore/HomeGui$HomeGuiHolder.class
 me/jules/magiocore/BaltopCommand.class
 me/jules/magiocore/HomeGui.class

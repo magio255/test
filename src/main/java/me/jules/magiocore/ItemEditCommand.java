@@ -3,20 +3,23 @@ package me.jules.magiocore;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +35,16 @@ public class ItemEditCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
-        if (args.length == 0) return false;
+
+        if (args.length == 0) {
+            ItemStack item = player.getInventory().getItemInMainHand();
+            if (item == null || item.getType().isAir()) {
+                player.sendMessage(FontUtils.parse("§c" + "ᴍᴜsíš ᴅʀžᴇᴛ ᴘřᴇᴅᴍěᴛ ᴠ ʀᴜᴄᴇ."));
+                return true;
+            }
+            player.openInventory(new ItemEditGui().getInventory());
+            return true;
+        }
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (item == null || item.getType().isAir()) {
@@ -161,12 +173,56 @@ public class ItemEditCommand implements CommandExecutor {
                     if (action.equals("add")) {
                         if (args.length < 5) return false;
                         Attribute attr = Attribute.valueOf(args[2].toUpperCase());
-                        AttributeModifier mod = new AttributeModifier(NamespacedKey.minecraft(UUID.randomUUID().toString().substring(0,8)), Double.parseDouble(args[3]), AttributeModifier.Operation.valueOf(args[4].toUpperCase()));
+                        AttributeModifier mod = new AttributeModifier(NamespacedKey.minecraft(UUID.randomUUID().toString().substring(0, 8)), Double.parseDouble(args[3]), AttributeModifier.Operation.valueOf(args[4].toUpperCase()));
                         meta.addAttributeModifier(attr, mod);
                     } else if (action.equals("remove")) {
                         if (args.length < 3) return false;
                         meta.removeAttributeModifier(Attribute.valueOf(args[2].toUpperCase()));
                     }
+                }
+                case "banner" -> {
+                    if (args.length < 2 || !(meta instanceof BannerMeta b)) return false;
+                    String action = args[1].toLowerCase();
+                    switch (action) {
+                        case "add" -> {
+                            if (args.length < 4) return false;
+                            b.addPattern(new Pattern(DyeColor.valueOf(args[2].toUpperCase()), PatternType.valueOf(args[3].toUpperCase())));
+                        }
+                        case "set" -> {
+                            if (args.length < 5) return false;
+                            int index = Integer.parseInt(args[2]);
+                            b.setPattern(index, new Pattern(DyeColor.valueOf(args[3].toUpperCase()), PatternType.valueOf(args[4].toUpperCase())));
+                        }
+                        case "remove" -> {
+                            if (args.length < 3) return false;
+                            b.removePattern(Integer.parseInt(args[2]));
+                        }
+                    }
+                }
+                case "booktype" -> {
+                    if (args.length < 2 || !(meta instanceof BookMeta b)) return false;
+                    b.setGeneration(BookMeta.Generation.valueOf(args[1].toUpperCase()));
+                }
+                case "tropicalfish" -> {
+                    if (args.length < 2 || !(meta instanceof TropicalFishBucketMeta b)) return false;
+                    String action = args[1].toLowerCase();
+                    if (action.equals("pattern")) b.setPattern(TropicalFish.Pattern.valueOf(args[2].toUpperCase()));
+                    else if (action.equals("bodycolor"))
+                        b.setBodyColor(DyeColor.valueOf(args[2].toUpperCase()));
+                    else if (action.equals("patterncolor"))
+                        b.setPatternColor(DyeColor.valueOf(args[2].toUpperCase()));
+                }
+                case "compass" -> {
+                    if (args.length < 2 || !(meta instanceof CompassMeta c)) return false;
+                    if (args[1].equalsIgnoreCase("set")) c.setLodestone(player.getLocation());
+                    else if (args[1].equalsIgnoreCase("clear")) c.setLodestone(null);
+                }
+                case "spawnereggtype" -> {
+                    if (args.length < 2 || !(meta instanceof SpawnEggMeta s)) return false;
+                    s.setCustomSpawnedType(EntityType.valueOf(args[1].toUpperCase()));
+                }
+                case "listaliases" -> {
+                    player.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴜᴘɴé ᴀʟɪᴀsʏ: ʀᴇɴᴀᴍᴇ, ʟᴏʀᴇ, ᴇɴᴄʜᴀɴᴛ, ʜɪᴅᴇ, ᴜɴʙʀᴇᴀᴋᴀʙʟᴇ, ʀᴇᴘᴀɪʀᴄᴏsᴛ, ᴀᴍᴏᴜɴᴛ, ᴅᴜʀᴀʙɪʟɪᴛʏ, sᴋᴜʟʟᴏᴡɴᴇʀ, ᴄᴜsᴛᴏᴍᴍᴏᴅᴇʟᴅᴀᴛᴀ, ᴛʏᴘᴇ, ʟᴇᴀᴛʜᴇʀᴄᴏʟᴏʀ, ᴘᴏᴛɪᴏɴᴄᴏʟᴏʀ, ʙᴏᴏᴋᴀᴜᴛʜᴏʀ, ғɪʀᴇᴡᴏʀᴋᴘᴏᴡᴇʀ, ᴘᴏᴛɪᴏɴᴇғғᴇᴄᴛ, ᴀᴛᴛʀɪʙᴜᴛᴇ, ʙᴀɴɴᴇʀ, ʙᴏᴏᴋᴛʏᴘᴇ, ᴛʀᴏᴘɪᴄᴀʟғɪsʜ, ᴄᴏᴍᴘᴀss, sᴘᴀᴡɴᴇʀᴇɢɢᴛʏᴘᴇ"));
                 }
                 default -> {
                     player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ sᴜʙᴘříᴋᴀᴢ ɴᴇɴí ᴢᴀᴛíᴍ ɪᴍᴘʟᴇᴍᴇɴᴛᴏᴠáɴ ɴᴇʙᴏ ᴊᴇ ɴᴇᴘʟᴀᴛɴý."));
