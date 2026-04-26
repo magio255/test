@@ -2,9 +2,12 @@ me/jules/magiocore/CoinflipManager.class
 me/jules/magiocore/GamemodeCommands.class
 me/jules/magiocore/PlaytimeRewardGui$PlaytimeLevel.class
 me/jules/magiocore/CoinflipGui$CoinflipGuiHolder.class
+me/jules/magiocore/VirtualSpawnerListener.class
 me/jules/magiocore/BaltopManager$BaltopEntry.class
 me/jules/magiocore/HomeCommands.class
 me/jules/magiocore/AfkZoneTask.class
+me/jules/magiocore/VirtualSpawnerManager.class
+me/jules/magiocore/VirtualSpawnerCommands.class
 me/jules/magiocore/InvseeCommand.class
 me/jules/magiocore/BaltopGui.class
 me/jules/magiocore/MagioCore.class
@@ -16,12 +19,15 @@ me/jules/magiocore/TpaManager.class
 me/jules/magiocore/CoinflipAnimation$1.class
 me/jules/magiocore/RtpCommand$RtpGuiHolder.class
 me/jules/magiocore/BaltopGui$BaltopGuiHolder.class
+me/jules/magiocore/VirtualSpawnerListener$LootGuiHolder.class
 me/jules/magiocore/CoinflipCommand.class
 me/jules/magiocore/UtilityCommands.class
 me/jules/magiocore/CoinflipAnimation.class
+me/jules/magiocore/VirtualSpawnerManager$1.class
 me/jules/magiocore/MagioCoreExpansion.class
 me/jules/magiocore/ItemEditListener.class
 me/jules/magiocore/ItemEditGui.class
+me/jules/magiocore/VirtualSpawnerListener$SpawnerGuiHolder.class
 me/jules/magiocore/HomeGui$HomeGuiHolder.class
 me/jules/magiocore/BaltopCommand.class
 me/jules/magiocore/HomeGui.class
@@ -29,6 +35,7 @@ me/jules/magiocore/ChatListener.class
 me/jules/magiocore/TpaManager$TpaRequest.class
 me/jules/magiocore/CoinflipManager$CoinflipBet.class
 me/jules/magiocore/Home.class
+me/jules/magiocore/VirtualSpawnerManager$VirtualSpawnerData.class
 me/jules/magiocore/SkinUtils.class
 me/jules/magiocore/RewardManager.class
 me/jules/magiocore/TeleportUtils.class

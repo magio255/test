@@ -17,6 +17,7 @@ public class MagioCore extends JavaPlugin {
     private RewardManager rewardManager;
     private DailyRewardGui dailyRewardGui;
     private PlaytimeRewardGui playtimeRewardGui;
+    private VirtualSpawnerManager spawnerManager;
 
     @Override
     public void onEnable() {
@@ -110,6 +111,12 @@ public class MagioCore extends JavaPlugin {
         dailyRewardGui = new DailyRewardGui(this, rewardManager);
         playtimeRewardGui = new PlaytimeRewardGui(this, rewardManager);
 
+        spawnerManager = new VirtualSpawnerManager(this);
+        VirtualSpawnerCommands spawnerCommands = new VirtualSpawnerCommands(this, spawnerManager);
+        getCommand("ss").setExecutor(spawnerCommands);
+        getCommand("virtualspawner").setExecutor(spawnerCommands);
+        getServer().getPluginManager().registerEvents(new VirtualSpawnerListener(this, spawnerManager), this);
+
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);
         getCommand("playtimerewards").setExecutor(rewardCommands);
@@ -162,6 +169,10 @@ public class MagioCore extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (spawnerManager != null) {
+            spawnerManager.save();
+            spawnerManager.stopTask();
+        }
         getLogger().info("MagioCore has been disabled!");
     }
 }

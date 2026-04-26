@@ -134,6 +134,10 @@ commands:
     description: Otevře pracovní stůl.
     usage: /workbench
     aliases: [wb, craft, wbench]
+  ss:
+    description: Administrace virtuálních spawnerů.
+    usage: /ss <list|give>
+    aliases: [virtualspawner]
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.
@@ -269,6 +273,9 @@ permissions:
     default: op
   magiocore.workbench:
     description: Přístup k /workbench.
+    default: op
+  magiocore.virtualspawner:
+    description: Přístup k /ss.
     default: op
   magiocore.home.0:
     default: true

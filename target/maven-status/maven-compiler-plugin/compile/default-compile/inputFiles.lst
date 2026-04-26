@@ -5,12 +5,14 @@
 /app/src/main/java/me/jules/magiocore/FlySpeedCommand.java
 /app/src/main/java/me/jules/magiocore/ChatListener.java
 /app/src/main/java/me/jules/magiocore/TpaManager.java
+/app/src/main/java/me/jules/magiocore/VirtualSpawnerListener.java
 /app/src/main/java/me/jules/magiocore/AfkZoneTask.java
 /app/src/main/java/me/jules/magiocore/ItemEditCommand.java
 /app/src/main/java/me/jules/magiocore/GamemodeCommands.java
 /app/src/main/java/me/jules/magiocore/MagioCore.java
 /app/src/main/java/me/jules/magiocore/SkinUtils.java
 /app/src/main/java/me/jules/magiocore/BaltopGui.java
+/app/src/main/java/me/jules/magiocore/VirtualSpawnerManager.java
 /app/src/main/java/me/jules/magiocore/CoinflipAnimation.java
 /app/src/main/java/me/jules/magiocore/PlaytimeRewardGui.java
 /app/src/main/java/me/jules/magiocore/CoinflipCommand.java
@@ -31,6 +33,7 @@
 /app/src/main/java/me/jules/magiocore/BaltopCommand.java
 /app/src/main/java/me/jules/magiocore/PlaytimeUtils.java
 /app/src/main/java/me/jules/magiocore/SpawnCommands.java
+/app/src/main/java/me/jules/magiocore/VirtualSpawnerCommands.java
 /app/src/main/java/me/jules/magiocore/ItemEditGui.java
 /app/src/main/java/me/jules/magiocore/HomeCommands.java
 /app/src/main/java/me/jules/magiocore/CoinflipGui.java
