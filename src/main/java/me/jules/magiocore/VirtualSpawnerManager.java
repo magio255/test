@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -83,8 +84,23 @@ public class VirtualSpawnerManager {
                     data.timeLeft = 15;
                     generateLoot(data);
                 }
+                updateHologram(data);
             }
         }, 20L, 20L);
+    }
+
+    private void updateHologram(VirtualSpawnerData data) {
+        if (data.hologram == null || !data.hologram.isValid()) {
+            Location loc = data.location.clone().add(0.5, 1.5, 0.5);
+            data.hologram = data.location.getWorld().spawn(loc, TextDisplay.class);
+            data.hologram.setBillboard(TextDisplay.Billboard.CENTER);
+        }
+
+        int lootCount = data.loot.stream().mapToInt(ItemStack::getAmount).sum();
+        String text = "&#00fbff" + data.type.name() + "\n" +
+                     "§7ᴘᴏčᴇᴛ ᴘřᴇᴅᴍěᴛů: &#00fbff" + lootCount + "\n" +
+                     "§7ᴅᴀʟší sᴘᴀᴡɴ ᴢᴀ: &#00fbff" + data.timeLeft + "s";
+        data.hologram.text(FontUtils.parse(text));
     }
 
     private void generateLoot(VirtualSpawnerData data) {
@@ -115,12 +131,17 @@ public class VirtualSpawnerManager {
     }
 
     public void addSpawner(Location loc, EntityType type) {
-        spawners.put(loc, new VirtualSpawnerData(loc, type, 15, new ArrayList<>()));
+        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 15, new ArrayList<>());
+        spawners.put(loc, data);
+        updateHologram(data);
         save();
     }
 
     public void removeSpawner(Location loc) {
-        spawners.remove(loc);
+        VirtualSpawnerData data = spawners.remove(loc);
+        if (data != null && data.hologram != null) {
+            data.hologram.remove();
+        }
         save();
     }
 
@@ -134,6 +155,9 @@ public class VirtualSpawnerManager {
 
     public void stopTask() {
         if (task != null) task.cancel();
+        for (VirtualSpawnerData data : spawners.values()) {
+            if (data.hologram != null) data.hologram.remove();
+        }
     }
 
     public static class VirtualSpawnerData {
@@ -141,6 +165,7 @@ public class VirtualSpawnerManager {
         public EntityType type;
         public int timeLeft;
         public List<ItemStack> loot;
+        public TextDisplay hologram;
 
         public VirtualSpawnerData(Location location, EntityType type, int timeLeft, List<ItemStack> loot) {
             this.location = location;
