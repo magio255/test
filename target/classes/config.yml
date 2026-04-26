@@ -42,7 +42,7 @@ anti-spam:
 # RTP GUI Settings
 rtp:
   gui:
-    title: "ᴡᴏʀʟᴅ sᴇʟᴇᴄᴛɪᴏɴ"
+    title: "ᴠýʙěʀ sᴠěᴛᴀ"
     rows: 3
     background: "AIR"
     worlds:
@@ -53,41 +53,41 @@ rtp:
         name: "&#37FF00ᴏᴠᴇʀᴡᴏʀʟᴅ"
         lore:
           - ""
-          - " &8| &fStatus: &#2ECC71Online"
-          - " &8| &fType: &7Dimension"
+          - " &8| &fStav: &#2ECC71Online"
+          - " &8| &fTyp: &7Dimenze"
           - ""
-          - " &#2ECC71> &7Teleport to a random location"
-          - " &#2ECC71> &7in the primary resource world."
+          - " &#2ECC71> &7Teleportuj se na náhodné místo"
+          - " &#2ECC71> &7v hlavním světě."
           - ""
-          - "&#2ECC71LEFT-CLICK &8• &fTo Teleport"
+          - "&#2ECC71LEVÝ KLIK &8• &fPro Teleport"
       nether:
         material: "PLAYER_HEAD"
         texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmVhOTc4NDEyZDUzZTBiMjM3MDIzZGU2NDVmNDhmM2I3MmZlNmNlZDU0Y2EwMzBjMWZjMWY1ZjNmZjRmYWY4MCJ9fX0="
         slot: 13
-        name: "&#E74C3Cᴛʜᴇ ɴᴇᴛʜᴇʀ"
+        name: "&#E74C3Cɴᴇᴛʜᴇʀ"
         lore:
           - ""
-          - " &8| &fStatus: &#E74C3COnline"
-          - " &8| &fType: &7Dimension"
+          - " &8| &fStav: &#E74C3COnline"
+          - " &8| &fTyp: &7Dimenze"
           - ""
-          - " &#E74C3C> &7Teleport to a random location"
-          - " &#E74C3C> &7in the hostile nether realm."
+          - " &#E74C3C> &7Teleportuj se na náhodné místo"
+          - " &#E74C3C> &7v nebezpečném netheru."
           - ""
-          - "&#E74C3CLEFT-CLICK &8• &fTo Teleport"
+          - "&#E74C3CLEVÝ KLIK &8• &fPro Teleport"
       end:
         material: "PLAYER_HEAD"
         texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjYyYzQ4MDRmNjc3YzQ2ODBhZGQ4ZDdmM2FlNjUxMTU3NjBmMDkyZDYzYWQzMzhhMGFlMzIyN2FhMWQ0MzUzNyJ9fX0="
         slot: 15
-        name: "&#A569BDᴛʜᴇ ᴇɴᴅ"
+        name: "&#A569BDᴇɴᴅ"
         lore:
           - ""
-          - " &8| &fStatus: &#A569BDOnline"
-          - " &8| &fType: &7Dimension"
+          - " &8| &fStav: &#A569BDOnline"
+          - " &8| &fTyp: &7Dimenze"
           - ""
-          - " &#A569BD> &7Teleport to a random location"
-          - " &#A569BD> &7in the void islands."
+          - " &#A569BD> &7Teleportuj se na náhodné místo"
+          - " &#A569BD> &7v temném endu."
           - ""
-          - "&#A569BDLEFT-CLICK &8• &fTo Teleport"
+          - "&#A569BDLEVÝ KLIK &8• &fPro Teleport"
   settings:
     radius: 5000
     max-attempts: 10
