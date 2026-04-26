@@ -43,6 +43,21 @@ public class RtpCommand implements CommandExecutor, Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) return true;
+
+        if (args.length > 0) {
+            String targetWorld = args[0].toLowerCase();
+            if (targetWorld.equals("world") || targetWorld.equals("overworld")) {
+                findRandomLocation(player, "world");
+            } else if (targetWorld.equals("nether")) {
+                findRandomLocation(player, "world_nether");
+            } else if (targetWorld.equals("end")) {
+                findRandomLocation(player, "world_the_end");
+            } else {
+                findRandomLocation(player, targetWorld);
+            }
+            return true;
+        }
+
         openGui(player);
         return true;
     }
@@ -138,7 +153,9 @@ public class RtpCommand implements CommandExecutor, Listener {
         if (slotToWorld.containsKey(slot)) {
             String worldName = slotToWorld.get(slot);
             player.closeInventory();
-            findRandomLocation(player, worldName);
+            if (worldName.equalsIgnoreCase("nether")) findRandomLocation(player, "world_nether");
+            else if (worldName.equalsIgnoreCase("end")) findRandomLocation(player, "world_the_end");
+            else findRandomLocation(player, worldName);
         }
     }
 
