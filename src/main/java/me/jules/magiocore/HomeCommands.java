@@ -1,14 +1,18 @@
 package me.jules.magiocore;
 
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class HomeCommands implements CommandExecutor {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class HomeCommands implements CommandExecutor, TabCompleter {
     private final MagioCore plugin;
     private final HomeManager homeManager;
 
@@ -80,5 +84,15 @@ public class HomeCommands implements CommandExecutor {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 1) {
+            return Arrays.asList("1", "2", "3", "4", "5", "6", "7").stream()
+                    .filter(s -> s.startsWith(args[0]))
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }

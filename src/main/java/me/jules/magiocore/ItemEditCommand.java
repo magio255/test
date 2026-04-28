@@ -13,6 +13,7 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -26,11 +27,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ItemEditCommand implements CommandExecutor {
+public class ItemEditCommand implements CommandExecutor, TabCompleter {
+
+    private final List<String> subcommands = Arrays.asList(
+            "rename", "lore", "enchant", "hide", "hideall", "unbreakable", "repaircost",
+            "amount", "durability", "skullowner", "custommodeldata", "type", "leathercolor",
+            "potioncolor", "bookauthor", "fireworkpower", "potioneffect", "attribute",
+            "banner", "booktype", "tropicalfish", "compass", "spawnereggtype", "listaliases"
+    );
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -236,5 +245,72 @@ public class ItemEditCommand implements CommandExecutor {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 1) {
+            return subcommands.stream().filter(s -> s.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+        }
+        if (args.length == 2) {
+            String sub = args[0].toLowerCase();
+            switch (sub) {
+                case "lore" -> {
+                    return Arrays.asList("add", "set", "remove", "reset").stream()
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "enchant" -> {
+                    return Arrays.stream(Enchantment.values())
+                            .map(e -> e.getKey().getKey())
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "hide" -> {
+                    return Arrays.stream(ItemFlag.values())
+                            .map(Enum::name)
+                            .map(String::toLowerCase)
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "type" -> {
+                    return Arrays.stream(Material.values())
+                            .map(Enum::name)
+                            .map(String::toLowerCase)
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "potioneffect" -> {
+                    return Arrays.asList("add", "remove", "reset").stream()
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "attribute" -> {
+                    return Arrays.asList("add", "remove").stream()
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "banner" -> {
+                    return Arrays.asList("add", "set", "remove").stream()
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "tropicalfish" -> {
+                    return Arrays.asList("pattern", "bodycolor", "patterncolor").stream()
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+                case "compass" -> {
+                    return Arrays.asList("set", "clear").stream()
+                            .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                }
+            }
+        }
+        if (args.length == 3) {
+            String sub = args[0].toLowerCase();
+            if (sub.equals("potioneffect") && args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove")) {
+                return Arrays.stream(PotionEffectType.values())
+                        .map(p -> p.getName().toLowerCase())
+                        .filter(s -> s.startsWith(args[2].toLowerCase())).collect(Collectors.toList());
+            }
+            if (sub.equals("attribute") && (args[1].equalsIgnoreCase("add") || args[1].equalsIgnoreCase("remove"))) {
+                return Arrays.stream(Attribute.values())
+                        .map(a -> a.name().toLowerCase())
+                        .filter(s -> s.startsWith(args[2].toLowerCase())).collect(Collectors.toList());
+            }
+        }
+        return Collections.emptyList();
     }
 }

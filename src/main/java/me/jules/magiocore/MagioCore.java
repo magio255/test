@@ -33,11 +33,15 @@ public class MagioCore extends JavaPlugin {
 
         HomeCommands homeCommands = new HomeCommands(this, homeManager);
         getCommand("home").setExecutor(homeCommands);
+        getCommand("home").setTabCompleter(homeCommands);
         getCommand("sethome").setExecutor(homeCommands);
+        getCommand("sethome").setTabCompleter(homeCommands);
 
         TpaCommands tpaCommands = new TpaCommands(this, tpaManager);
         getCommand("tpa").setExecutor(tpaCommands);
+        getCommand("tpa").setTabCompleter(tpaCommands);
         getCommand("tpahere").setExecutor(tpaCommands);
+        getCommand("tpahere").setTabCompleter(tpaCommands);
         getCommand("tpacancel").setExecutor(tpaCommands);
         getCommand("tpaoff").setExecutor(tpaCommands);
         getCommand("tpaccept").setExecutor(tpaCommands);
@@ -55,6 +59,7 @@ public class MagioCore extends JavaPlugin {
 
         RtpCommand rtpCommand = new RtpCommand(this);
         getCommand("rtp").setExecutor(rtpCommand);
+        getCommand("rtp").setTabCompleter(rtpCommand);
 
         FlySpeedCommand flySpeedCommand = new FlySpeedCommand();
         getCommand("flyspeed").setExecutor(flySpeedCommand);
@@ -91,13 +96,19 @@ public class MagioCore extends JavaPlugin {
         UtilityCommands utilityCommands = new UtilityCommands();
         getCommand("broadcast").setExecutor(utilityCommands);
         getCommand("feed").setExecutor(utilityCommands);
+        getCommand("feed").setTabCompleter(utilityCommands);
         getCommand("fly").setExecutor(utilityCommands);
+        getCommand("fly").setTabCompleter(utilityCommands);
         getCommand("hat").setExecutor(utilityCommands);
         getCommand("heal").setExecutor(utilityCommands);
+        getCommand("heal").setTabCompleter(utilityCommands);
         getCommand("repair").setExecutor(utilityCommands);
+        getCommand("repair").setTabCompleter(utilityCommands);
         getCommand("suicide").setExecutor(utilityCommands);
         getCommand("ptime").setExecutor(utilityCommands);
+        getCommand("ptime").setTabCompleter(utilityCommands);
         getCommand("pweather").setExecutor(utilityCommands);
+        getCommand("pweather").setTabCompleter(utilityCommands);
 
         GuiUtilityCommands guiUtilityCommands = new GuiUtilityCommands();
         getCommand("anvil").setExecutor(guiUtilityCommands);
@@ -114,13 +125,17 @@ public class MagioCore extends JavaPlugin {
         spawnerManager = new VirtualSpawnerManager(this);
         VirtualSpawnerCommands spawnerCommands = new VirtualSpawnerCommands(this, spawnerManager);
         getCommand("ss").setExecutor(spawnerCommands);
+        getCommand("ss").setTabCompleter(spawnerCommands);
         getCommand("virtualspawner").setExecutor(spawnerCommands);
+        getCommand("virtualspawner").setTabCompleter(spawnerCommands);
         getServer().getPluginManager().registerEvents(new VirtualSpawnerListener(this, spawnerManager), this);
 
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);
         getCommand("playtimerewards").setExecutor(rewardCommands);
-        getCommand("itemedit").setExecutor(new ItemEditCommand());
+        ItemEditCommand itemEditCommand = new ItemEditCommand();
+        getCommand("itemedit").setExecutor(itemEditCommand);
+        getCommand("itemedit").setTabCompleter(itemEditCommand);
 
         getServer().getPluginManager().registerEvents(dailyRewardGui, this);
         getServer().getPluginManager().registerEvents(playtimeRewardGui, this);

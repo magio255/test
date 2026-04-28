@@ -6,6 +6,7 @@ import org.bukkit.WeatherType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -13,9 +14,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class UtilityCommands implements CommandExecutor {
+public class UtilityCommands implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -226,5 +230,33 @@ public class UtilityCommands implements CommandExecutor {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        String sub = command.getName().toLowerCase();
+        if (args.length == 1) {
+            if (Arrays.asList("feed", "heal", "fly").contains(sub)) {
+                return Bukkit.getOnlinePlayers().stream().map(Player::getName)
+                        .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+            }
+            if (sub.equals("ptime")) {
+                return Arrays.asList("list", "reset", "day", "night", "dawn", "ticks").stream()
+                        .filter(s -> s.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+            }
+            if (sub.equals("pweather")) {
+                return Arrays.asList("list", "reset", "storm", "sun", "clear").stream()
+                        .filter(s -> s.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+            }
+            if (sub.equals("repair")) {
+                return Arrays.asList("hand", "all").stream()
+                        .filter(s -> s.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+            }
+        }
+        if (args.length == 2 && (sub.equals("ptime") || sub.equals("pweather"))) {
+            return Bukkit.getOnlinePlayers().stream().map(Player::getName)
+                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }

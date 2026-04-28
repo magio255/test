@@ -4,15 +4,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import java.util.UUID;
 
-public class TpaCommands implements CommandExecutor {
+public class TpaCommands implements CommandExecutor, TabCompleter {
     private final MagioCore plugin;
     private final TpaManager tpaManager;
 
@@ -162,5 +168,19 @@ public class TpaCommands implements CommandExecutor {
         if (requester != null) {
             requester.sendMessage(FontUtils.parse(prefix + "ʜʀáč " + color + player.getName() + " §7ᴏᴅᴍíᴛʟ ᴛᴠᴏᴊí žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ"));
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 1) {
+            String sub = command.getName().toLowerCase();
+            if (sub.equals("tpa") || sub.equals("tpahere")) {
+                return Bukkit.getOnlinePlayers().stream()
+                        .map(Player::getName)
+                        .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
+                        .collect(Collectors.toList());
+            }
+        }
+        return Collections.emptyList();
     }
 }
