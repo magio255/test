@@ -85,6 +85,10 @@ public class VirtualSpawnerListener implements Listener {
 
     private void openSpawnerGui(Player player, VirtualSpawnerManager.VirtualSpawnerData data) {
         Inventory inv = Bukkit.createInventory(new SpawnerGuiHolder(data), 27, FontUtils.parse("&#00fbffᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ"));
+
+        ItemStack glass = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
+        for (int i = 0; i < 27; i++) inv.setItem(i, glass);
+
         updateSpawnerGui(inv, data);
         player.openInventory(inv);
 
@@ -119,25 +123,50 @@ public class VirtualSpawnerListener implements Listener {
         if (event.getInventory().getHolder() instanceof LootGuiHolder holder) {
             event.setCancelled(true);
             int slot = event.getRawSlot();
+            Player player = (Player) event.getWhoClicked();
+
             if (slot < 45) {
                 int itemIndex = holder.page * 45 + slot;
                 if (itemIndex < holder.data.loot.size()) {
                     ItemStack item = holder.data.loot.get(itemIndex);
-                    event.getWhoClicked().getInventory().addItem(item);
-                    holder.data.loot.remove(itemIndex);
-                    openLootGui((Player) event.getWhoClicked(), holder.data, holder.page);
-                    manager.save();
+                    if (player.getInventory().firstEmpty() != -1) {
+                        player.getInventory().addItem(item);
+                        holder.data.loot.remove(itemIndex);
+                        openLootGui(player, holder.data, holder.page);
+                        manager.save();
+                    } else {
+                        player.sendMessage(FontUtils.parse("§c" + "ᴍáš ᴘʟɴý ɪɴᴠᴇɴᴛář."));
+                    }
                 }
             } else if (slot == 45 && holder.page > 0) {
-                openLootGui((Player) event.getWhoClicked(), holder.data, holder.page - 1);
+                openLootGui(player, holder.data, holder.page - 1);
             } else if (slot == 53 && (holder.page + 1) * 45 < holder.data.loot.size()) {
-                openLootGui((Player) event.getWhoClicked(), holder.data, holder.page + 1);
+                openLootGui(player, holder.data, holder.page + 1);
+            } else if (slot == 49) {
+                if (holder.data.loot.isEmpty()) {
+                    player.sendMessage(FontUtils.parse("§c" + "ᴢᴅᴇ ɴᴇɴí žáᴅɴý ʟᴏᴏᴛ ᴋ ᴠʏʙʀáɴí."));
+                    return;
+                }
+                for (ItemStack item : new ArrayList<>(holder.data.loot)) {
+                    if (player.getInventory().firstEmpty() != -1) {
+                        player.getInventory().addItem(item);
+                        holder.data.loot.remove(item);
+                    } else {
+                        player.sendMessage(FontUtils.parse("§c" + "ɪɴᴠᴇɴᴛář ᴊᴇ ᴘʟɴý! ᴢʙýᴠᴀᴊíᴄí ᴘřᴇᴅᴍěᴛʏ ᴢůsᴛᴀʟʏ ᴠᴇ sᴘᴀᴡɴᴇʀᴜ."));
+                        break;
+                    }
+                }
+                openLootGui(player, holder.data, 0);
+                manager.save();
             }
         }
     }
 
     private void openLootGui(Player player, VirtualSpawnerManager.VirtualSpawnerData data, int page) {
         Inventory inv = Bukkit.createInventory(new LootGuiHolder(data, page), 54, FontUtils.parse("&#00fbffᴜsᴄʜᴏᴠᴀɴý ʟᴏᴏᴛ"));
+
+        ItemStack glass = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
+        for (int i = 45; i < 54; i++) inv.setItem(i, glass);
 
         int start = page * 45;
         for (int i = 0; i < 45 && start + i < data.loot.size(); i++) {
@@ -151,13 +180,20 @@ public class VirtualSpawnerListener implements Listener {
             inv.setItem(53, createItem(Material.ARROW, "&#00fbffᴅᴀʟší sᴛʀᴀɴᴀ"));
         }
 
+        inv.setItem(49, createItem(Material.HOPPER, "&#00ff44ᴠʏʙʀᴀᴛ ᴠšᴇᴄʜᴇɴ ʟᴏᴏᴛ", "§7ᴋʟɪᴋɴɪ ᴘʀᴏ ᴠʏʙʀáɴí ᴠšᴇᴄʜ ᴘřᴇᴅᴍěᴛů."));
+
         player.openInventory(inv);
     }
 
-    private ItemStack createItem(Material mat, String name) {
+    private ItemStack createItem(Material mat, String name, String... lore) {
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(FontUtils.parse(name));
+        if (lore.length > 0) {
+            List<Component> l = new ArrayList<>();
+            for (String s : lore) l.add(FontUtils.parse(s));
+            meta.lore(l);
+        }
         item.setItemMeta(meta);
         return item;
     }
