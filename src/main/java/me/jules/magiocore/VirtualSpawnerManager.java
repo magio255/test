@@ -51,10 +51,11 @@ public class VirtualSpawnerManager {
                 if (loc == null) continue;
 
                 EntityType type = EntityType.valueOf(s.getString("type", "ZOMBIE"));
+                int count = s.getInt("count", 1);
                 int timeLeft = s.getInt("timeLeft", 15);
                 List<ItemStack> loot = (List<ItemStack>) s.getList("loot", new ArrayList<>());
 
-                spawners.put(loc, new VirtualSpawnerData(loc, type, timeLeft, loot));
+                spawners.put(loc, new VirtualSpawnerData(loc, type, count, timeLeft, loot));
             }
         }
     }
@@ -66,6 +67,7 @@ public class VirtualSpawnerManager {
             String path = "spawners.s" + i++;
             config.set(path + ".location", data.location);
             config.set(path + ".type", data.type.name());
+            config.set(path + ".count", data.count);
             config.set(path + ".timeLeft", data.timeLeft);
             config.set(path + ".loot", data.loot);
         }
@@ -95,10 +97,11 @@ public class VirtualSpawnerManager {
             data.hologram = data.location.getWorld().spawn(loc, TextDisplay.class);
             data.hologram.setBillboard(TextDisplay.Billboard.CENTER);
             data.hologram.setShadowed(true);
+            data.hologram.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
         }
 
         int lootCount = data.loot.stream().mapToInt(ItemStack::getAmount).sum();
-        String text = "&#00fbff&l" + data.type.name() + " sᴘᴀᴡɴᴇʀ\n" +
+        String text = "&#00fbff&l" + data.type.name() + " sᴘᴀᴡɴᴇʀ §8(x" + data.count + ")\n" +
                      "&7ꜱᴇʀᴠᴇʀ ᴠɪʀᴛᴜᴀʟ ꜱʏꜱᴛᴇᴍ\n" +
                      "&r\n" +
                      "&fᴘᴏčᴇᴛ ᴘřᴇᴅᴍěᴛů: &#00fbff" + lootCount + " ᴋs\n" +
@@ -109,6 +112,7 @@ public class VirtualSpawnerManager {
     }
 
     private void generateLoot(VirtualSpawnerData data) {
+        int amount = data.count;
         ItemStack item;
         switch (data.type) {
             case ZOMBIE -> item = new ItemStack(Material.ROTTEN_FLESH);
@@ -122,21 +126,36 @@ public class VirtualSpawnerManager {
         }
 
         // Add to loot list, merging if possible
-        boolean merged = false;
-        for (ItemStack lootItem : data.loot) {
-            if (lootItem != null && lootItem.isSimilar(item) && lootItem.getAmount() < 64) {
-                lootItem.setAmount(lootItem.getAmount() + 1);
-                merged = true;
-                break;
+        while (amount > 0) {
+            int toAdd = Math.min(amount, 64);
+            ItemStack stack = item.clone();
+            stack.setAmount(toAdd);
+
+            boolean merged = false;
+            for (ItemStack lootItem : data.loot) {
+                if (lootItem != null && lootItem.isSimilar(stack) && lootItem.getAmount() < 64) {
+                    int canAdd = 64 - lootItem.getAmount();
+                    int adding = Math.min(toAdd, canAdd);
+                    lootItem.setAmount(lootItem.getAmount() + adding);
+                    toAdd -= adding;
+                    if (toAdd <= 0) {
+                        merged = true;
+                        break;
+                    }
+                }
             }
-        }
-        if (!merged) {
-            data.loot.add(item);
+            if (!merged && toAdd > 0) {
+                ItemStack finalStack = item.clone();
+                finalStack.setAmount(toAdd);
+                data.loot.add(finalStack);
+                toAdd = 0;
+            }
+            amount = toAdd;
         }
     }
 
     public void addSpawner(Location loc, EntityType type) {
-        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 15, new ArrayList<>());
+        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 1, 15, new ArrayList<>());
         spawners.put(loc, data);
         updateHologram(data);
         save();
@@ -168,13 +187,15 @@ public class VirtualSpawnerManager {
     public static class VirtualSpawnerData {
         public Location location;
         public EntityType type;
+        public int count;
         public int timeLeft;
         public List<ItemStack> loot;
         public TextDisplay hologram;
 
-        public VirtualSpawnerData(Location location, EntityType type, int timeLeft, List<ItemStack> loot) {
+        public VirtualSpawnerData(Location location, EntityType type, int count, int timeLeft, List<ItemStack> loot) {
             this.location = location;
             this.type = type;
+            this.count = count;
             this.timeLeft = timeLeft;
             this.loot = loot;
         }

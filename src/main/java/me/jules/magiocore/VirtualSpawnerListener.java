@@ -23,6 +23,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,15 +58,30 @@ public class VirtualSpawnerListener implements Listener {
         if (data != null) {
             manager.removeSpawner(loc);
 
-            ItemStack spawner = new ItemStack(Material.SPAWNER);
+            ItemStack spawner = new ItemStack(Material.SPAWNER, 1);
             ItemMeta meta = spawner.getItemMeta();
-            meta.displayName(FontUtils.parse("&#00fbffᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ (" + data.type.name() + ")"));
-            meta.lore(Collections.singletonList(FontUtils.parse("§7ᴘᴏʟᴏž ᴛᴇɴᴛᴏ sᴘᴀᴡɴᴇʀ ᴘʀᴏ ᴠʏᴛᴠᴏřᴇɴí ᴠɪʀᴛᴜáʟɴíʜᴏ sᴘᴀᴡɴᴇʀᴜ.")));
+            meta.displayName(FontUtils.parse("&#00fbff&lᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ"));
+            meta.lore(Arrays.asList(
+                    FontUtils.parse("§7ᴛʏᴘ: &#00fbff" + data.type.name()),
+                    FontUtils.parse(""),
+                    FontUtils.parse("&#00fbff» §7ᴘᴏʟᴏž ᴘʀᴏ ᴠʏᴛᴠᴏřᴇɴí sᴘᴀᴡɴᴇʀᴜ"),
+                    FontUtils.parse("&#00fbff» §7ᴋʟɪᴋɴɪ sᴛᴇᴊɴýᴍ ᴛʏᴘᴇᴍ ᴘʀᴏ sᴛᴀᴄᴋᴏᴠáɴí"),
+                    FontUtils.parse(""),
+                    FontUtils.parse("&#FCD05Cᴅɪsᴘʟᴀʏ &#4498DBꜱᴇʀᴠᴇʀ ꜱʏꜱᴛᴇᴍ")
+            ));
             meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "virtual_spawner"), PersistentDataType.STRING, data.type.name());
             spawner.setItemMeta(meta);
 
             event.setDropItems(false);
-            loc.getWorld().dropItemNaturally(loc, spawner);
+            int count = data.count;
+            while (count > 0) {
+                int drop = Math.min(count, 64);
+                ItemStack toDrop = spawner.clone();
+                toDrop.setAmount(drop);
+                loc.getWorld().dropItemNaturally(loc, toDrop);
+                count -= drop;
+            }
+
             event.getPlayer().sendMessage(FontUtils.parse("§c" + "ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ ʙʏʟ ᴏᴅsᴛʀᴀɴěɴ."));
         }
     }
@@ -79,6 +95,24 @@ public class VirtualSpawnerListener implements Listener {
         VirtualSpawnerManager.VirtualSpawnerData data = manager.getSpawner(block.getLocation());
         if (data != null) {
             event.setCancelled(true);
+
+            ItemStack item = event.getItem();
+            if (item != null && item.getType() == Material.SPAWNER) {
+                ItemMeta meta = item.getItemMeta();
+                NamespacedKey key = new NamespacedKey(plugin, "virtual_spawner");
+                if (meta != null && meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
+                    String typeStr = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
+                    if (data.type.name().equalsIgnoreCase(typeStr)) {
+                        int amount = event.getPlayer().isSneaking() ? item.getAmount() : 1;
+                        data.count += amount;
+                        item.setAmount(item.getAmount() - amount);
+                        event.getPlayer().sendMessage(FontUtils.parse("&#00fbff" + "sᴘᴀᴡɴᴇʀ ʙʏʟ ᴠʏʟᴇᴘšᴇɴ (sᴛᴀᴄᴋᴇᴅ). ᴀᴋᴛᴜáʟɴě: " + data.count + "x"));
+                        manager.save();
+                        return;
+                    }
+                }
+            }
+
             openSpawnerGui(event.getPlayer(), data);
         }
     }

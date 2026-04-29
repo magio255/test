@@ -51,21 +51,33 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
             }
         } else if (sub.equals("give")) {
             if (args.length < 2) {
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ss ɢɪᴠᴇ <ᴛʏᴘᴇ>"));
+                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ss ɢɪᴠᴇ <ᴛʏᴘᴇ> [ᴍɴᴏžsᴛᴠí]"));
                 return true;
             }
             try {
                 EntityType type = EntityType.valueOf(args[1].toUpperCase());
-                ItemStack spawner = new ItemStack(Material.SPAWNER);
+                int amount = args.length > 2 ? Integer.parseInt(args[2]) : 1;
+
+                ItemStack spawner = new ItemStack(Material.SPAWNER, amount);
                 ItemMeta meta = spawner.getItemMeta();
-                meta.displayName(FontUtils.parse("&#00fbffᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ (" + type.name() + ")"));
-                meta.lore(Collections.singletonList(FontUtils.parse("§7ᴘᴏʟᴏž ᴛᴇɴᴛᴏ sᴘᴀᴡɴᴇʀ ᴘʀᴏ ᴠʏᴛᴠᴏřᴇɴí ᴠɪʀᴛᴜáʟɴíʜᴏ sᴘᴀᴡɴᴇʀᴜ.")));
+
+                meta.displayName(FontUtils.parse("&#00fbff&lᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ"));
+                meta.lore(Arrays.asList(
+                    FontUtils.parse("§7ᴛʏᴘ: &#00fbff" + type.name()),
+                    FontUtils.parse(""),
+                    FontUtils.parse("&#00fbff» §7ᴘᴏʟᴏž ᴘʀᴏ ᴠʏᴛᴠᴏřᴇɴí sᴘᴀᴡɴᴇʀᴜ"),
+                    FontUtils.parse("&#00fbff» §7ᴋʟɪᴋɴɪ sᴛᴇᴊɴýᴍ ᴛʏᴘᴇᴍ ᴘʀᴏ sᴛᴀᴄᴋᴏᴠáɴí"),
+                    FontUtils.parse(""),
+                    FontUtils.parse("&#FCD05Cᴅɪsᴘʟᴀʏ &#4498DBꜱᴇʀᴠᴇʀ ꜱʏꜱᴛᴇᴍ")
+                ));
+
                 meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "virtual_spawner"), PersistentDataType.STRING, type.name());
                 spawner.setItemMeta(meta);
+
                 player.getInventory().addItem(spawner);
-                player.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴀʟ ᴊsɪ ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ " + type.name() + "."));
+                player.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴀʟ ᴊsɪ " + amount + "x ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ " + type.name() + "."));
             } catch (Exception e) {
-                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴘʟᴀᴛɴý ᴛʏᴘ ᴍᴏʙᴀ."));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴘʟᴀᴛɴý ᴛʏᴘ ᴍᴏʙᴀ ɴᴇʙᴏ ᴍɴᴏžsᴛᴠí."));
             }
         }
 
@@ -84,6 +96,11 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
                     .map(EntityType::name)
                     .map(String::toLowerCase)
                     .filter(s -> s.startsWith(args[1].toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            return Arrays.asList("1", "10", "64").stream()
+                    .filter(s -> s.startsWith(args[2]))
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
