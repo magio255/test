@@ -94,12 +94,17 @@ public class VirtualSpawnerManager {
             Location loc = data.location.clone().add(0.5, 1.5, 0.5);
             data.hologram = data.location.getWorld().spawn(loc, TextDisplay.class);
             data.hologram.setBillboard(TextDisplay.Billboard.CENTER);
+            data.hologram.setShadowed(true);
         }
 
         int lootCount = data.loot.stream().mapToInt(ItemStack::getAmount).sum();
-        String text = "&#00fbff" + data.type.name() + "\n" +
-                     "§7ᴘᴏčᴇᴛ ᴘřᴇᴅᴍěᴛů: &#00fbff" + lootCount + "\n" +
-                     "§7ᴅᴀʟší sᴘᴀᴡɴ ᴢᴀ: &#00fbff" + data.timeLeft + "s";
+        String text = "&#00fbff&l" + data.type.name() + " sᴘᴀᴡɴᴇʀ\n" +
+                     "&7ꜱᴇʀᴠᴇʀ ᴠɪʀᴛᴜᴀʟ ꜱʏꜱᴛᴇᴍ\n" +
+                     "&r\n" +
+                     "&fᴘᴏčᴇᴛ ᴘřᴇᴅᴍěᴛů: &#00fbff" + lootCount + " ᴋs\n" +
+                     "&fᴅᴀʟší sᴘᴀᴡɴ ᴢᴀ: &#00fbff" + data.timeLeft + "s\n" +
+                     "&r\n" +
+                     "&#FCD05C⬇ &#4498DBᴋʟɪᴋɴɪ ᴘʀᴏ ᴍᴇɴᴜ &#FCD05C⬇";
         data.hologram.text(FontUtils.parse(text));
     }
 

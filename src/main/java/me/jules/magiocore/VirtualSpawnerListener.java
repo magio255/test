@@ -142,7 +142,7 @@ public class VirtualSpawnerListener implements Listener {
                 openLootGui(player, holder.data, holder.page - 1);
             } else if (slot == 53 && (holder.page + 1) * 45 < holder.data.loot.size()) {
                 openLootGui(player, holder.data, holder.page + 1);
-            } else if (slot == 49) {
+            } else if (slot == 48) {
                 if (holder.data.loot.isEmpty()) {
                     player.sendMessage(FontUtils.parse("§c" + "ᴢᴅᴇ ɴᴇɴí žáᴅɴý ʟᴏᴏᴛ ᴋ ᴠʏʙʀáɴí."));
                     return;
@@ -156,6 +156,18 @@ public class VirtualSpawnerListener implements Listener {
                         break;
                     }
                 }
+                openLootGui(player, holder.data, 0);
+                manager.save();
+            } else if (slot == 50) {
+                if (holder.data.loot.isEmpty()) {
+                    player.sendMessage(FontUtils.parse("§c" + "ᴢᴅᴇ ɴᴇɴí žáᴅɴý ʟᴏᴏᴛ ᴋ ᴠʏʜᴏᴢᴇɴí."));
+                    return;
+                }
+                for (ItemStack item : holder.data.loot) {
+                    holder.data.location.getWorld().dropItemNaturally(holder.data.location.clone().add(0.5, 1, 0.5), item);
+                }
+                holder.data.loot.clear();
+                player.sendMessage(FontUtils.parse("&#00fbff" + "ᴠšᴇᴄʜᴇɴ ʟᴏᴏᴛ ʙʏʟ ᴠʏʜᴏᴢᴇɴ ɴᴀ ᴢᴇᴍ."));
                 openLootGui(player, holder.data, 0);
                 manager.save();
             }
@@ -180,7 +192,8 @@ public class VirtualSpawnerListener implements Listener {
             inv.setItem(53, createItem(Material.ARROW, "&#00fbffᴅᴀʟší sᴛʀᴀɴᴀ"));
         }
 
-        inv.setItem(49, createItem(Material.HOPPER, "&#00ff44ᴠʏʙʀᴀᴛ ᴠšᴇᴄʜᴇɴ ʟᴏᴏᴛ", "§7ᴋʟɪᴋɴɪ ᴘʀᴏ ᴠʏʙʀáɴí ᴠšᴇᴄʜ ᴘřᴇᴅᴍěᴛů."));
+        inv.setItem(48, createItem(Material.HOPPER, "&#00ff44ᴠʏʙʀᴀᴛ ᴠšᴇᴄʜᴇɴ ʟᴏᴏᴛ", "§7ᴋʟɪᴋɴɪ ᴘʀᴏ ᴠʏʙʀáɴí ᴠšᴇᴄʜ ᴘřᴇᴅᴍěᴛů."));
+        inv.setItem(50, createItem(Material.DISPENSER, "&#ffbb00ᴠʏʜᴏᴅɪᴛ ᴠšᴇᴄʜᴇɴ ʟᴏᴏᴛ", "§7ᴋʟɪᴋɴɪ ᴘʀᴏ ᴠʏʜᴏᴢᴇɴí ᴠšᴇᴄʜ ᴘřᴇᴅᴍěᴛů ɴᴀ ᴢᴇᴍ."));
 
         player.openInventory(inv);
     }
