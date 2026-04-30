@@ -41,6 +41,14 @@ public class TeleportUtils {
                     return;
                 }
 
+                if (player.getWorld() != startLocation.getWorld()) {
+                    player.sendMessage(FontUtils.parse("§c" + "ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢʀᴜšᴇɴᴀ! ᴢᴍěɴɪʟ ᴊsɪ sᴠěᴛ"));
+                    cancel();
+                    pendingTeleports.remove(player.getUniqueId());
+                    callback.accept(false);
+                    return;
+                }
+
                 if (player.getLocation().distanceSquared(startLocation) > 0.25) { // 0.5 distance limit
                     player.sendMessage(FontUtils.parse("§c" + "ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢʀᴜšᴇɴᴀ! ᴘᴏʜɴᴜʟ ᴊsɪ sᴇ"));
                     cancel();
