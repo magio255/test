@@ -140,6 +140,7 @@ public class MagioCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(dailyRewardGui, this);
         getServer().getPluginManager().registerEvents(playtimeRewardGui, this);
         getServer().getPluginManager().registerEvents(new ItemEditListener(this), this);
+        getServer().getPluginManager().registerEvents(new CombatListener(this), this);
 
         new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
 
