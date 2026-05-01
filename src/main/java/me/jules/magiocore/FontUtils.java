@@ -79,4 +79,11 @@ public class FontUtils {
         return LegacyComponentSerializer.legacySection().deserialize(sb.toString())
                 .decoration(TextDecoration.ITALIC, false);
     }
+
+    public static String formatMoney(double amount) {
+        if (amount < 1000) return String.format("%.1f", amount);
+        int exp = (int) (Math.log(amount) / Math.log(1000));
+        char unit = "kmbtq".charAt(exp - 1);
+        return String.format("%.1f%c", amount / Math.pow(1000, exp), unit);
+    }
 }

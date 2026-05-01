@@ -74,7 +74,7 @@ public class ChatListener implements Listener {
             if (entry.name().equalsIgnoreCase(message)) {
                 found = true;
                 rank = i + 1;
-                player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00" + entry.name() + " §fᴊᴇ ɴᴀ &#00fbff" + rank + ". §fᴍísᴛě s ʙᴀʟᴀɴᴄí &#00ff44" + entry.balance() + " $"));
+                player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00" + entry.name() + " §fᴊᴇ ɴᴀ &#00fbff" + rank + ". §fᴍísᴛě s ʙᴀʟᴀɴᴄí &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $"));
                 break;
             }
         }
