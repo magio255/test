@@ -3,12 +3,15 @@ package me.jules.magiocore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
@@ -22,9 +25,11 @@ public class VirtualSpawnerManager {
     private FileConfiguration config;
     private final Map<Location, VirtualSpawnerData> spawners = new ConcurrentHashMap<>();
     private BukkitTask task;
+    private final NamespacedKey hologramKey;
 
     public VirtualSpawnerManager(MagioCore plugin) {
         this.plugin = plugin;
+        this.hologramKey = new NamespacedKey(plugin, "vspawner_hologram");
         this.file = new File(plugin.getDataFolder(), "spawners.yml");
         load();
         startTask();
@@ -92,12 +97,28 @@ public class VirtualSpawnerManager {
     }
 
     private void updateHologram(VirtualSpawnerData data) {
+        if (!data.location.isChunkLoaded()) return;
+
         if (data.hologram == null || !data.hologram.isValid()) {
             Location loc = data.location.clone().add(0.5, 1.5, 0.5);
-            data.hologram = data.location.getWorld().spawn(loc, TextDisplay.class);
-            data.hologram.setBillboard(TextDisplay.Billboard.CENTER);
-            data.hologram.setShadowed(true);
-            data.hologram.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
+
+            // Try to find existing hologram in chunk to avoid duplicates
+            for (Entity entity : loc.getChunk().getEntities()) {
+                if (entity instanceof TextDisplay td && entity.getPersistentDataContainer().has(hologramKey, PersistentDataType.BYTE)) {
+                    if (entity.getLocation().distanceSquared(loc) < 0.1) {
+                        data.hologram = td;
+                        break;
+                    }
+                }
+            }
+
+            if (data.hologram == null || !data.hologram.isValid()) {
+                data.hologram = data.location.getWorld().spawn(loc, TextDisplay.class);
+                data.hologram.setBillboard(TextDisplay.Billboard.CENTER);
+                data.hologram.setShadowed(true);
+                data.hologram.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
+                data.hologram.getPersistentDataContainer().set(hologramKey, PersistentDataType.BYTE, (byte) 1);
+            }
         }
 
         int lootCount = data.loot.stream().mapToInt(ItemStack::getAmount).sum();
