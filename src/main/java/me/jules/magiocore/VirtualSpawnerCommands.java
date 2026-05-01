@@ -44,11 +44,10 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
 
         String sub = args[0].toLowerCase();
         if (sub.equals("list")) {
-            player.sendMessage(FontUtils.parse("&#00fbff" + "sᴇᴢɴᴀᴍ ᴠɪʀᴛᴜáʟɴíᴄʜ sᴘᴀᴡɴᴇʀů:"));
-            for (VirtualSpawnerManager.VirtualSpawnerData data : manager.getAllSpawners()) {
-                String loc = data.location.getWorld().getName() + " " + data.location.getBlockX() + " " + data.location.getBlockY() + " " + data.location.getBlockZ();
-                player.sendMessage(FontUtils.parse("§7- &#00fbff" + data.type.name() + " §7ɴᴀ " + loc));
-            }
+            plugin.getSpawnerListener().openAdminGui(player, 0);
+        } else if (sub.equals("fix")) {
+            int count = manager.forceCleanup(player);
+            player.sendMessage(FontUtils.parse("&#00fbff" + "ᴠʏčɪšᴛěɴᴏ &#ffbb00" + count + " §7ᴏsɪřᴇʟýᴄʜ ʜᴏʟᴏɢʀᴀᴍů."));
         } else if (sub.equals("give")) {
             if (args.length < 2) {
                 player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ss ɢɪᴠᴇ <ᴛʏᴘᴇ> [ᴍɴᴏžsᴛᴠí]"));
@@ -87,7 +86,7 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("list", "give").stream()
+            return Arrays.asList("list", "give", "fix").stream()
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
                     .collect(Collectors.toList());
         }

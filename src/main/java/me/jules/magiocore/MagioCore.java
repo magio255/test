@@ -18,6 +18,7 @@ public class MagioCore extends JavaPlugin {
     private DailyRewardGui dailyRewardGui;
     private PlaytimeRewardGui playtimeRewardGui;
     private VirtualSpawnerManager spawnerManager;
+    private VirtualSpawnerListener spawnerListener;
 
     @Override
     public void onEnable() {
@@ -123,12 +124,13 @@ public class MagioCore extends JavaPlugin {
         playtimeRewardGui = new PlaytimeRewardGui(this, rewardManager);
 
         spawnerManager = new VirtualSpawnerManager(this);
+        spawnerListener = new VirtualSpawnerListener(this, spawnerManager);
         VirtualSpawnerCommands spawnerCommands = new VirtualSpawnerCommands(this, spawnerManager);
         getCommand("ss").setExecutor(spawnerCommands);
         getCommand("ss").setTabCompleter(spawnerCommands);
         getCommand("virtualspawner").setExecutor(spawnerCommands);
         getCommand("virtualspawner").setTabCompleter(spawnerCommands);
-        getServer().getPluginManager().registerEvents(new VirtualSpawnerListener(this, spawnerManager), this);
+        getServer().getPluginManager().registerEvents(spawnerListener, this);
 
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);
@@ -181,6 +183,10 @@ public class MagioCore extends JavaPlugin {
 
     public HomeGui getHomeGui() {
         return homeGui;
+    }
+
+    public VirtualSpawnerListener getSpawnerListener() {
+        return spawnerListener;
     }
 
     @Override

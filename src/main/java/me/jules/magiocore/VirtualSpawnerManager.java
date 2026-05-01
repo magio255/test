@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -196,6 +197,20 @@ public class VirtualSpawnerManager {
 
     public Collection<VirtualSpawnerData> getAllSpawners() {
         return spawners.values();
+    }
+
+    public int forceCleanup(Player player) {
+        int count = 0;
+        // Search all TextDisplays in the player's world
+        for (org.bukkit.entity.Entity entity : player.getWorld().getEntitiesByClass(TextDisplay.class)) {
+            // Remove if tagged or within a 10-block radius
+            if (entity.getPersistentDataContainer().has(hologramKey, PersistentDataType.BYTE) ||
+                entity.getLocation().distanceSquared(player.getLocation()) <= 100) {
+                entity.remove();
+                count++;
+            }
+        }
+        return count;
     }
 
     public void stopTask() {

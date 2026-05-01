@@ -146,6 +146,36 @@ public class VirtualSpawnerListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
+        if (event.getInventory().getHolder() instanceof AdminGuiHolder holder) {
+            event.setCancelled(true);
+            if (event.getRawSlot() >= 54 || event.getRawSlot() < 0) return;
+
+            int slot = event.getRawSlot();
+            Player player = (Player) event.getWhoClicked();
+            List<VirtualSpawnerManager.VirtualSpawnerData> list = new ArrayList<>(manager.getAllSpawners());
+
+            if (slot < 45) {
+                int index = holder.page * 45 + slot;
+                if (index < list.size()) {
+                    VirtualSpawnerManager.VirtualSpawnerData data = list.get(index);
+                    if (event.getClick().isLeftClick()) {
+                        player.teleport(data.location.clone().add(0.5, 1, 0.5));
+                        player.sendMessage(FontUtils.parse("&#00fbff" + "ʙʏʟ ᴊsɪ ᴛᴇʟᴇᴘᴏʀᴛᴏᴠáɴ ᴋ sᴘᴀᴡɴᴇʀᴜ."));
+                    } else if (event.getClick().isRightClick()) {
+                        manager.removeSpawner(data.location);
+                        data.location.getBlock().setType(Material.AIR);
+                        openAdminGui(player, holder.page);
+                        player.sendMessage(FontUtils.parse("&#EA427F" + "sᴘᴀᴡɴᴇʀ ʙʏʟ ᴏᴅsᴛʀᴀɴěɴ."));
+                    }
+                }
+            } else if (slot == 45 && holder.page > 0) {
+                openAdminGui(player, holder.page - 1);
+            } else if (slot == 53 && (holder.page + 1) * 45 < list.size()) {
+                openAdminGui(player, holder.page + 1);
+            }
+            return;
+        }
+
         if (event.getInventory().getHolder() instanceof SpawnerGuiHolder holder) {
             event.setCancelled(true);
             if (event.getRawSlot() == 13) {
@@ -255,6 +285,37 @@ public class VirtualSpawnerListener implements Listener {
         public final VirtualSpawnerManager.VirtualSpawnerData data;
         public final int page;
         public LootGuiHolder(VirtualSpawnerManager.VirtualSpawnerData data, int page) { this.data = data; this.page = page; }
+        @Override public @NotNull Inventory getInventory() { return null; }
+    }
+
+    public void openAdminGui(Player player, int page) {
+        Inventory inv = Bukkit.createInventory(new AdminGuiHolder(page), 54, FontUtils.parse("&#00fbffsᴘᴀᴡɴᴇʀ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ"));
+
+        ItemStack glass = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
+        for (int i = 45; i < 54; i++) inv.setItem(i, glass);
+
+        List<VirtualSpawnerManager.VirtualSpawnerData> list = new ArrayList<>(manager.getAllSpawners());
+        int start = page * 45;
+        for (int i = 0; i < 45 && start + i < list.size(); i++) {
+            VirtualSpawnerManager.VirtualSpawnerData data = list.get(start + i);
+            inv.setItem(i, createItem(Material.SPAWNER, "&#00fbff" + data.type.name(),
+                "§7ʟᴏᴋᴀᴄᴇ: &#00fbff" + data.location.getWorld().getName() + " " + data.location.getBlockX() + " " + data.location.getBlockY() + " " + data.location.getBlockZ(),
+                "§7sᴛᴀᴄᴋ: &#00fbff" + data.count + "x",
+                "",
+                "&#00ff44ʟᴇᴠý ᴋʟɪᴋ §7- ᴛᴇʟᴇᴘᴏʀᴛ",
+                "&#EA427Fᴘʀᴀᴠý ᴋʟɪᴋ §7- sᴍᴀᴢᴀᴛ"
+            ));
+        }
+
+        if (page > 0) inv.setItem(45, createItem(Material.ARROW, "&#00fbffᴘřᴇᴅᴄʜᴏᴢí sᴛʀᴀɴᴀ"));
+        if ((page + 1) * 45 < list.size()) inv.setItem(53, createItem(Material.ARROW, "&#00fbffᴅᴀʟší sᴛʀᴀɴᴀ"));
+
+        player.openInventory(inv);
+    }
+
+    public static class AdminGuiHolder implements InventoryHolder {
+        public final int page;
+        public AdminGuiHolder(int page) { this.page = page; }
         @Override public @NotNull Inventory getInventory() { return null; }
     }
 }
