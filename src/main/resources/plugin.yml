@@ -21,6 +21,7 @@ commands:
   tpaoff:
     description: Přepne přijímání žádostí o teleport.
     usage: /tpaoff
+    aliases: [tptoggle]
   tpaccept:
     description: Přijme žádost o teleport.
     usage: /tpaccept
@@ -134,6 +135,18 @@ commands:
     description: Otevře pracovní stůl.
     usage: /workbench
     aliases: [wb, craft, wbench]
+  afk:
+    description: Teleportuje tě do AFK zóny.
+    usage: /afk
+  setafk:
+    description: Nastaví AFK zónu.
+    usage: /setafk
+  book:
+    description: Dá ti psací knížku.
+    usage: /book
+  compass:
+    description: Dá ti kompas.
+    usage: /compass
   ss:
     description: Administrace virtuálních spawnerů.
     usage: /ss <list|give>

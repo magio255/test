@@ -12,20 +12,64 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.bukkit.Location;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UtilityCommands implements CommandExecutor, TabCompleter {
+    private final MagioCore plugin;
+    private final Map<UUID, Long> bookCooldown = new HashMap<>();
+    private final Map<UUID, Long> compassCooldown = new HashMap<>();
+
+    public UtilityCommands(MagioCore plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         String cmd = command.getName().toLowerCase();
 
         switch (cmd) {
+            case "afk" -> {
+                if (!(sender instanceof Player player)) return true;
+                Location afkLoc = plugin.getConfig().getLocation("afk-location");
+                if (afkLoc == null) {
+                    player.sendMessage(FontUtils.parse("§c" + "ᴀꜰᴋ ᴢóɴᴀ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴᴀ."));
+                    return true;
+                }
+                TeleportUtils.startTeleportCountdown(player, afkLoc, plugin, success -> {});
+            }
+            case "setafk" -> {
+                if (!(sender instanceof Player player)) return true;
+                if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
+                    player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí."));
+                    return true;
+                }
+                plugin.getConfig().set("afk-location", player.getLocation());
+                plugin.saveConfig();
+                player.sendMessage(FontUtils.parse("&#00ff44" + "ᴀꜰᴋ ᴢóɴᴀ ʙʏʟᴀ ɴᴀsᴛᴀᴠᴇɴᴀ."));
+            }
+            case "book" -> {
+                if (!(sender instanceof Player player)) return true;
+                if (checkCooldown(player, bookCooldown)) {
+                    player.getInventory().addItem(new ItemStack(Material.WRITABLE_BOOK));
+                    player.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴀʟ ᴊsɪ ᴘsᴀᴄí ᴋɴížᴋᴜ."));
+                }
+            }
+            case "compass" -> {
+                if (!(sender instanceof Player player)) return true;
+                if (checkCooldown(player, compassCooldown)) {
+                    player.getInventory().addItem(new ItemStack(Material.COMPASS));
+                    player.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴀʟ ᴊsɪ ᴋᴏᴍᴘᴀs."));
+                }
+            }
             case "broadcast" -> {
                 if (!sender.hasPermission("magiocore.broadcast")) {
                     sender.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴘřísᴛᴜᴘ ᴋ ᴛᴏᴍᴜᴛᴏ ᴘříᴋᴀᴢᴜ."));
@@ -218,6 +262,19 @@ public class UtilityCommands implements CommandExecutor, TabCompleter {
                 sender.sendMessage(FontUtils.parse("&#00fbff" + "ᴘᴏčᴀsí ᴘʀᴏ " + target.getName() + " ʙʏʟᴏ ᴢᴍěɴěɴᴏ."));
             }
         }
+        return true;
+    }
+
+    private boolean checkCooldown(Player player, Map<UUID, Long> cooldownMap) {
+        long now = System.currentTimeMillis();
+        long last = cooldownMap.getOrDefault(player.getUniqueId(), 0L);
+        long diff = now - last;
+        if (diff < 300000) { // 5 minutes
+            long remaining = (300000 - diff) / 1000;
+            player.sendMessage(FontUtils.parse("§c" + "ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴊᴇšᴛě " + remaining + "s."));
+            return false;
+        }
+        cooldownMap.put(player.getUniqueId(), now);
         return true;
     }
 

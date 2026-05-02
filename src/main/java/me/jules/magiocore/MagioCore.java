@@ -94,7 +94,7 @@ public class MagioCore extends JavaPlugin {
         getCommand("baltop").setExecutor(new BaltopCommand(this));
         getServer().getPluginManager().registerEvents(baltopGui, this);
 
-        UtilityCommands utilityCommands = new UtilityCommands();
+        UtilityCommands utilityCommands = new UtilityCommands(this);
         getCommand("broadcast").setExecutor(utilityCommands);
         getCommand("feed").setExecutor(utilityCommands);
         getCommand("feed").setTabCompleter(utilityCommands);
@@ -118,6 +118,11 @@ public class MagioCore extends JavaPlugin {
         getCommand("loom").setExecutor(guiUtilityCommands);
         getCommand("smithingtable").setExecutor(guiUtilityCommands);
         getCommand("workbench").setExecutor(guiUtilityCommands);
+
+        getCommand("afk").setExecutor(utilityCommands);
+        getCommand("setafk").setExecutor(utilityCommands);
+        getCommand("book").setExecutor(utilityCommands);
+        getCommand("compass").setExecutor(utilityCommands);
 
         rewardManager = new RewardManager(this);
         dailyRewardGui = new DailyRewardGui(this, rewardManager);

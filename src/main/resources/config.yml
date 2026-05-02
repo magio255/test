@@ -95,6 +95,9 @@ rtp:
 # Spawn Location
 spawn: null
 
+# AFK Location
+afk-location: null
+
 # Daily Rewards
 daily-rewards:
   command: "eco give %player% 1000"

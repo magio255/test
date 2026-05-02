@@ -48,6 +48,7 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
                 handleTpaCancel(player);
                 break;
             case "tpaoff":
+            case "tptoggle":
                 handleTpaOff(player);
                 break;
             case "tpaccept":
