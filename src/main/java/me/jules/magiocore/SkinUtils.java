@@ -35,41 +35,58 @@ public class SkinUtils {
             try {
                 URL skinUrl = player.getPlayerProfile().getTextures().getSkin();
                 if (skinUrl == null) {
-                    skinUrl = new URL(DEFAULT_SKINS[random.nextInt(DEFAULT_SKINS.length)]);
+                    return getInternalHeadRows(new URL(DEFAULT_SKINS[random.nextInt(DEFAULT_SKINS.length)]));
                 }
-
-                BufferedImage image = ImageIO.read(skinUrl);
-                List<Component> rows = new ArrayList<>();
-
-                for (int y = 8; y < 16; y++) {
-                    Component row = Component.empty();
-                    for (int x = 8; x < 16; x++) {
-                        int rgb = image.getRGB(x, y);
-
-                        // Hat layer support
-                        int overlayX = x + 32;
-                        int overlayY = y;
-                        int overlayRgb = image.getRGB(overlayX, overlayY);
-
-                        if (((overlayRgb >> 24) & 0xFF) > 0) {
-                            rgb = overlayRgb;
-                        }
-
-                        row = row.append(Component.text("█").color(TextColor.color(rgb)));
-                    }
-                    rows.add(row);
-                }
-                return rows;
+                return getInternalHeadRows(skinUrl);
             } catch (Exception e) {
-                return getSteveHead();
+                try {
+                    return getInternalHeadRows(new URL(DEFAULT_SKINS[random.nextInt(DEFAULT_SKINS.length)]));
+                } catch (Exception ex) {
+                    return getFallbackSteveHead();
+                }
             }
         });
     }
 
-    private static List<Component> getSteveHead() {
+    private static List<Component> getInternalHeadRows(URL url) throws IOException {
+        BufferedImage image = ImageIO.read(url);
         List<Component> rows = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            rows.add(LegacyComponentSerializer.legacySection().deserialize("§8████████"));
+
+        for (int y = 8; y < 16; y++) {
+            Component row = Component.empty();
+            for (int x = 8; x < 16; x++) {
+                int rgb = image.getRGB(x, y);
+
+                // Hat layer support
+                int overlayX = x + 32;
+                int overlayY = y;
+                int overlayRgb = image.getRGB(overlayX, overlayY);
+
+                if (((overlayRgb >> 24) & 0xFF) > 0) {
+                    rgb = overlayRgb;
+                }
+
+                row = row.append(Component.text("█").color(TextColor.color(rgb)));
+            }
+            rows.add(row);
+        }
+        return rows;
+    }
+
+    private static List<Component> getFallbackSteveHead() {
+        String[] steve = {
+            "&#2d1e15████████",
+            "&#2d1e15████████",
+            "&#2d1e15█&#ae7c5d██████&#2d1e15█",
+            "&#ae7c5d████████",
+            "&#ae7c5d█&#ffffff█&#1a2d7c█&#ae7c5d██&#1a2d7c█&#ffffff█&#ae7c5d█",
+            "&#ae7c5d███&#3e2718████",
+            "&#ae7c5d██&#3e2718████&#ae7c5d██",
+            "&#ae7c5d████████"
+        };
+        List<Component> rows = new ArrayList<>();
+        for (String line : steve) {
+            rows.add(FontUtils.parse(line));
         }
         return rows;
     }
