@@ -124,9 +124,9 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
     private void handleTpaOff(Player player) {
         tpaManager.toggleTpa(player.getUniqueId());
         if (tpaManager.isTpaOff(player.getUniqueId())) {
-            player.sendMessage(FontUtils.parse(prefix + "žáᴅᴏsᴛɪ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ʙʏʟʏ &#EA427Fᴠʏᴘɴᴜᴛʏ"));
+            player.sendMessage(FontUtils.parse(prefix + "žáᴅᴏsᴛɪ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ʙʏʟʏ &#EA427Fᴠʏᴘɴᴜᴛᴏ"));
         } else {
-            player.sendMessage(FontUtils.parse(prefix + "žáᴅᴏsᴛɪ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ʙʏʟʏ &#00ff44ᴢᴀᴘɴᴜᴛʏ"));
+            player.sendMessage(FontUtils.parse(prefix + "žáᴅᴏsᴛɪ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ʙʏʟʏ &#00ff44ᴢᴀᴘɴᴜᴛᴏ"));
         }
     }
 

@@ -1,10 +1,16 @@
 package me.jules.magiocore;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
+import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class MagioCore extends JavaPlugin {
+public class MagioCore extends JavaPlugin implements Listener {
     private HomeManager homeManager;
     private HomeGui homeGui;
     private TpaManager tpaManager;
@@ -23,6 +29,13 @@ public class MagioCore extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+
+        // Disable advancement announcements in all worlds
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        }
+        getServer().getPluginManager().registerEvents(this, this);
+
         if (!setupEconomy()) {
             getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
@@ -192,6 +205,11 @@ public class MagioCore extends JavaPlugin {
 
     public VirtualSpawnerListener getSpawnerListener() {
         return spawnerListener;
+    }
+
+    @EventHandler
+    public void onWorldLoad(WorldLoadEvent event) {
+        event.getWorld().setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
     }
 
     @Override

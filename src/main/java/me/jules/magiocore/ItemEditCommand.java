@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class ItemEditCommand implements CommandExecutor, TabCompleter {
 
     private final List<String> subcommands = Arrays.asList(
-            "rename", "lore", "enchant", "hide", "hideall", "unbreakable", "repaircost",
+            "rename", "lore", "enchant", "hide", "unhide", "hideall", "unbreakable", "repaircost",
             "amount", "durability", "skullowner", "custommodeldata", "type", "leathercolor",
             "potioncolor", "bookauthor", "fireworkpower", "potioneffect", "attribute",
             "banner", "booktype", "tropicalfish", "compass", "spawnereggtype", "listaliases"
@@ -264,7 +264,7 @@ public class ItemEditCommand implements CommandExecutor, TabCompleter {
                             .map(e -> e.getKey().getKey())
                             .filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
                 }
-                case "hide" -> {
+                case "hide", "unhide" -> {
                     return Arrays.stream(ItemFlag.values())
                             .map(Enum::name)
                             .map(String::toLowerCase)
