@@ -87,10 +87,22 @@ public class VirtualSpawnerManager {
     private void startTask() {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (VirtualSpawnerData data : spawners.values()) {
-                data.timeLeft--;
-                if (data.timeLeft <= 0) {
-                    data.timeLeft = 15;
-                    generateLoot(data);
+                if (!data.location.isChunkLoaded()) continue;
+
+                boolean playerNearby = false;
+                for (Player p : data.location.getWorld().getPlayers()) {
+                    if (p.getLocation().distanceSquared(data.location) <= 225) { // 15 blocks
+                        playerNearby = true;
+                        break;
+                    }
+                }
+
+                if (playerNearby) {
+                    data.timeLeft--;
+                    if (data.timeLeft <= 0) {
+                        data.timeLeft = 15;
+                        generateLoot(data);
+                    }
                 }
                 updateHologram(data);
             }
@@ -119,6 +131,9 @@ public class VirtualSpawnerManager {
                 data.hologram.setShadowed(true);
                 data.hologram.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
                 data.hologram.getPersistentDataContainer().set(hologramKey, PersistentDataType.BYTE, (byte) 1);
+                // Standard block scale is 1.0. 15 blocks is roughly 0.15 in float range?
+                // View range is usually in blocks for TextDisplay? Documentation says view range is roughly blocks.
+                data.hologram.setViewRange(0.15f); // 15 blocks (0.1f = 10 blocks usually in Paper/Spigot TextDisplay)
             }
         }
 
@@ -134,45 +149,76 @@ public class VirtualSpawnerManager {
     }
 
     private void generateLoot(VirtualSpawnerData data) {
-        int amount = data.count;
-        ItemStack item;
-        switch (data.type) {
-            case ZOMBIE -> item = new ItemStack(Material.ROTTEN_FLESH);
-            case SKELETON -> item = new ItemStack(Material.BONE);
-            case SPIDER -> item = new ItemStack(Material.STRING);
-            case CREEPER -> item = new ItemStack(Material.GUNPOWDER);
-            case PIG -> item = new ItemStack(Material.PORKCHOP);
-            case COW -> item = new ItemStack(Material.BEEF);
-            case CHICKEN -> item = new ItemStack(Material.CHICKEN);
-            default -> item = new ItemStack(Material.IRON_INGOT);
+        Random rand = new Random();
+        for (int i = 0; i < data.count; i++) {
+            List<ItemStack> items = new ArrayList<>();
+            switch (data.type) {
+                case ZOMBIE -> {
+                    items.add(new ItemStack(Material.ROTTEN_FLESH, rand.nextInt(3))); // 0-2
+                    if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.IRON_INGOT));
+                    if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.CARROT));
+                    if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.POTATO));
+                }
+                case SKELETON -> {
+                    items.add(new ItemStack(Material.BONE, rand.nextInt(3))); // 0-2
+                    items.add(new ItemStack(Material.ARROW, rand.nextInt(3))); // 0-2
+                    if (rand.nextInt(100) < 10) {
+                        ItemStack bow = new ItemStack(Material.BOW);
+                        org.bukkit.inventory.meta.Damageable meta = (org.bukkit.inventory.meta.Damageable) bow.getItemMeta();
+                        meta.setDamage(rand.nextInt(Material.BOW.getMaxDurability()));
+                        bow.setItemMeta(meta);
+                        items.add(bow);
+                    }
+                }
+                case SPIDER -> {
+                    items.add(new ItemStack(Material.STRING, rand.nextInt(3)));
+                    if (rand.nextInt(100) < 15) items.add(new ItemStack(Material.SPIDER_EYE));
+                }
+                case CREEPER -> {
+                    items.add(new ItemStack(Material.GUNPOWDER, rand.nextInt(3)));
+                    if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.TNT));
+                }
+                case PIG -> {
+                    items.add(new ItemStack(Material.PORKCHOP, rand.nextInt(4) + 1)); // 1-3
+                }
+                case COW -> {
+                    items.add(new ItemStack(Material.BEEF, rand.nextInt(4) + 1));
+                    items.add(new ItemStack(Material.LEATHER, rand.nextInt(3)));
+                }
+                case CHICKEN -> {
+                    items.add(new ItemStack(Material.CHICKEN, 1));
+                    items.add(new ItemStack(Material.FEATHER, rand.nextInt(3)));
+                }
+                default -> items.add(new ItemStack(Material.IRON_INGOT));
+            }
+
+            for (ItemStack item : items) {
+                if (item.getAmount() <= 0 && !item.getType().name().contains("BOW")) continue;
+                addLootItem(data, item);
+            }
         }
+    }
 
-        // Add to loot list, merging if possible
-        while (amount > 0) {
-            int toAdd = Math.min(amount, 64);
-            ItemStack stack = item.clone();
-            stack.setAmount(toAdd);
+    private void addLootItem(VirtualSpawnerData data, ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) return;
 
-            boolean merged = false;
+        boolean merged = false;
+        if (item.getMaxStackSize() > 1) {
             for (ItemStack lootItem : data.loot) {
-                if (lootItem != null && lootItem.isSimilar(stack) && lootItem.getAmount() < 64) {
-                    int canAdd = 64 - lootItem.getAmount();
-                    int adding = Math.min(toAdd, canAdd);
+                if (lootItem != null && lootItem.isSimilar(item) && lootItem.getAmount() < lootItem.getMaxStackSize()) {
+                    int canAdd = lootItem.getMaxStackSize() - lootItem.getAmount();
+                    int adding = Math.min(item.getAmount(), canAdd);
                     lootItem.setAmount(lootItem.getAmount() + adding);
-                    toAdd -= adding;
-                    if (toAdd <= 0) {
+                    item.setAmount(item.getAmount() - adding);
+                    if (item.getAmount() <= 0) {
                         merged = true;
                         break;
                     }
                 }
             }
-            if (!merged && toAdd > 0) {
-                ItemStack finalStack = item.clone();
-                finalStack.setAmount(toAdd);
-                data.loot.add(finalStack);
-                toAdd = 0;
-            }
-            amount = toAdd;
+        }
+        if (!merged && item.getAmount() > 0) {
+            data.loot.add(item.clone());
         }
     }
 
