@@ -151,6 +151,10 @@ commands:
     description: Administrace virtuálních spawnerů.
     usage: /ss <list|give>
     aliases: [virtualspawner]
+  vanish:
+    description: Zneviditelní tě pro ostatní hráče.
+    usage: /vanish
+    aliases: [v]
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.
@@ -289,6 +293,12 @@ permissions:
     default: op
   magiocore.virtualspawner:
     description: Přístup k /ss.
+    default: op
+  magiocore.vanish:
+    description: Přístup k /vanish.
+    default: op
+  magiocore.vanish.see:
+    description: Schopnost vidět neviditelné hráče.
     default: op
   magiocore.home.0:
     default: true

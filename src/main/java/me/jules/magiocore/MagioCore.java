@@ -25,6 +25,7 @@ public class MagioCore extends JavaPlugin implements Listener {
     private PlaytimeRewardGui playtimeRewardGui;
     private VirtualSpawnerManager spawnerManager;
     private VirtualSpawnerListener spawnerListener;
+    private VanishCommand vanishCommand;
 
     @Override
     public void onEnable() {
@@ -150,6 +151,10 @@ public class MagioCore extends JavaPlugin implements Listener {
         getCommand("virtualspawner").setTabCompleter(spawnerCommands);
         getServer().getPluginManager().registerEvents(spawnerListener, this);
 
+        vanishCommand = new VanishCommand(this);
+        getCommand("vanish").setExecutor(vanishCommand);
+        getServer().getPluginManager().registerEvents(vanishCommand, this);
+
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);
         getCommand("playtimerewards").setExecutor(rewardCommands);
@@ -161,6 +166,7 @@ public class MagioCore extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(playtimeRewardGui, this);
         getServer().getPluginManager().registerEvents(new ItemEditListener(this), this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
+        getServer().getPluginManager().registerEvents(new DeathListener(), this);
 
         new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
 

@@ -1,6 +1,7 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -31,31 +32,37 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) return true;
-        if (!player.hasPermission("magiocore.virtualspawner")) {
-            player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴘřísᴛᴜᴘ ᴋ ᴛᴏᴍᴜᴛᴏ ᴘříᴋᴀᴢᴜ."));
+        if (!sender.hasPermission("magiocore.virtualspawner")) {
+            sender.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴘřísᴛᴜᴘ ᴋ ᴛᴏᴍᴜᴛᴏ ᴘříᴋᴀᴢᴜ."));
             return true;
         }
 
         if (args.length == 0) {
-            player.sendMessage(FontUtils.parse("&#00fbff" + "ᴘᴏᴜžɪᴛí: /ss <ʟɪsᴛ|ɢɪᴠᴇ>"));
+            sender.sendMessage(FontUtils.parse("&#00fbff" + "ᴘᴏᴜžɪᴛí: /ss <ʟɪsᴛ|ɢɪᴠᴇ|ꜰɪx>"));
             return true;
         }
 
         String sub = args[0].toLowerCase();
         if (sub.equals("list")) {
+            if (!(sender instanceof Player player)) return true;
             plugin.getSpawnerListener().openAdminGui(player, 0);
         } else if (sub.equals("fix")) {
+            if (!(sender instanceof Player player)) return true;
             int count = manager.forceCleanup(player);
             player.sendMessage(FontUtils.parse("&#00fbff" + "ᴠʏčɪšᴛěɴᴏ &#ffbb00" + count + " §7ᴏsɪřᴇʟýᴄʜ ʜᴏʟᴏɢʀᴀᴍů."));
         } else if (sub.equals("give")) {
-            if (args.length < 2) {
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ss ɢɪᴠᴇ <ᴛʏᴘᴇ> [ᴍɴᴏžsᴛᴠí]"));
+            if (args.length < 3) {
+                sender.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ss ɢɪᴠᴇ <ʜʀáč> <ᴛʏᴘᴇ> [ᴍɴᴏžsᴛᴠí]"));
+                return true;
+            }
+            Player target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                sender.sendMessage(FontUtils.parse("§c" + "ʜʀáč ɴᴇɴí ᴏɴʟɪɴᴇ."));
                 return true;
             }
             try {
-                EntityType type = EntityType.valueOf(args[1].toUpperCase());
-                int amount = args.length > 2 ? Integer.parseInt(args[2]) : 1;
+                EntityType type = EntityType.valueOf(args[2].toUpperCase());
+                int amount = args.length > 3 ? Integer.parseInt(args[3]) : 1;
 
                 ItemStack spawner = new ItemStack(Material.SPAWNER, amount);
                 ItemMeta meta = spawner.getItemMeta();
@@ -73,10 +80,11 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
                 meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "virtual_spawner"), PersistentDataType.STRING, type.name());
                 spawner.setItemMeta(meta);
 
-                player.getInventory().addItem(spawner);
-                player.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴀʟ ᴊsɪ " + amount + "x ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ " + type.name() + "."));
+                target.getInventory().addItem(spawner);
+                sender.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴀʟ ᴊsɪ " + amount + "x ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ " + type.name() + " ʜʀáčɪ " + target.getName() + "."));
+                target.sendMessage(FontUtils.parse("&#00fbff" + "ᴅᴏsᴛᴀʟ ᴊsɪ " + amount + "x ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ " + type.name() + "."));
             } catch (Exception e) {
-                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴘʟᴀᴛɴý ᴛʏᴘ ᴍᴏʙᴀ ɴᴇʙᴏ ᴍɴᴏžsᴛᴠí."));
+                sender.sendMessage(FontUtils.parse("§c" + "ɴᴇᴘʟᴀᴛɴý ᴛʏᴘ ᴍᴏʙᴀ ɴᴇʙᴏ ᴍɴᴏžsᴛᴠí."));
             }
         }
 
@@ -91,15 +99,21 @@ public class VirtualSpawnerCommands implements CommandExecutor, TabCompleter {
                     .collect(Collectors.toList());
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-            return Arrays.stream(EntityType.values())
-                    .map(EntityType::name)
-                    .map(String::toLowerCase)
-                    .filter(s -> s.startsWith(args[1].toLowerCase()))
+            return Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
                     .collect(Collectors.toList());
         }
         if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            return Arrays.stream(EntityType.values())
+                    .map(EntityType::name)
+                    .map(String::toLowerCase)
+                    .filter(s -> s.startsWith(args[2].toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
             return Arrays.asList("1", "10", "64").stream()
-                    .filter(s -> s.startsWith(args[2]))
+                    .filter(s -> s.startsWith(args[3]))
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
