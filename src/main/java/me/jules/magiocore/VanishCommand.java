@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -44,7 +46,9 @@ public class VanishCommand implements CommandExecutor, Listener {
 
     private void vanish(Player player) {
         vanishedPlayers.add(player.getUniqueId());
+        player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, -1, 0, false, false));
         for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.equals(player)) continue;
             if (!online.hasPermission("magiocore.vanish.see")) {
                 online.hidePlayer(plugin, player);
             }
@@ -53,6 +57,7 @@ public class VanishCommand implements CommandExecutor, Listener {
 
     private void unvanish(Player player) {
         vanishedPlayers.remove(player.getUniqueId());
+        player.removePotionEffect(PotionEffectType.INVISIBILITY);
         for (Player online : Bukkit.getOnlinePlayers()) {
             online.showPlayer(plugin, player);
         }
