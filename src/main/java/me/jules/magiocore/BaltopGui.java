@@ -46,7 +46,7 @@ public class BaltopGui implements Listener {
                 BaltopManager.BaltopEntry entry = top.get(index);
                 ItemStack head = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) head.getItemMeta();
-                meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.name()));
+                meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.uuid()));
                 meta.displayName(FontUtils.parse("&#ffbb00" + (index + 1) + ". §f" + entry.name()));
                 meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $")));
                 head.setItemMeta(meta);
