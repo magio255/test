@@ -26,6 +26,7 @@ public class MagioCore extends JavaPlugin implements Listener {
     private VirtualSpawnerManager spawnerManager;
     private VirtualSpawnerListener spawnerListener;
     private VanishCommand vanishCommand;
+    private WarpManager warpManager;
 
     @Override
     public void onEnable() {
@@ -154,6 +155,14 @@ public class MagioCore extends JavaPlugin implements Listener {
         vanishCommand = new VanishCommand(this);
         getCommand("vanish").setExecutor(vanishCommand);
         getServer().getPluginManager().registerEvents(vanishCommand, this);
+
+        warpManager = new WarpManager(this);
+        WarpCommands warpCommands = new WarpCommands(this, warpManager);
+        getCommand("warp").setExecutor(warpCommands);
+        getCommand("warp").setTabCompleter(warpCommands);
+        getCommand("setwarp").setExecutor(warpCommands);
+        getCommand("delwarp").setExecutor(warpCommands);
+        getCommand("delwarp").setTabCompleter(warpCommands);
 
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);

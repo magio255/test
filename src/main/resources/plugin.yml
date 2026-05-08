@@ -155,6 +155,15 @@ commands:
     description: Zneviditelní tě pro ostatní hráče.
     usage: /vanish
     aliases: [v]
+  warp:
+    description: Teleportuje tě na warp.
+    usage: /warp [název]
+  setwarp:
+    description: Nastaví warp.
+    usage: /setwarp <název>
+  delwarp:
+    description: Smaže warp.
+    usage: /delwarp <název>
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.
