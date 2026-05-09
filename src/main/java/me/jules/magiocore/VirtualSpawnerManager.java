@@ -60,8 +60,13 @@ public class VirtualSpawnerManager {
                 int count = s.getInt("count", 1);
                 int timeLeft = s.getInt("timeLeft", 15);
                 List<ItemStack> loot = (List<ItemStack>) s.getList("loot", new ArrayList<>());
+                Set<Material> blocked = new HashSet<>();
+                List<String> blockedNames = s.getStringList("blocked");
+                for (String name : blockedNames) {
+                    try { blocked.add(Material.valueOf(name)); } catch (Exception ignored) {}
+                }
 
-                spawners.put(loc, new VirtualSpawnerData(loc, type, count, timeLeft, loot));
+                spawners.put(loc, new VirtualSpawnerData(loc, type, count, timeLeft, loot, blocked));
             }
         }
     }
@@ -76,6 +81,7 @@ public class VirtualSpawnerManager {
             config.set(path + ".count", data.count);
             config.set(path + ".timeLeft", data.timeLeft);
             config.set(path + ".loot", data.loot);
+            config.set(path + ".blocked", data.blockedMaterials.stream().map(Enum::name).toList());
         }
         try {
             config.save(file);
@@ -192,6 +198,7 @@ public class VirtualSpawnerManager {
 
             for (ItemStack item : items) {
                 if (item.getAmount() <= 0 && !item.getType().name().contains("BOW")) continue;
+                if (data.blockedMaterials.contains(item.getType())) continue;
                 addLootItem(data, item);
             }
         }
@@ -222,7 +229,7 @@ public class VirtualSpawnerManager {
     }
 
     public void addSpawner(Location loc, EntityType type) {
-        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 1, 15, new ArrayList<>());
+        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 1, 15, new ArrayList<>(), new HashSet<>());
         spawners.put(loc, data);
         updateHologram(data);
         save();
@@ -271,14 +278,16 @@ public class VirtualSpawnerManager {
         public int count;
         public int timeLeft;
         public List<ItemStack> loot;
+        public final Set<Material> blockedMaterials;
         public TextDisplay hologram;
 
-        public VirtualSpawnerData(Location location, EntityType type, int count, int timeLeft, List<ItemStack> loot) {
+        public VirtualSpawnerData(Location location, EntityType type, int count, int timeLeft, List<ItemStack> loot, Set<Material> blocked) {
             this.location = location;
             this.type = type;
             this.count = count;
             this.timeLeft = timeLeft;
             this.loot = loot;
+            this.blockedMaterials = blocked;
         }
     }
 }
