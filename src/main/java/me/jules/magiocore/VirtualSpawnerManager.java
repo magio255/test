@@ -87,11 +87,11 @@ public class VirtualSpawnerManager {
     private void startTask() {
         task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
             for (VirtualSpawnerData data : spawners.values()) {
-                if (!data.location.isChunkLoaded()) continue;
+                if (data.location.getWorld() == null || !data.location.isChunkLoaded()) continue;
 
                 boolean playerNearby = false;
                 for (Player p : data.location.getWorld().getPlayers()) {
-                    if (p.getLocation().distanceSquared(data.location) <= 225) { // 15 blocks
+                    if (p.getLocation().distanceSquared(data.location) <= 900) { // 30 blocks
                         playerNearby = true;
                         break;
                     }
@@ -110,7 +110,7 @@ public class VirtualSpawnerManager {
     }
 
     private void updateHologram(VirtualSpawnerData data) {
-        if (!data.location.isChunkLoaded()) return;
+        if (data.location.getWorld() == null || !data.location.isChunkLoaded()) return;
 
         if (data.hologram == null || !data.hologram.isValid()) {
             Location loc = data.location.clone().add(0.5, 1.5, 0.5);
@@ -131,9 +131,7 @@ public class VirtualSpawnerManager {
                 data.hologram.setShadowed(true);
                 data.hologram.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
                 data.hologram.getPersistentDataContainer().set(hologramKey, PersistentDataType.BYTE, (byte) 1);
-                // Standard block scale is 1.0. 15 blocks is roughly 0.15 in float range?
-                // View range is usually in blocks for TextDisplay? Documentation says view range is roughly blocks.
-                data.hologram.setViewRange(0.15f); // 15 blocks (0.1f = 10 blocks usually in Paper/Spigot TextDisplay)
+                data.hologram.setViewRange(1.0f); // Standard view range (approx 70-100 blocks)
             }
         }
 
@@ -154,14 +152,14 @@ public class VirtualSpawnerManager {
             List<ItemStack> items = new ArrayList<>();
             switch (data.type) {
                 case ZOMBIE -> {
-                    items.add(new ItemStack(Material.ROTTEN_FLESH, rand.nextInt(3))); // 0-2
+                    items.add(new ItemStack(Material.ROTTEN_FLESH, rand.nextInt(3) + 1)); // 1-3
                     if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.IRON_INGOT));
                     if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.CARROT));
                     if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.POTATO));
                 }
                 case SKELETON -> {
-                    items.add(new ItemStack(Material.BONE, rand.nextInt(3))); // 0-2
-                    items.add(new ItemStack(Material.ARROW, rand.nextInt(3))); // 0-2
+                    items.add(new ItemStack(Material.BONE, rand.nextInt(3) + 1)); // 1-3
+                    items.add(new ItemStack(Material.ARROW, rand.nextInt(3) + 1)); // 1-3
                     if (rand.nextInt(100) < 10) {
                         ItemStack bow = new ItemStack(Material.BOW);
                         org.bukkit.inventory.meta.Damageable meta = (org.bukkit.inventory.meta.Damageable) bow.getItemMeta();
@@ -171,11 +169,11 @@ public class VirtualSpawnerManager {
                     }
                 }
                 case SPIDER -> {
-                    items.add(new ItemStack(Material.STRING, rand.nextInt(3)));
+                    items.add(new ItemStack(Material.STRING, rand.nextInt(3) + 1));
                     if (rand.nextInt(100) < 15) items.add(new ItemStack(Material.SPIDER_EYE));
                 }
                 case CREEPER -> {
-                    items.add(new ItemStack(Material.GUNPOWDER, rand.nextInt(3)));
+                    items.add(new ItemStack(Material.GUNPOWDER, rand.nextInt(3) + 1));
                     if (rand.nextInt(100) < 5) items.add(new ItemStack(Material.TNT));
                 }
                 case PIG -> {
@@ -197,6 +195,7 @@ public class VirtualSpawnerManager {
                 addLootItem(data, item);
             }
         }
+        save();
     }
 
     private void addLootItem(VirtualSpawnerData data, ItemStack item) {
