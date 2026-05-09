@@ -137,7 +137,7 @@ public class VirtualSpawnerManager {
                 data.hologram.setShadowed(true);
                 data.hologram.setBackgroundColor(org.bukkit.Color.fromARGB(0, 0, 0, 0));
                 data.hologram.getPersistentDataContainer().set(hologramKey, PersistentDataType.BYTE, (byte) 1);
-                data.hologram.setViewRange(1.0f); // Standard view range (approx 70-100 blocks)
+                data.hologram.setViewRange(0.2f); // Approx 20 blocks
             }
         }
 
