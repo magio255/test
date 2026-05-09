@@ -84,11 +84,12 @@ public class MessageCommand implements CommandExecutor {
         String senderName = sender.getName();
         String targetName = target.getName();
 
-        Component toSender = FontUtils.parse("&#00fbff" + senderName + " &#888888» &#00fbff" + targetName + "§7: §f" + message);
-        Component toTarget = FontUtils.parse("&#00fbff" + senderName + " &#888888» &#00fbff" + targetName + "§7: §f" + message);
+        Component header = FontUtils.parse("&#00fbff" + senderName + " &#888888» &#00fbff" + targetName + "§7: ");
+        Component content = FontUtils.parse("§f" + message, false);
+        Component fullMessage = header.append(content);
 
-        sender.sendMessage(toSender);
-        target.sendMessage(toTarget);
+        sender.sendMessage(fullMessage);
+        target.sendMessage(fullMessage);
 
         lastMessaged.put(sender.getUniqueId(), target.getUniqueId());
         lastMessaged.put(target.getUniqueId(), sender.getUniqueId());
