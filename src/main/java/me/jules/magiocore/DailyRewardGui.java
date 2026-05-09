@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,19 +49,37 @@ public class DailyRewardGui implements Listener {
         long diff = now - lastClaim;
         boolean canClaim = diff >= 24 * 60 * 60 * 1000;
 
+        int streak = rewardManager.getDailyStreak(player.getUniqueId());
+        // Reset streak if missed more than 48 hours
+        if (diff > 48 * 60 * 60 * 1000) {
+            streak = 0;
+        }
+
+        double multiplier = 1.0 + (Math.min(streak, 40) * 0.1); // 1.0, 1.1, 1.2 ... up to 5.0 (streak 40)
+        long amount = (long) (1000000 * multiplier);
+
         ItemStack chest = new ItemStack(canClaim ? Material.CHEST : Material.MINECART);
         ItemMeta meta = chest.getItemMeta();
         if (meta != null) {
             meta.displayName(FontUtils.parse(config.getString("chest-name")));
+            List<Component> lore = new ArrayList<>();
             if (canClaim) {
-                List<String> lore = config.getStringList("chest-lore");
-                meta.lore(lore.stream().map(FontUtils::parse).collect(Collectors.toList()));
+                for (String s : config.getStringList("chest-lore")) {
+                    lore.add(FontUtils.parse(s));
+                }
+                lore.add(FontUtils.parse("§7"));
+                lore.add(FontUtils.parse("&#ffbb00ᴀᴋᴛᴜáʟɴí sᴛʀᴇᴀᴋ: &#00fbff" + (streak + 1) + " ᴅɴí"));
+                lore.add(FontUtils.parse("&#ffbb00ᴏᴅᴍěɴᴀ: &#00ff44" + FontUtils.formatMoney(amount) + " $"));
             } else {
                 long remaining = 24 * 60 * 60 * 1000 - diff;
                 String timeStr = formatTime(remaining);
-                List<String> lore = config.getStringList("cooldown-lore");
-                meta.lore(lore.stream().map(s -> FontUtils.parse(s.replace("%time%", timeStr))).collect(Collectors.toList()));
+                for (String s : config.getStringList("cooldown-lore")) {
+                    lore.add(FontUtils.parse(s.replace("%time%", timeStr)));
+                }
+                lore.add(FontUtils.parse("§7"));
+                lore.add(FontUtils.parse("&#ffbb00ᴛᴠůj sᴛʀᴇᴀᴋ: &#00fbff" + streak + " ᴅɴí"));
             }
+            meta.lore(lore);
             chest.setItemMeta(meta);
         }
 
@@ -84,13 +103,24 @@ public class DailyRewardGui implements Listener {
         if (event.getRawSlot() == 13) {
             long lastClaim = rewardManager.getLastDailyClaim(player.getUniqueId());
             long now = System.currentTimeMillis();
-            if (now - lastClaim >= 24 * 60 * 60 * 1000) {
-                rewardManager.setLastDailyClaim(player.getUniqueId(), now);
-                String command = plugin.getConfig().getString("daily-rewards.command");
-                if (command != null) {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName()));
+            long diff = now - lastClaim;
+
+            if (diff >= 24 * 60 * 60 * 1000) {
+                int streak = rewardManager.getDailyStreak(player.getUniqueId());
+                if (diff > 48 * 60 * 60 * 1000) {
+                    streak = 0;
                 }
+
+                double multiplier = 1.0 + (Math.min(streak, 40) * 0.1);
+                long amount = (long) (1000000 * multiplier);
+
+                rewardManager.setLastDailyClaim(player.getUniqueId(), now);
+                rewardManager.setDailyStreak(player.getUniqueId(), streak + 1);
+
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "money give " + player.getName() + " " + amount);
+
                 player.sendMessage(FontUtils.parse("&#00ff44" + "ᴅᴇɴɴí ᴏᴅᴍěɴᴀ ʙʏʟᴀ ᴠʏʙʀáɴᴀ!"));
+                player.sendMessage(FontUtils.parse("&#ffbb00ᴢísᴋᴀʟ ᴊsɪ: &#00ff44" + FontUtils.formatMoney(amount) + " $ " + "§7(sᴛʀᴇᴀᴋ: " + (streak + 1) + " ᴅɴí)"));
                 player.closeInventory();
             } else {
                 player.sendMessage(FontUtils.parse("§c" + "ᴏᴅᴍěɴᴜ sɪ ᴍůžᴇš ᴠʏʙʀáᴛ ᴀž ᴢᴀ 24 ʜᴏᴅɪɴ."));
