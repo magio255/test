@@ -78,11 +78,15 @@ public class HomeGui implements Listener {
             inv.setItem(i + 18, pearl);
 
             // Barrier (Delete) - Row 4 (slots 28-34)
-            if (!isLocked && home != null) {
+            if (!isLocked) {
                 ItemStack barrier = new ItemStack(Material.BARRIER);
                 ItemMeta barrierMeta = barrier.getItemMeta();
                 barrierMeta.displayName(FontUtils.parse("§c" + "sᴍᴀᴢᴀᴛ ᴅᴏᴍᴏᴠ §7#" + i));
-                barrierMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ sᴍᴀᴢáɴí ᴅᴏᴍᴏᴠᴀ")));
+                if (home != null) {
+                    barrierMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ sᴍᴀᴢáɴí ᴅᴏᴍᴏᴠᴀ")));
+                } else {
+                    barrierMeta.lore(List.of(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ")));
+                }
                 barrier.setItemMeta(barrierMeta);
                 inv.setItem(i + 27, barrier);
             }

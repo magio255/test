@@ -52,6 +52,8 @@ public class MagioCore extends JavaPlugin implements Listener {
         getCommand("home").setTabCompleter(homeCommands);
         getCommand("sethome").setExecutor(homeCommands);
         getCommand("sethome").setTabCompleter(homeCommands);
+        getCommand("delhome").setExecutor(homeCommands);
+        getCommand("delhome").setTabCompleter(homeCommands);
 
         TpaCommands tpaCommands = new TpaCommands(this, tpaManager);
         getCommand("tpa").setExecutor(tpaCommands);

@@ -9,6 +9,9 @@ commands:
   sethome:
     description: Nastaví domov.
     usage: /sethome [číslo]
+  delhome:
+    description: Smaže domov.
+    usage: /delhome [číslo]
   tpa:
     description: Žádost o teleport k hráči.
     usage: /tpa <hráč>
