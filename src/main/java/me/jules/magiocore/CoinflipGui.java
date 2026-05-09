@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -76,9 +77,12 @@ public class CoinflipGui implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
-        if (!(event.getInventory().getHolder() instanceof CoinflipGuiHolder)) return;
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (!(holder instanceof CoinflipGuiHolder) && !(holder instanceof CoinflipAnimation.CoinflipAnimationHolder)) return;
 
         event.setCancelled(true);
+        if (holder instanceof CoinflipAnimation.CoinflipAnimationHolder) return;
+
         int slot = event.getRawSlot();
         List<CoinflipManager.CoinflipBet> bets = manager.getActiveBets();
 
@@ -98,6 +102,14 @@ public class CoinflipGui implements Listener {
             manager.removeBet(bet);
             player.closeInventory();
             new CoinflipAnimation(plugin, Bukkit.getPlayer(bet.creator), player, bet.amount).start();
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (holder instanceof CoinflipGuiHolder || holder instanceof CoinflipAnimation.CoinflipAnimationHolder) {
+            event.setCancelled(true);
         }
     }
 

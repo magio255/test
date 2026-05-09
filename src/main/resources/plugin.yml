@@ -167,6 +167,14 @@ commands:
   delwarp:
     description: Smaže warp.
     usage: /delwarp <název>
+  msg:
+    description: Pošle soukromou zprávu hráči.
+    usage: /msg <hráč> <zpráva>
+    aliases: [w, tell, m, t]
+  reply:
+    description: Odpoví na poslední soukromou zprávu.
+    usage: /reply <zpráva>
+    aliases: [r]
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.

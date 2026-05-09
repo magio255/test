@@ -6,13 +6,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URL;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +28,7 @@ public class BaltopGui implements Listener {
     private final BaltopManager manager;
     private final String title = "&#EA427F» " + "ʙᴀʟᴛᴏᴘ";
     private final Map<UUID, Integer> playerPages = new HashMap<>();
+    private final String goldHeadBase64 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTRhMDc0Y2U5MThkNDkyYzNhNjhiMTRmY2FhYWYzZDU1N2RjOTI1NWFhYjMxYWJkZTk0MGI0ZTI0ZDA5In19fQ==";
 
     public BaltopGui(MagioCore plugin, BaltopManager manager) {
         this.plugin = plugin;
@@ -46,7 +52,10 @@ public class BaltopGui implements Listener {
                 BaltopManager.BaltopEntry entry = top.get(index);
                 ItemStack head = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) head.getItemMeta();
-                meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.uuid()));
+
+                // Use a consistent head texture to avoid Mojang API rate limits (403 errors)
+                applyTexture(meta, goldHeadBase64);
+
                 meta.displayName(FontUtils.parse("&#ffbb00" + (index + 1) + ". §f" + entry.name()));
                 meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $")));
                 head.setItemMeta(meta);
@@ -60,6 +69,23 @@ public class BaltopGui implements Listener {
         inv.setItem(53, createNav("&#00ff44" + "ᴅᴀʟší", Material.ARROW));
 
         player.openInventory(inv);
+    }
+
+    private void applyTexture(SkullMeta meta, String base64) {
+        UUID uuid = UUID.nameUUIDFromBytes(base64.getBytes());
+        PlayerProfile profile = Bukkit.createProfile(uuid, "BaltopHead");
+        PlayerTextures textures = profile.getTextures();
+
+        try {
+            String decoded = new String(Base64.getDecoder().decode(base64));
+            String urlStr = decoded.substring(decoded.indexOf("http"), decoded.lastIndexOf("\""));
+            textures.setSkin(new URL(urlStr));
+        } catch (Exception e) {
+            // ignore
+        }
+
+        profile.setTextures(textures);
+        meta.setOwnerProfile(profile);
     }
 
     private ItemStack createNav(String name, Material mat) {
@@ -87,6 +113,13 @@ public class BaltopGui implements Listener {
             player.closeInventory();
             player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ɴᴀᴘɪš ᴊᴍéɴᴏ ʜʀáčᴇ ᴅᴏ ᴄʜᴀᴛᴜ:"));
             plugin.getChatListener().setSearchMode(player.getUniqueId(), true);
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (event.getInventory().getHolder() instanceof BaltopGuiHolder) {
+            event.setCancelled(true);
         }
     }
 

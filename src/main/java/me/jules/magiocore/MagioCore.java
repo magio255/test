@@ -166,6 +166,10 @@ public class MagioCore extends JavaPlugin implements Listener {
         getCommand("delwarp").setExecutor(warpCommands);
         getCommand("delwarp").setTabCompleter(warpCommands);
 
+        MessageCommand messageCommand = new MessageCommand();
+        getCommand("msg").setExecutor(messageCommand);
+        getCommand("reply").setExecutor(messageCommand);
+
         RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
         getCommand("dailyrewards").setExecutor(rewardCommands);
         getCommand("playtimerewards").setExecutor(rewardCommands);

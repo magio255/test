@@ -14,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -400,6 +401,14 @@ public class VirtualSpawnerListener implements Listener {
         if ((page + 1) * 45 < list.size()) inv.setItem(53, createItem(Material.ARROW, "&#00fbffᴅᴀʟší sᴛʀᴀɴᴀ"));
 
         player.openInventory(inv);
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        InventoryHolder holder = event.getInventory().getHolder();
+        if (holder instanceof AdminGuiHolder || holder instanceof SpawnerGuiHolder || holder instanceof LootGuiHolder || holder instanceof FilterGuiHolder) {
+            event.setCancelled(true);
+        }
     }
 
     public static class AdminGuiHolder implements InventoryHolder {
