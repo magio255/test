@@ -70,6 +70,10 @@ public class DailyRewardGui implements Listener {
                 lore.add(FontUtils.parse("§7"));
                 lore.add(FontUtils.parse("&#ffbb00ᴀᴋᴛᴜáʟɴí sᴛʀᴇᴀᴋ: &#00fbff" + (streak + 1) + " ᴅɴí"));
                 lore.add(FontUtils.parse("&#ffbb00ᴏᴅᴍěɴᴀ: &#00ff44" + FontUtils.formatMoney(amount) + " $"));
+
+                double nextMultiplier = 1.0 + (Math.min(streak + 1, 40) * 0.1);
+                long nextAmount = (long) (1000000 * nextMultiplier);
+                lore.add(FontUtils.parse("&#ffbb00ᴘříšᴛí ᴏᴅᴍěɴᴀ: &#00fbff" + FontUtils.formatMoney(nextAmount) + " $"));
             } else {
                 long remaining = 24 * 60 * 60 * 1000 - diff;
                 String timeStr = formatTime(remaining);
@@ -78,6 +82,10 @@ public class DailyRewardGui implements Listener {
                 }
                 lore.add(FontUtils.parse("§7"));
                 lore.add(FontUtils.parse("&#ffbb00ᴛᴠůj sᴛʀᴇᴀᴋ: &#00fbff" + streak + " ᴅɴí"));
+
+                double nextMultiplier = 1.0 + (Math.min(streak, 40) * 0.1);
+                long nextAmount = (long) (1000000 * nextMultiplier);
+                lore.add(FontUtils.parse("&#ffbb00ᴘříšᴛí ᴏᴅᴍěɴᴀ: &#00fbff" + FontUtils.formatMoney(nextAmount) + " $"));
             }
             meta.lore(lore);
             chest.setItemMeta(meta);
