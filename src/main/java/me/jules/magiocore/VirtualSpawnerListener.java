@@ -44,6 +44,13 @@ public class VirtualSpawnerListener implements Listener {
 
         NamespacedKey key = new NamespacedKey(plugin, "virtual_spawner");
         if (meta.getPersistentDataContainer().has(key, PersistentDataType.STRING)) {
+            String worldName = event.getBlock().getWorld().getName();
+            if (!worldName.equals("world") && !worldName.equals("world_nether") && !worldName.equals("world_the_end")) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(FontUtils.parse("§c" + "ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀʏ ʟᴢᴇ ᴘᴏᴋʟáᴅᴀᴛ ᴘᴏᴜᴢᴇ ᴠ ʜʟᴀᴠɴíᴄʜ sᴠěᴛᴇᴄʜ (ᴡᴏʀʟᴅ, ɴᴇᴛʜᴇʀ, ᴇɴᴅ)."));
+                return;
+            }
+
             String typeStr = meta.getPersistentDataContainer().get(key, PersistentDataType.STRING);
             EntityType type = EntityType.valueOf(typeStr);
             manager.addSpawner(event.getBlock().getLocation(), type);
