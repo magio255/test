@@ -39,6 +39,10 @@ afk-zone:
 anti-spam:
   delay: 2 # Delay in seconds between messages
 
+# Spawner Settings
+spawner:
+  delay: 25 # Delay in seconds between loot generation
+
 # RTP GUI Settings
 rtp:
   gui:

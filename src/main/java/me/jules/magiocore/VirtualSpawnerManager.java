@@ -58,7 +58,7 @@ public class VirtualSpawnerManager {
 
                 EntityType type = EntityType.valueOf(s.getString("type", "ZOMBIE"));
                 int count = s.getInt("count", 1);
-                int timeLeft = s.getInt("timeLeft", 15);
+                int timeLeft = s.getInt("timeLeft", plugin.getConfig().getInt("spawner.delay", 25));
                 List<ItemStack> loot = (List<ItemStack>) s.getList("loot", new ArrayList<>());
                 Set<Material> blocked = new HashSet<>();
                 List<String> blockedNames = s.getStringList("blocked");
@@ -106,7 +106,7 @@ public class VirtualSpawnerManager {
                 if (playerNearby) {
                     data.timeLeft--;
                     if (data.timeLeft <= 0) {
-                        data.timeLeft = 15;
+                        data.timeLeft = plugin.getConfig().getInt("spawner.delay", 25);
                         generateLoot(data);
                     }
                 }
@@ -229,7 +229,8 @@ public class VirtualSpawnerManager {
     }
 
     public void addSpawner(Location loc, EntityType type) {
-        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 1, 15, new ArrayList<>(), new HashSet<>());
+        int delay = plugin.getConfig().getInt("spawner.delay", 25);
+        VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 1, delay, new ArrayList<>(), new HashSet<>());
         spawners.put(loc, data);
         updateHologram(data);
         save();
