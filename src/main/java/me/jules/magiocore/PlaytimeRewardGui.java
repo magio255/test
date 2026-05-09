@@ -35,8 +35,9 @@ public class PlaytimeRewardGui implements Listener {
             if (i == 1) hours = 1;
             if (i == 147) hours = 1300;
 
+            int amount = 500 + i * 100;
             Material mat = getLevelMaterial(i);
-            levels.add(new PlaytimeLevel(i, hours, "eco give %player% " + (500 + i * 100), mat));
+            levels.add(new PlaytimeLevel(i, hours, "money give %player% " + amount, amount, mat));
         }
     }
 
@@ -88,6 +89,7 @@ public class PlaytimeRewardGui implements Listener {
                 meta.displayName(FontUtils.parse("&#ffbb00úʀᴏᴠᴇň " + level.id));
                 List<Component> lore = new ArrayList<>();
                 lore.add(FontUtils.parse("§7ᴘᴏᴛřᴇʙɴý čᴀs: &#00fbff" + level.hours + "ʜ"));
+                lore.add(FontUtils.parse("§7ᴏᴅᴍěɴᴀ: &#00ff44" + level.amount + " $"));
                 lore.add(Component.empty());
                 if (claimed) {
                     lore.add(FontUtils.parse("&#EA427F" + "ᴊɪž ᴠʏʙʀáɴᴏ"));
@@ -162,12 +164,14 @@ public class PlaytimeRewardGui implements Listener {
         int id;
         int hours;
         String command;
+        int amount;
         Material material;
 
-        PlaytimeLevel(int id, int hours, String command, Material material) {
+        PlaytimeLevel(int id, int hours, String command, int amount, Material material) {
             this.id = id;
             this.hours = hours;
             this.command = command;
+            this.amount = amount;
             this.material = material;
         }
     }
