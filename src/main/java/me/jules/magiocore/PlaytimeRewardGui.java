@@ -29,13 +29,25 @@ public class PlaytimeRewardGui implements Listener {
     }
 
     private void setupLevels() {
+        long[] fixedRewards = {
+            50000, 120000, 300000, 450000, 500000, 600000, 700000, 1000000,
+            1100000, 1300000, 1500000, 1600000, 1700000, 2000000, 2100000, 2300000
+        };
+
         // Generate 147 levels
         for (int i = 1; i <= 147; i++) {
             int hours = (int) (i * 8.85); // Approx 1300 hours / 147 levels
             if (i == 1) hours = 1;
             if (i == 147) hours = 1300;
 
-            int amount = (500 + i * 100) * 80;
+            long amount;
+            if (i <= fixedRewards.length) {
+                amount = fixedRewards[i - 1];
+            } else {
+                // Continue trend: 2.3m + 250k per level after 16
+                amount = 2300000L + (long) (i - 16) * 250000L;
+            }
+
             Material mat = getLevelMaterial(i);
             levels.add(new PlaytimeLevel(i, hours, "money give %player% " + amount, amount, mat));
         }
@@ -89,7 +101,7 @@ public class PlaytimeRewardGui implements Listener {
                 meta.displayName(FontUtils.parse("&#ffbb00úʀᴏᴠᴇň " + level.id));
                 List<Component> lore = new ArrayList<>();
                 lore.add(FontUtils.parse("§7ᴘᴏᴛřᴇʙɴý čᴀs: &#00fbff" + level.hours + "ʜ"));
-                lore.add(FontUtils.parse("§7ᴏᴅᴍěɴᴀ: &#00ff44" + level.amount + " $"));
+                lore.add(FontUtils.parse("§7ᴏᴅᴍěɴᴀ: &#00ff44" + FontUtils.formatMoney(level.amount) + " $"));
                 lore.add(Component.empty());
                 if (claimed) {
                     lore.add(FontUtils.parse("&#EA427F" + "ᴊɪž ᴠʏʙʀáɴᴏ"));
@@ -164,10 +176,10 @@ public class PlaytimeRewardGui implements Listener {
         int id;
         int hours;
         String command;
-        int amount;
+        long amount;
         Material material;
 
-        PlaytimeLevel(int id, int hours, String command, int amount, Material material) {
+        PlaytimeLevel(int id, int hours, String command, long amount, Material material) {
             this.id = id;
             this.hours = hours;
             this.command = command;
