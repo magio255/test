@@ -27,7 +27,7 @@ public class HomeGui implements Listener {
     }
 
     public void open(Player player) {
-        Inventory inv = Bukkit.createInventory(new HomeGuiHolder(), 36, FontUtils.parse(title));
+        Inventory inv = Bukkit.createInventory(new HomeGuiHolder(), 45, FontUtils.parse(title));
         Map<Integer, Home> homes = homeManager.getHomes(player.getUniqueId());
         int maxHomes = PlaytimeUtils.getMaxHomes(player);
 
@@ -37,8 +37,8 @@ public class HomeGui implements Listener {
         glassMeta.displayName(Component.empty());
         glass.setItemMeta(glassMeta);
 
-        for (int i = 0; i < 36; i++) {
-            if (i < 9 || i >= 27 || i % 9 == 0 || i % 9 == 8) {
+        for (int i = 0; i < 45; i++) {
+            if (i < 9 || i >= 36 || i % 9 == 0 || i % 9 == 8) {
                 inv.setItem(i, glass);
             }
         }
@@ -76,6 +76,16 @@ public class HomeGui implements Listener {
             }
             pearl.setItemMeta(pearlMeta);
             inv.setItem(i + 18, pearl);
+
+            // Barrier (Delete) - Row 4 (slots 28-34)
+            if (!isLocked && home != null) {
+                ItemStack barrier = new ItemStack(Material.BARRIER);
+                ItemMeta barrierMeta = barrier.getItemMeta();
+                barrierMeta.displayName(FontUtils.parse("§c" + "sᴍᴀᴢᴀᴛ ᴅᴏᴍᴏᴠ §7#" + i));
+                barrierMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ sᴍᴀᴢáɴí ᴅᴏᴍᴏᴠᴀ")));
+                barrier.setItemMeta(barrierMeta);
+                inv.setItem(i + 27, barrier);
+            }
         }
 
         player.openInventory(inv);
@@ -113,6 +123,17 @@ public class HomeGui implements Listener {
             player.sendMessage(FontUtils.parse("&#00ff44" + "ᴅᴏᴍᴏᴠ #" + homeNum + " ɴᴀsᴛᴀᴠᴇɴ"));
             player.closeInventory();
             open(player); // Refresh
+        } else if (slot >= 28 && slot <= 34) {
+            int homeNum = slot - 27;
+            if (homeNum > maxHomes) return;
+
+            Home home = homeManager.getHome(player.getUniqueId(), homeNum);
+            if (home != null) {
+                homeManager.deleteHome(player.getUniqueId(), homeNum);
+                player.sendMessage(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ #" + homeNum + " sᴍᴀᴢáɴ"));
+                player.closeInventory();
+                open(player); // Refresh
+            }
         }
     }
 
