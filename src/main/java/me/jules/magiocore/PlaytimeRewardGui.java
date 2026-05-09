@@ -35,7 +35,7 @@ public class PlaytimeRewardGui implements Listener {
             if (i == 1) hours = 1;
             if (i == 147) hours = 1300;
 
-            int amount = 500 + i * 100;
+            int amount = (500 + i * 100) * 80;
             Material mat = getLevelMaterial(i);
             levels.add(new PlaytimeLevel(i, hours, "money give %player% " + amount, amount, mat));
         }
