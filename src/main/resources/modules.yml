@@ -1,0 +1,8 @@
+autorestart: true
+staffchat: true
+report: true
+socials: true
+keyall: true
+freeze: true
+antigrief: true
+deathsystem: true

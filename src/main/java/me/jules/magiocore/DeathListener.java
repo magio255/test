@@ -24,5 +24,17 @@ public class DeathListener implements Listener {
             Component message = FontUtils.parse("&#888888» &#ff0000☠ &#ff0000" + victim.getName() + " §7has died");
             event.deathMessage(message);
         }
+
+        // Module logic for titles
+        MagioCore plugin = MagioCore.getPlugin(MagioCore.class);
+        if (plugin.getModuleManager().isEnabled("deathsystem")) {
+            String dagger = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse("&#ff0000" + "🗡"));
+            String victimSub = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse("§fʏᴏᴜ ʜᴀᴠᴇ ʙᴇᴇɴ ᴋɪʟʟᴇᴅ ʙʏ " + (killer != null ? killer.getName() : "ᴇɴᴠɪʀᴏɴᴍᴇɴᴛ")));
+            victim.sendTitle(dagger, victimSub, 10, 40, 10);
+            if (killer != null) {
+                String killerSub = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse("§fʏᴏᴜ ʜᴀᴠᴇ ᴋɪʟʟᴇᴅ " + victim.getName()));
+                killer.sendTitle(dagger, killerSub, 10, 40, 10);
+            }
+        }
     }
 }

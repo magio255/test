@@ -96,6 +96,47 @@ rtp:
     radius: 5000
     max-attempts: 10
 
+# Restart Settings
+autorestart:
+  time: "00:00"
+
+# Socials Settings
+socials:
+  discord:
+    prefix: "&#5865F2&lᴅɪsᴄᴏʀᴅ"
+    link: "https://dsc.gg/czsksmp"
+    message: "&fPřipoj se k naší komunitě na &#5865F2&lᴅɪsᴄᴏʀᴅᴜ&f!"
+  store:
+    prefix: "&#F1C40F&lᴏʙᴄʜᴏᴅ"
+    link: "https://web.czsksmp.eu"
+    message: "&fNavštiv náš serverový obchod pro &#F1C40F&lʀᴀɴᴋʏ&f, &#F1C40F&lᴋʟíčᴇ ᴅᴏ ʙᴇᴅᴇɴ&f, &#F1C40F&lᴍɪɴᴄᴇ&f a další!"
+  broadcast:
+    interval: 15 # minutes
+    sound: "BLOCK_NOTE_BLOCK_PLING"
+    volume: 1.0
+    pitch: 2.0
+
+# AntiGrief Settings
+antigrief:
+  banned-words:
+    - "-8671675297374502204"
+  difficulty-task: true # Force hard difficulty every 10 mins
+
+# KeyAll Settings
+keyall:
+  money-amount: 30000
+  vote-key-amount: 1
+
+# Freeze Settings
+freeze:
+  spawn-location:
+    world: "spawn"
+    x: 39.5
+    y: 94.0
+    z: -13.5
+    yaw: 0.0
+    pitch: 0.0
+
 # Spawn Location
 spawn: null
 

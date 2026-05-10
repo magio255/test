@@ -27,10 +27,12 @@ public class MagioCore extends JavaPlugin implements Listener {
     private VirtualSpawnerListener spawnerListener;
     private VanishCommand vanishCommand;
     private WarpManager warpManager;
+    private ModuleManager moduleManager;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        moduleManager = new ModuleManager(this);
 
         // Disable advancement announcements in all worlds
         for (World world : Bukkit.getWorlds()) {
@@ -140,6 +142,7 @@ public class MagioCore extends JavaPlugin implements Listener {
         getCommand("setafk").setExecutor(utilityCommands);
         getCommand("book").setExecutor(utilityCommands);
         getCommand("compass").setExecutor(utilityCommands);
+        getCommand("shardshop").setExecutor(utilityCommands);
 
         rewardManager = new RewardManager(this);
         dailyRewardGui = new DailyRewardGui(this, rewardManager);
@@ -183,9 +186,45 @@ public class MagioCore extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
 
+        registerModules();
+
         new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
 
         getLogger().info("MagioCore has been enabled!");
+    }
+
+    private void registerModules() {
+        if (moduleManager.isEnabled("autorestart")) {
+            new me.jules.magiocore.modules.AutoRestartModule(this);
+        }
+        if (moduleManager.isEnabled("staffchat") || moduleManager.isEnabled("report")) {
+            me.jules.magiocore.modules.StaffReportModule staffReportModule = new me.jules.magiocore.modules.StaffReportModule(this);
+            getCommand("staffchat").setExecutor(staffReportModule);
+            getCommand("report").setExecutor(staffReportModule);
+            getCommand("checkreport").setExecutor(staffReportModule);
+            getCommand("clearreports").setExecutor(staffReportModule);
+        }
+        if (moduleManager.isEnabled("socials")) {
+            me.jules.magiocore.modules.SocialsModule socialsModule = new me.jules.magiocore.modules.SocialsModule(this);
+            getCommand("discord").setExecutor(socialsModule);
+            getCommand("store").setExecutor(socialsModule);
+        }
+        if (moduleManager.isEnabled("keyall")) {
+            getCommand("keyall").setExecutor(new me.jules.magiocore.modules.KeyAllModule(this));
+        }
+        if (moduleManager.isEnabled("freeze")) {
+            me.jules.magiocore.modules.FreezeModule freezeModule = new me.jules.magiocore.modules.FreezeModule(this);
+            getCommand("freeze").setExecutor(freezeModule);
+            getCommand("unfreeze").setExecutor(freezeModule);
+            getServer().getPluginManager().registerEvents(freezeModule, this);
+        }
+        if (moduleManager.isEnabled("antigrief")) {
+            getServer().getPluginManager().registerEvents(new me.jules.magiocore.modules.AntiGriefModule(this), this);
+        }
+    }
+
+    public ModuleManager getModuleManager() {
+        return moduleManager;
     }
 
     private boolean setupEconomy() {
