@@ -27,7 +27,12 @@ public class ModuleManager {
         modulesConfig = YamlConfiguration.loadConfiguration(modulesFile);
 
         // Default modules
-        String[] modules = {"autorestart", "staffchat", "report", "socials", "keyall", "freeze", "antigrief", "deathsystem"};
+        String[] modules = {
+            "home", "tpa", "spawn", "gamemode", "rtp", "flyspeed", "playtime", "coinflip",
+            "invsee", "baltop", "dailyrewards", "playtimerewards", "itemedit", "utilities",
+            "virtualspawner", "vanish", "warp", "afkzone",
+            "autorestart", "staffchat", "report", "socials", "keyall", "freeze", "antigrief", "deathsystem"
+        };
         for (String module : modules) {
             if (!modulesConfig.contains(module)) {
                 modulesConfig.set(module, true);

@@ -45,150 +45,189 @@ public class MagioCore extends JavaPlugin implements Listener {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        homeManager = new HomeManager(this);
-        homeGui = new HomeGui(this, homeManager);
-        tpaManager = new TpaManager(this);
 
-        HomeCommands homeCommands = new HomeCommands(this, homeManager);
-        getCommand("home").setExecutor(homeCommands);
-        getCommand("home").setTabCompleter(homeCommands);
-        getCommand("sethome").setExecutor(homeCommands);
-        getCommand("sethome").setTabCompleter(homeCommands);
-        getCommand("delhome").setExecutor(homeCommands);
-        getCommand("delhome").setTabCompleter(homeCommands);
+        if (moduleManager.isEnabled("home")) {
+            homeManager = new HomeManager(this);
+            homeGui = new HomeGui(this, homeManager);
+            HomeCommands homeCommands = new HomeCommands(this, homeManager);
+            getCommand("home").setExecutor(homeCommands);
+            getCommand("home").setTabCompleter(homeCommands);
+            getCommand("sethome").setExecutor(homeCommands);
+            getCommand("sethome").setTabCompleter(homeCommands);
+            getCommand("delhome").setExecutor(homeCommands);
+            getCommand("delhome").setTabCompleter(homeCommands);
+            getServer().getPluginManager().registerEvents(homeGui, this);
+        }
 
-        TpaCommands tpaCommands = new TpaCommands(this, tpaManager);
-        getCommand("tpa").setExecutor(tpaCommands);
-        getCommand("tpa").setTabCompleter(tpaCommands);
-        getCommand("tpahere").setExecutor(tpaCommands);
-        getCommand("tpahere").setTabCompleter(tpaCommands);
-        getCommand("tpacancel").setExecutor(tpaCommands);
-        getCommand("tpaoff").setExecutor(tpaCommands);
-        getCommand("tpaccept").setExecutor(tpaCommands);
-        getCommand("tpadeny").setExecutor(tpaCommands);
+        if (moduleManager.isEnabled("tpa")) {
+            tpaManager = new TpaManager(this);
+            TpaCommands tpaCommands = new TpaCommands(this, tpaManager);
+            getCommand("tpa").setExecutor(tpaCommands);
+            getCommand("tpa").setTabCompleter(tpaCommands);
+            getCommand("tpahere").setExecutor(tpaCommands);
+            getCommand("tpahere").setTabCompleter(tpaCommands);
+            getCommand("tpacancel").setExecutor(tpaCommands);
+            getCommand("tpaoff").setExecutor(tpaCommands);
+            getCommand("tpaccept").setExecutor(tpaCommands);
+            getCommand("tpadeny").setExecutor(tpaCommands);
+        }
 
-        SpawnCommands spawnCommands = new SpawnCommands(this);
-        getCommand("spawn").setExecutor(spawnCommands);
-        getCommand("setspawn").setExecutor(spawnCommands);
+        if (moduleManager.isEnabled("spawn")) {
+            SpawnCommands spawnCommands = new SpawnCommands(this);
+            getCommand("spawn").setExecutor(spawnCommands);
+            getCommand("setspawn").setExecutor(spawnCommands);
+        }
 
-        GamemodeCommands gmCommands = new GamemodeCommands();
-        getCommand("gmc").setExecutor(gmCommands);
-        getCommand("gms").setExecutor(gmCommands);
-        getCommand("gmsp").setExecutor(gmCommands);
-        getCommand("gma").setExecutor(gmCommands);
+        if (moduleManager.isEnabled("gamemode")) {
+            GamemodeCommands gmCommands = new GamemodeCommands();
+            getCommand("gmc").setExecutor(gmCommands);
+            getCommand("gms").setExecutor(gmCommands);
+            getCommand("gmsp").setExecutor(gmCommands);
+            getCommand("gma").setExecutor(gmCommands);
+        }
 
-        RtpCommand rtpCommand = new RtpCommand(this);
-        getCommand("rtp").setExecutor(rtpCommand);
-        getCommand("rtp").setTabCompleter(rtpCommand);
+        if (moduleManager.isEnabled("rtp")) {
+            RtpCommand rtpCommand = new RtpCommand(this);
+            getCommand("rtp").setExecutor(rtpCommand);
+            getCommand("rtp").setTabCompleter(rtpCommand);
+            getServer().getPluginManager().registerEvents(rtpCommand, this);
+        }
 
-        FlySpeedCommand flySpeedCommand = new FlySpeedCommand();
-        getCommand("flyspeed").setExecutor(flySpeedCommand);
+        if (moduleManager.isEnabled("flyspeed")) {
+            FlySpeedCommand flySpeedCommand = new FlySpeedCommand();
+            getCommand("flyspeed").setExecutor(flySpeedCommand);
+            getServer().getPluginManager().registerEvents(flySpeedCommand, this);
+        }
 
-        PlaytimeCommand playtimeCommand = new PlaytimeCommand();
-        getCommand("playtime").setExecutor(playtimeCommand);
+        if (moduleManager.isEnabled("playtime")) {
+            PlaytimeCommand playtimeCommand = new PlaytimeCommand();
+            getCommand("playtime").setExecutor(playtimeCommand);
+        }
 
-        InvseeCommand invseeCommand = new InvseeCommand();
-        getCommand("invsee").setExecutor(invseeCommand);
+        if (moduleManager.isEnabled("invsee")) {
+            InvseeCommand invseeCommand = new InvseeCommand();
+            getCommand("invsee").setExecutor(invseeCommand);
+        }
 
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new MagioCoreExpansion(this).register();
         }
 
-        getServer().getPluginManager().registerEvents(homeGui, this);
-        getServer().getPluginManager().registerEvents(rtpCommand, this);
-        getServer().getPluginManager().registerEvents(flySpeedCommand, this);
         getServer().getPluginManager().registerEvents(new JoinListener(this), this);
         chatListener = new ChatListener(this);
         getServer().getPluginManager().registerEvents(chatListener, this);
 
-        coinflipManager = new CoinflipManager();
-        coinflipGui = new CoinflipGui(this, coinflipManager);
-        CoinflipCommand coinflipCommand = new CoinflipCommand(this, coinflipManager);
-        getCommand("coinflip").setExecutor(coinflipCommand);
-        getCommand("coinflip").setTabCompleter(coinflipCommand);
-        getServer().getPluginManager().registerEvents(coinflipGui, this);
+        if (moduleManager.isEnabled("coinflip")) {
+            coinflipManager = new CoinflipManager();
+            coinflipGui = new CoinflipGui(this, coinflipManager);
+            CoinflipCommand coinflipCommand = new CoinflipCommand(this, coinflipManager);
+            getCommand("coinflip").setExecutor(coinflipCommand);
+            getCommand("coinflip").setTabCompleter(coinflipCommand);
+            getServer().getPluginManager().registerEvents(coinflipGui, this);
+        }
 
-        baltopManager = new BaltopManager(this);
-        baltopGui = new BaltopGui(this, baltopManager);
-        getCommand("baltop").setExecutor(new BaltopCommand(this));
-        getServer().getPluginManager().registerEvents(baltopGui, this);
+        if (moduleManager.isEnabled("baltop")) {
+            baltopManager = new BaltopManager(this);
+            baltopGui = new BaltopGui(this, baltopManager);
+            getCommand("baltop").setExecutor(new BaltopCommand(this));
+            getServer().getPluginManager().registerEvents(baltopGui, this);
+        }
 
         UtilityCommands utilityCommands = new UtilityCommands(this);
-        getCommand("broadcast").setExecutor(utilityCommands);
-        getCommand("feed").setExecutor(utilityCommands);
-        getCommand("feed").setTabCompleter(utilityCommands);
-        getCommand("fly").setExecutor(utilityCommands);
-        getCommand("fly").setTabCompleter(utilityCommands);
-        getCommand("hat").setExecutor(utilityCommands);
-        getCommand("heal").setExecutor(utilityCommands);
-        getCommand("heal").setTabCompleter(utilityCommands);
-        getCommand("repair").setExecutor(utilityCommands);
-        getCommand("repair").setTabCompleter(utilityCommands);
-        getCommand("suicide").setExecutor(utilityCommands);
-        getCommand("ptime").setExecutor(utilityCommands);
-        getCommand("ptime").setTabCompleter(utilityCommands);
-        getCommand("pweather").setExecutor(utilityCommands);
-        getCommand("pweather").setTabCompleter(utilityCommands);
+        if (moduleManager.isEnabled("utilities")) {
+            getCommand("broadcast").setExecutor(utilityCommands);
+            getCommand("feed").setExecutor(utilityCommands);
+            getCommand("feed").setTabCompleter(utilityCommands);
+            getCommand("fly").setExecutor(utilityCommands);
+            getCommand("fly").setTabCompleter(utilityCommands);
+            getCommand("hat").setExecutor(utilityCommands);
+            getCommand("heal").setExecutor(utilityCommands);
+            getCommand("heal").setTabCompleter(utilityCommands);
+            getCommand("repair").setExecutor(utilityCommands);
+            getCommand("repair").setTabCompleter(utilityCommands);
+            getCommand("suicide").setExecutor(utilityCommands);
+            getCommand("ptime").setExecutor(utilityCommands);
+            getCommand("ptime").setTabCompleter(utilityCommands);
+            getCommand("pweather").setExecutor(utilityCommands);
+            getCommand("pweather").setTabCompleter(utilityCommands);
 
-        GuiUtilityCommands guiUtilityCommands = new GuiUtilityCommands();
-        getCommand("anvil").setExecutor(guiUtilityCommands);
-        getCommand("disposal").setExecutor(guiUtilityCommands);
-        getCommand("grindstone").setExecutor(guiUtilityCommands);
-        getCommand("loom").setExecutor(guiUtilityCommands);
-        getCommand("smithingtable").setExecutor(guiUtilityCommands);
-        getCommand("workbench").setExecutor(guiUtilityCommands);
+            GuiUtilityCommands guiUtilityCommands = new GuiUtilityCommands();
+            getCommand("anvil").setExecutor(guiUtilityCommands);
+            getCommand("disposal").setExecutor(guiUtilityCommands);
+            getCommand("grindstone").setExecutor(guiUtilityCommands);
+            getCommand("loom").setExecutor(guiUtilityCommands);
+            getCommand("smithingtable").setExecutor(guiUtilityCommands);
+            getCommand("workbench").setExecutor(guiUtilityCommands);
 
-        getCommand("afk").setExecutor(utilityCommands);
-        getCommand("setafk").setExecutor(utilityCommands);
-        getCommand("book").setExecutor(utilityCommands);
-        getCommand("compass").setExecutor(utilityCommands);
-        getCommand("shardshop").setExecutor(utilityCommands);
+            getCommand("afk").setExecutor(utilityCommands);
+            getCommand("setafk").setExecutor(utilityCommands);
+            getCommand("book").setExecutor(utilityCommands);
+            getCommand("compass").setExecutor(utilityCommands);
+            getCommand("shardshop").setExecutor(utilityCommands);
+        }
 
-        rewardManager = new RewardManager(this);
-        dailyRewardGui = new DailyRewardGui(this, rewardManager);
-        playtimeRewardGui = new PlaytimeRewardGui(this, rewardManager);
+        if (moduleManager.isEnabled("dailyrewards") || moduleManager.isEnabled("playtimerewards")) {
+            rewardManager = new RewardManager(this);
+            dailyRewardGui = new DailyRewardGui(this, rewardManager);
+            playtimeRewardGui = new PlaytimeRewardGui(this, rewardManager);
+            RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
 
-        spawnerManager = new VirtualSpawnerManager(this);
-        spawnerListener = new VirtualSpawnerListener(this, spawnerManager);
-        VirtualSpawnerCommands spawnerCommands = new VirtualSpawnerCommands(this, spawnerManager);
-        getCommand("ss").setExecutor(spawnerCommands);
-        getCommand("ss").setTabCompleter(spawnerCommands);
-        getCommand("virtualspawner").setExecutor(spawnerCommands);
-        getCommand("virtualspawner").setTabCompleter(spawnerCommands);
-        getServer().getPluginManager().registerEvents(spawnerListener, this);
+            if (moduleManager.isEnabled("dailyrewards")) {
+                getCommand("dailyrewards").setExecutor(rewardCommands);
+                getServer().getPluginManager().registerEvents(dailyRewardGui, this);
+            }
+            if (moduleManager.isEnabled("playtimerewards")) {
+                getCommand("playtimerewards").setExecutor(rewardCommands);
+                getServer().getPluginManager().registerEvents(playtimeRewardGui, this);
+            }
+        }
 
-        vanishCommand = new VanishCommand(this);
-        getCommand("vanish").setExecutor(vanishCommand);
-        getServer().getPluginManager().registerEvents(vanishCommand, this);
+        if (moduleManager.isEnabled("virtualspawner")) {
+            spawnerManager = new VirtualSpawnerManager(this);
+            spawnerListener = new VirtualSpawnerListener(this, spawnerManager);
+            VirtualSpawnerCommands spawnerCommands = new VirtualSpawnerCommands(this, spawnerManager);
+            getCommand("ss").setExecutor(spawnerCommands);
+            getCommand("ss").setTabCompleter(spawnerCommands);
+            getCommand("virtualspawner").setExecutor(spawnerCommands);
+            getCommand("virtualspawner").setTabCompleter(spawnerCommands);
+            getServer().getPluginManager().registerEvents(spawnerListener, this);
+        }
 
-        warpManager = new WarpManager(this);
-        WarpCommands warpCommands = new WarpCommands(this, warpManager);
-        getCommand("warp").setExecutor(warpCommands);
-        getCommand("warp").setTabCompleter(warpCommands);
-        getCommand("setwarp").setExecutor(warpCommands);
-        getCommand("delwarp").setExecutor(warpCommands);
-        getCommand("delwarp").setTabCompleter(warpCommands);
+        if (moduleManager.isEnabled("vanish")) {
+            vanishCommand = new VanishCommand(this);
+            getCommand("vanish").setExecutor(vanishCommand);
+            getServer().getPluginManager().registerEvents(vanishCommand, this);
+        }
+
+        if (moduleManager.isEnabled("warp")) {
+            warpManager = new WarpManager(this);
+            WarpCommands warpCommands = new WarpCommands(this, warpManager);
+            getCommand("warp").setExecutor(warpCommands);
+            getCommand("warp").setTabCompleter(warpCommands);
+            getCommand("setwarp").setExecutor(warpCommands);
+            getCommand("delwarp").setExecutor(warpCommands);
+            getCommand("delwarp").setTabCompleter(warpCommands);
+        }
 
         MessageCommand messageCommand = new MessageCommand();
         getCommand("msg").setExecutor(messageCommand);
         getCommand("reply").setExecutor(messageCommand);
 
-        RewardCommands rewardCommands = new RewardCommands(dailyRewardGui, playtimeRewardGui);
-        getCommand("dailyrewards").setExecutor(rewardCommands);
-        getCommand("playtimerewards").setExecutor(rewardCommands);
-        ItemEditCommand itemEditCommand = new ItemEditCommand();
-        getCommand("itemedit").setExecutor(itemEditCommand);
-        getCommand("itemedit").setTabCompleter(itemEditCommand);
+        if (moduleManager.isEnabled("itemedit")) {
+            ItemEditCommand itemEditCommand = new ItemEditCommand();
+            getCommand("itemedit").setExecutor(itemEditCommand);
+            getCommand("itemedit").setTabCompleter(itemEditCommand);
+            getServer().getPluginManager().registerEvents(new ItemEditListener(this), this);
+        }
 
-        getServer().getPluginManager().registerEvents(dailyRewardGui, this);
-        getServer().getPluginManager().registerEvents(playtimeRewardGui, this);
-        getServer().getPluginManager().registerEvents(new ItemEditListener(this), this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
 
         registerModules();
 
-        new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
+        if (moduleManager.isEnabled("afkzone")) {
+            new AfkZoneTask(this).runTaskTimer(this, 20L, 20L); // Every second
+        }
 
         getLogger().info("MagioCore has been enabled!");
     }
@@ -199,23 +238,23 @@ public class MagioCore extends JavaPlugin implements Listener {
         }
         if (moduleManager.isEnabled("staffchat") || moduleManager.isEnabled("report")) {
             me.jules.magiocore.modules.StaffReportModule staffReportModule = new me.jules.magiocore.modules.StaffReportModule(this);
-            getCommand("staffchat").setExecutor(staffReportModule);
-            getCommand("report").setExecutor(staffReportModule);
-            getCommand("checkreport").setExecutor(staffReportModule);
-            getCommand("clearreports").setExecutor(staffReportModule);
+            if (getCommand("staffchat") != null) getCommand("staffchat").setExecutor(staffReportModule);
+            if (getCommand("report") != null) getCommand("report").setExecutor(staffReportModule);
+            if (getCommand("checkreport") != null) getCommand("checkreport").setExecutor(staffReportModule);
+            if (getCommand("clearreports") != null) getCommand("clearreports").setExecutor(staffReportModule);
         }
         if (moduleManager.isEnabled("socials")) {
             me.jules.magiocore.modules.SocialsModule socialsModule = new me.jules.magiocore.modules.SocialsModule(this);
-            getCommand("discord").setExecutor(socialsModule);
-            getCommand("store").setExecutor(socialsModule);
+            if (getCommand("discord") != null) getCommand("discord").setExecutor(socialsModule);
+            if (getCommand("store") != null) getCommand("store").setExecutor(socialsModule);
         }
         if (moduleManager.isEnabled("keyall")) {
-            getCommand("keyall").setExecutor(new me.jules.magiocore.modules.KeyAllModule(this));
+            if (getCommand("keyall") != null) getCommand("keyall").setExecutor(new me.jules.magiocore.modules.KeyAllModule(this));
         }
         if (moduleManager.isEnabled("freeze")) {
             me.jules.magiocore.modules.FreezeModule freezeModule = new me.jules.magiocore.modules.FreezeModule(this);
-            getCommand("freeze").setExecutor(freezeModule);
-            getCommand("unfreeze").setExecutor(freezeModule);
+            if (getCommand("freeze") != null) getCommand("freeze").setExecutor(freezeModule);
+            if (getCommand("unfreeze") != null) getCommand("unfreeze").setExecutor(freezeModule);
             getServer().getPluginManager().registerEvents(freezeModule, this);
         }
         if (moduleManager.isEnabled("antigrief")) {
