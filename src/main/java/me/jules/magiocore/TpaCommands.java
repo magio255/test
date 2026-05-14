@@ -18,9 +18,13 @@ import java.util.stream.Collectors;
 
 import java.util.UUID;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TpaCommands implements CommandExecutor, TabCompleter {
     private final MagioCore plugin;
     private final TpaManager tpaManager;
+    private final Map<UUID, Long> tpaCooldown = new HashMap<>();
 
     private final String prefix = "&#00fbffᴛᴘᴀ &#888888» §7";
     private final String errorPrefix = "§cᴛᴘᴀ &#888888» §7";
@@ -84,7 +88,16 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
             return;
         }
 
+        long now = System.currentTimeMillis();
+        long last = tpaCooldown.getOrDefault(player.getUniqueId(), 0L);
+        if (now - last < 60000) {
+            long remaining = (60000 - (now - last)) / 1000;
+            player.sendMessage(FontUtils.parse(errorPrefix + "ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴊᴇšᴛě " + remaining + "s."));
+            return;
+        }
+
         tpaManager.sendRequest(player.getUniqueId(), target.getUniqueId(), type);
+        tpaCooldown.put(player.getUniqueId(), now);
 
         player.sendMessage(FontUtils.parse(prefix + (type.equals("to") ? "ᴢᴀsʟᴀʟ ᴊsɪ žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ʜʀáčɪ " : "ᴢᴀsʟᴀʟ ᴊsɪ žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ᴋ sᴏʙě ʜʀáčɪ ") + color + target.getName() + ""));
 
