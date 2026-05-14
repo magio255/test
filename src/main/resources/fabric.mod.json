@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "magiocore",
+  "version": "${version}",
+  "name": "Magio Client",
+  "description": "Modern Hack Client",
+  "authors": [ "Jules" ],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [ "com.magio.MagioClient" ],
+    "client": [ "com.magio.client.MagioClientClient" ]
+  },
+  "mixins": [ "magiocore.mixins.json" ],
+  "depends": {
+    "fabricloader": ">=0.16.10",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
