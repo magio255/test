@@ -53,8 +53,7 @@ public class BaltopGui implements Listener {
                 ItemStack head = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-                // Use a consistent head texture to avoid Mojang API rate limits (403 errors)
-                applyTexture(meta, goldHeadBase64);
+                meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.uuid()));
 
                 meta.displayName(FontUtils.parse("&#ffbb00" + (index + 1) + ". §f" + entry.name()));
                 meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $")));

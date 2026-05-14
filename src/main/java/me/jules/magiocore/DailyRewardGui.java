@@ -57,7 +57,7 @@ public class DailyRewardGui implements Listener {
         }
 
         double multiplier = 1.0 + (Math.min(streak, 40) * 0.1); // 1.0, 1.1, 1.2 ... up to 5.0 (streak 40)
-        long amount = (long) (500000 * multiplier);
+        long amount = (long) (100000 * multiplier);
 
         ItemStack chest = new ItemStack(canClaim ? Material.CHEST : Material.MINECART);
         ItemMeta meta = chest.getItemMeta();
@@ -73,7 +73,7 @@ public class DailyRewardGui implements Listener {
                 lore.add(FontUtils.parse("&#ffbb00ᴏᴅᴍěɴᴀ: &#00ff44" + FontUtils.formatMoney(amount) + " $"));
 
                 double nextMultiplier = 1.0 + (Math.min(streak + 1, 40) * 0.1);
-                long nextAmount = (long) (500000 * nextMultiplier);
+                long nextAmount = (long) (100000 * nextMultiplier);
                 lore.add(FontUtils.parse("&#ffbb00ᴘříšᴛí ᴏᴅᴍěɴᴀ: &#00fbff" + FontUtils.formatMoney(nextAmount) + " $"));
             } else {
                 long remaining = 24 * 60 * 60 * 1000 - diff;
@@ -85,7 +85,7 @@ public class DailyRewardGui implements Listener {
                 lore.add(FontUtils.parse("&#ffbb00ᴛᴠůj sᴛʀᴇᴀᴋ: &#00fbff" + streak + " ᴅɴí"));
 
                 double nextMultiplier = 1.0 + (Math.min(streak, 40) * 0.1);
-                long nextAmount = (long) (500000 * nextMultiplier);
+                long nextAmount = (long) (100000 * nextMultiplier);
                 lore.add(FontUtils.parse("&#ffbb00ᴘříšᴛí ᴏᴅᴍěɴᴀ: &#00fbff" + FontUtils.formatMoney(nextAmount) + " $"));
             }
             meta.lore(lore);
@@ -121,7 +121,7 @@ public class DailyRewardGui implements Listener {
                 }
 
                 double multiplier = 1.0 + (Math.min(streak, 40) * 0.1);
-                long amount = (long) (500000 * multiplier);
+                long amount = (long) (100000 * multiplier);
 
                 rewardManager.setLastDailyClaim(player.getUniqueId(), now);
                 rewardManager.setDailyStreak(player.getUniqueId(), streak + 1);
