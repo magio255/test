@@ -1,0 +1,17 @@
+name: ExploitFixer
+version: 1.0
+main: me.jules.exploitfixer.ExploitFixer
+api-version: '1.21'
+description: Anti-Crash and Anti-Dupe plugin.
+commands:
+  exploitfixer:
+    description: Main command for ExploitFixer
+    permission: exploitfixer.admin
+    usage: /exploitfixer <help|reload|notifications|stats>
+permissions:
+  exploitfixer.admin:
+    description: Allows use of ExploitFixer commands and receiving notifications.
+    default: op
+  exploitfixer.printer:
+    description: Higher packet limits for Printer/Schematica.
+    default: false
