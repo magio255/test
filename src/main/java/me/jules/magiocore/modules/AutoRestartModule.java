@@ -4,6 +4,7 @@ import me.jules.magiocore.FontUtils;
 import me.jules.magiocore.MagioCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -25,7 +26,8 @@ public class AutoRestartModule {
             public void run() {
                 if (restarting) return;
 
-                String restartTimeStr = plugin.getConfig().getString("autorestart.time", "00:00");
+                FileConfiguration config = plugin.getModuleManager().getModuleConfig("autorestart");
+                String restartTimeStr = config.getString("restart-time", "00:00");
                 String now = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
 
                 if (now.equals(restartTimeStr)) {
@@ -51,8 +53,10 @@ public class AutoRestartModule {
                 }
 
                 if (shouldAnnounce(secondsLeft)) {
+                    FileConfiguration config = plugin.getModuleManager().getModuleConfig("autorestart");
                     String timeMsg = formatTime(secondsLeft);
-                    String title = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse("&#ff0000" + "sᴇʀᴠᴇʀ ɪs ʀᴇsᴛᴀʀᴛɪɴɢ ɪɴ " + timeMsg + "!"));
+                    String format = config.getString("messages.countdown", "&#ff0000sᴇʀᴠᴇʀ ɪs ʀᴇsᴛᴀʀᴛɪɴɢ ɪɴ %time%!");
+                    String title = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse(format.replace("%time%", timeMsg)));
                     for (Player player : Bukkit.getOnlinePlayers()) {
                         player.sendTitle(title, "", 10, 40, 10);
                         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1f);

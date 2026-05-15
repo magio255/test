@@ -79,6 +79,11 @@ public class MessageCommand implements CommandExecutor {
     }
 
     private void sendPrivateMessage(Player sender, Player target, String message) {
+        if (MagioCore.getPlugin(MagioCore.class).getIgnoreModule().isIgnored(target.getUniqueId(), sender.getUniqueId())) {
+            sender.sendMessage(FontUtils.parse("§cᴛᴇɴᴛᴏ ʜʀáč ᴛě ɪɢɴᴏʀᴜᴊᴇ."));
+            return;
+        }
+
         // Format: Name » Name: Message
         // Colors: Sender(Blue), Arrow(Gray), Target(Blue), Colon(Gray), Message(White)
         String senderName = sender.getName();

@@ -10,23 +10,28 @@ import java.util.Map;
 
 public class ModuleManager {
     private final MagioCore plugin;
-    private final File modulesFile;
-    private FileConfiguration modulesConfig;
+    private final File modulesDir;
+    private final File modulesToggleFile;
+    private FileConfiguration modulesToggleConfig;
     private final Map<String, Boolean> moduleStates = new HashMap<>();
+    private final Map<String, FileConfiguration> moduleConfigs = new HashMap<>();
 
     public ModuleManager(MagioCore plugin) {
         this.plugin = plugin;
-        this.modulesFile = new File(plugin.getDataFolder(), "modules.yml");
-        loadModulesConfig();
+        this.modulesDir = new File(plugin.getDataFolder(), "modules");
+        if (!modulesDir.exists()) modulesDir.mkdirs();
+
+        this.modulesToggleFile = new File(plugin.getDataFolder(), "modules.yml");
+        loadModulesToggleConfig();
+        loadAllModuleConfigs();
     }
 
-    public void loadModulesConfig() {
-        if (!modulesFile.exists()) {
+    public void loadModulesToggleConfig() {
+        if (!modulesToggleFile.exists()) {
             plugin.saveResource("modules.yml", false);
         }
-        modulesConfig = YamlConfiguration.loadConfiguration(modulesFile);
+        modulesToggleConfig = YamlConfiguration.loadConfiguration(modulesToggleFile);
 
-        // Default modules
         String[] modules = {
             "home", "tpa", "spawn", "gamemode", "rtp", "flyspeed", "playtime", "coinflip",
             "invsee", "baltop", "dailyrewards", "playtimerewards", "itemedit", "utilities",
@@ -34,17 +39,31 @@ public class ModuleManager {
             "autorestart", "staffchat", "report", "socials", "keyall", "freeze", "antigrief", "deathsystem"
         };
         for (String module : modules) {
-            if (!modulesConfig.contains(module)) {
-                modulesConfig.set(module, true);
+            if (!modulesToggleConfig.contains(module)) {
+                modulesToggleConfig.set(module, true);
             }
-            moduleStates.put(module, modulesConfig.getBoolean(module));
+            moduleStates.put(module.toLowerCase(), modulesToggleConfig.getBoolean(module));
         }
-        saveModulesConfig();
+        saveModulesToggleConfig();
     }
 
-    public void saveModulesConfig() {
+    private void loadAllModuleConfigs() {
+        String[] modules = {
+            "home", "tpa", "spawn", "autorestart", "socials", "keyall", "freeze",
+            "antigrief", "deathsystem", "virtualspawner", "coinflip", "baltop"
+        };
+        for (String module : modules) {
+            File file = new File(modulesDir, module + ".yml");
+            if (!file.exists()) {
+                plugin.saveResource("modules/" + module + ".yml", false);
+            }
+            moduleConfigs.put(module, YamlConfiguration.loadConfiguration(file));
+        }
+    }
+
+    public void saveModulesToggleConfig() {
         try {
-            modulesConfig.save(modulesFile);
+            modulesToggleConfig.save(modulesToggleFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,5 +71,19 @@ public class ModuleManager {
 
     public boolean isEnabled(String moduleName) {
         return moduleStates.getOrDefault(moduleName.toLowerCase(), false);
+    }
+
+    public FileConfiguration getModuleConfig(String moduleName) {
+        return moduleConfigs.get(moduleName.toLowerCase());
+    }
+
+    public void saveModuleConfig(String moduleName) {
+        FileConfiguration config = getModuleConfig(moduleName);
+        if (config == null) return;
+        try {
+            config.save(new File(modulesDir, moduleName.toLowerCase() + ".yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

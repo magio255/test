@@ -28,6 +28,7 @@ public class MagioCore extends JavaPlugin implements Listener {
     private VanishCommand vanishCommand;
     private WarpManager warpManager;
     private ModuleManager moduleManager;
+    private me.jules.magiocore.modules.IgnoreModule ignoreModule;
 
     @Override
     public void onEnable() {
@@ -199,6 +200,10 @@ public class MagioCore extends JavaPlugin implements Listener {
             getServer().getPluginManager().registerEvents(vanishCommand, this);
         }
 
+        ignoreModule = new me.jules.magiocore.modules.IgnoreModule(this);
+        getCommand("ignore").setExecutor(ignoreModule);
+        getCommand("tpaignore").setExecutor(ignoreModule);
+
         if (moduleManager.isEnabled("warp")) {
             warpManager = new WarpManager(this);
             WarpCommands warpCommands = new WarpCommands(this, warpManager);
@@ -264,6 +269,10 @@ public class MagioCore extends JavaPlugin implements Listener {
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public me.jules.magiocore.modules.IgnoreModule getIgnoreModule() {
+        return ignoreModule;
     }
 
     private boolean setupEconomy() {

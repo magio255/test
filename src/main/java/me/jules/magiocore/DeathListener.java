@@ -13,17 +13,9 @@ public class DeathListener implements Listener {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
 
-        if (killer != null) {
-            // Killed by player
-            // » ☠ victim, was killed by ⚔ killer
-            Component message = FontUtils.parse("&#888888» &#ff0000☠ &#ff0000" + victim.getName() + "§7, was killed by &#ff0000⚔ &#00fbff" + killer.getName());
-            event.deathMessage(message);
-        } else {
-            // Normal death
-            // » ☠ victim has died
-            Component message = FontUtils.parse("&#888888» &#ff0000☠ &#ff0000" + victim.getName() + " §7has died");
-            event.deathMessage(message);
-        }
+        // New format: #FF1010☠ &f%player% umrel
+        Component message = FontUtils.parse("&#FF1010☠ §f" + victim.getName() + " umrel");
+        event.deathMessage(message);
 
         // Module logic for titles
         MagioCore plugin = MagioCore.getPlugin(MagioCore.class);

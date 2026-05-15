@@ -1,0 +1,9 @@
+enabled: true
+messages:
+  teleport: "&#00fbffᴅᴏᴍᴏᴠ §7#%number% &#888888» §7Teleportuji..."
+  set: "&#00ff44ᴅᴏᴍᴏᴠ §7#%number% &#888888» §7Nastaveno"
+  delete: "§cᴅᴏᴍᴏᴠ §7#%number% &#888888» §7Smazáno"
+  locked: "§cᴛᴇɴᴛᴏ sʟᴏᴛ ᴊᴇ ᴢᴀᴍčᴇɴý §7(ʟɪᴍɪᴛ: %limit%)"
+  not-set: "§cᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ"
+gui:
+  title: "&#EA427F» ᴍᴇɴᴜ ᴅᴏᴍᴏᴠů"

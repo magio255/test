@@ -204,6 +204,11 @@ commands:
     permission: freeze.use
   shardshop:
     description: Opens shard shop.
+  ignore:
+    description: Ignore a player.
+    usage: /ignore <player>
+  tpaignore:
+    description: Toggle ignoring all TPA requests.
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.

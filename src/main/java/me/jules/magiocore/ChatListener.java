@@ -29,6 +29,14 @@ public class ChatListener implements Listener {
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
+
+        // Check ignored players
+        event.viewers().removeIf(viewer -> {
+            if (viewer instanceof Player viewerPlayer) {
+                return plugin.getIgnoreModule().isIgnored(viewerPlayer.getUniqueId(), player.getUniqueId());
+            }
+            return false;
+        });
         String message = LegacyComponentSerializer.legacySection().serialize(event.originalMessage());
 
         if (ItemEditListener.pendingInput.containsKey(player.getUniqueId())) {

@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 import java.util.UUID;
 
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +69,7 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
     }
 
     private void handleTpa(Player player, String[] args, String type) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("tpa");
         if (args.length == 0) {
             player.sendMessage(FontUtils.parse(errorPrefix + "ᴘᴏᴜžɪᴛí: /" + (type.equals("to") ? "ᴛᴘᴀ" : "ᴛᴘᴀʜᴇʀᴇ") + " <ʜʀáč>"));
             return;
@@ -84,24 +87,35 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
         }
 
         if (tpaManager.isTpaOff(target.getUniqueId())) {
-            player.sendMessage(FontUtils.parse(errorPrefix + "ʜʀáč ᴍá ᴠʏᴘɴᴜᴛé žáᴅᴏsᴛɪ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ"));
+            String offMsg = config.getString("messages.tpaoff", "§cᴛᴘᴀ &#888888» §7Hráč má vypnuté žádosti.");
+            player.sendMessage(FontUtils.parse(offMsg));
+            return;
+        }
+
+        if (plugin.getIgnoreModule().isTpaIgnored(target.getUniqueId()) || plugin.getIgnoreModule().isIgnored(target.getUniqueId(), player.getUniqueId())) {
+            String ignoreMsg = config.getString("messages.ignored", "§cᴛᴘᴀ &#888888» §7Tento hráč tě ignoruje.");
+            player.sendMessage(FontUtils.parse(ignoreMsg));
             return;
         }
 
         long now = System.currentTimeMillis();
         long last = tpaCooldown.getOrDefault(player.getUniqueId(), 0L);
-        if (now - last < 60000) {
-            long remaining = (60000 - (now - last)) / 1000;
-            player.sendMessage(FontUtils.parse(errorPrefix + "ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴊᴇšᴛě " + remaining + "s."));
+        long delayMs = config.getLong("delay", 60) * 1000;
+        if (now - last < delayMs) {
+            long remaining = (delayMs - (now - last)) / 1000;
+            String cdMsg = config.getString("messages.cooldown", "§cᴛᴘᴀ &#888888» §7Musíš počkat ještě %time%s.").replace("%time%", String.valueOf(remaining));
+            player.sendMessage(FontUtils.parse(cdMsg));
             return;
         }
 
         tpaManager.sendRequest(player.getUniqueId(), target.getUniqueId(), type);
         tpaCooldown.put(player.getUniqueId(), now);
 
-        player.sendMessage(FontUtils.parse(prefix + (type.equals("to") ? "ᴢᴀsʟᴀʟ ᴊsɪ žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ʜʀáčɪ " : "ᴢᴀsʟᴀʟ ᴊsɪ žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ ᴋ sᴏʙě ʜʀáčɪ ") + color + target.getName() + ""));
+        String sentMsg = config.getString("messages.sent", "&#00fbffᴛᴘᴀ &#888888» §7Zaslal jsi žádost hráči &#00fbff%player%").replace("%player%", target.getName());
+        player.sendMessage(FontUtils.parse(sentMsg));
 
-        target.sendMessage(FontUtils.parse(prefix + "ʜʀáč " + color + player.getName() + " §7" + (type.equals("to") ? "sᴇ ᴄʜᴄᴇ ᴛᴇʟᴇᴘᴏʀᴛᴏᴠᴀᴛ ᴋ ᴛᴏʙě." : "ᴄʜᴄᴇ, ᴀʙʏs sᴇ ᴛᴇʟᴇᴘᴏʀᴛᴏᴠᴀʟ ᴋ ɴěᴍᴜ.")));
+        String receivedMsg = config.getString("messages.received", "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7se chce k tobě teleportovat.").replace("%player%", player.getName());
+        target.sendMessage(FontUtils.parse(receivedMsg));
 
         Component accept = FontUtils.parse("&#00ff44[ᴘᴏᴛᴠʀᴅɪᴛ]")
                 .hoverEvent(HoverEvent.showText(FontUtils.parse("&#00ff44ᴋʟɪᴋɴɪ ᴘʀᴏ ᴘᴏᴛᴠʀᴢᴇɴí")))
@@ -144,6 +158,7 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
     }
 
     private void handleTpaAccept(Player player) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("tpa");
         TpaManager.TpaRequest req = tpaManager.getRequest(player.getUniqueId());
         if (req == null) {
             player.sendMessage(FontUtils.parse(errorPrefix + "ɴᴇᴍáš žáᴅɴᴏᴜ ᴀᴋᴛɪᴠɴí žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ"));
@@ -159,8 +174,9 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
 
         tpaManager.removeRequest(player.getUniqueId());
 
-        player.sendMessage(FontUtils.parse(prefix + "ᴘřɪᴊᴀʟ ᴊsɪ žáᴅᴏsᴛ. ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢᴀ 3s..."));
-        requester.sendMessage(FontUtils.parse(prefix + "ʜʀáč " + color + player.getName() + " §7ᴘřɪᴊᴀʟ ᴛᴠᴏᴊí žáᴅᴏsᴛ. ᴛᴇʟᴇᴘᴏʀᴛᴀᴄᴇ ᴢᴀ 3s..."));
+        String accMsg = config.getString("messages.accepted", "&#00fbffᴛᴘᴀ &#888888» §7Žádost přijata.");
+        player.sendMessage(FontUtils.parse(accMsg));
+        requester.sendMessage(FontUtils.parse(accMsg));
 
         Player toTeleport = req.type.equals("to") ? requester : player;
         Player targetLocPlayer = req.type.equals("to") ? player : requester;
@@ -169,6 +185,7 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
     }
 
     private void handleTpaDeny(Player player) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("tpa");
         TpaManager.TpaRequest req = tpaManager.getRequest(player.getUniqueId());
         if (req == null) {
             player.sendMessage(FontUtils.parse(errorPrefix + "ɴᴇᴍáš žáᴅɴᴏᴜ ᴀᴋᴛɪᴠɴí žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ"));
@@ -178,9 +195,10 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
         Player requester = Bukkit.getPlayer(req.requester);
         tpaManager.removeRequest(player.getUniqueId());
 
-        player.sendMessage(FontUtils.parse(prefix + "ᴏᴅᴍíᴛʟ ᴊsɪ žáᴅᴏsᴛ"));
+        String denMsg = config.getString("messages.denied", "§cᴛᴘᴀ &#888888» §7Žádost odmítnuta.");
+        player.sendMessage(FontUtils.parse(denMsg));
         if (requester != null) {
-            requester.sendMessage(FontUtils.parse(prefix + "ʜʀáč " + color + player.getName() + " §7ᴏᴅᴍíᴛʟ ᴛᴠᴏᴊí žáᴅᴏsᴛ ᴏ ᴛᴇʟᴇᴘᴏʀᴛ"));
+            requester.sendMessage(FontUtils.parse(denMsg));
         }
     }
 

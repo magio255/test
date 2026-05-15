@@ -1,0 +1,9 @@
+delay: 60 # seconds
+messages:
+  sent: "&#00fbffᴛᴘᴀ &#888888» §7Zaslal jsi žádost hráči &#00fbff%player%"
+  received: "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7se chce k tobě teleportovat."
+  accepted: "&#00fbffᴛᴘᴀ &#888888» §7Žádost přijata."
+  denied: "§cᴛᴘᴀ &#888888» §7Žádost odmítnuta."
+  cooldown: "§cᴛᴘᴀ &#888888» §7Musíš počkat ještě %time%s."
+  ignored: "§cᴛᴘᴀ &#888888» §7Tento hráč tě ignoruje."
+  tpaoff: "§cᴛᴘᴀ &#888888» §7Hráč má vypnuté žádosti."
