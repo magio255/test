@@ -12,12 +12,9 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.profile.PlayerProfile;
-import org.bukkit.profile.PlayerTextures;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.URL;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +25,6 @@ public class BaltopGui implements Listener {
     private final BaltopManager manager;
     private final String title = "&#EA427F» " + "ʙᴀʟᴛᴏᴘ";
     private final Map<UUID, Integer> playerPages = new HashMap<>();
-    private final String goldHeadBase64 = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTRhMDc0Y2U5MThkNDkyYzNhNjhiMTRmY2FhYWYzZDU1N2RjOTI1NWFhYjMxYWJkZTk0MGI0ZTI0ZDA5In19fQ==";
 
     public BaltopGui(MagioCore plugin, BaltopManager manager) {
         this.plugin = plugin;
@@ -39,59 +35,68 @@ public class BaltopGui implements Listener {
         Inventory inv = Bukkit.createInventory(new BaltopGuiHolder(), 54, FontUtils.parse(title));
         List<BaltopManager.BaltopEntry> top = manager.getCachedTop();
 
-        int start = (page - 1) * 45;
+        int maxPerPage = 28; // 4 rows of 7
+        int start = (page - 1) * maxPerPage;
         if (start >= top.size() && !top.isEmpty()) {
-            page = (int) Math.ceil((double) top.size() / 45);
-            start = (page - 1) * 45;
+            page = (int) Math.ceil((double) top.size() / maxPerPage);
+            start = (page - 1) * maxPerPage;
         }
         playerPages.put(player.getUniqueId(), page);
 
-        for (int i = 0; i < 45; i++) {
+        // Border Design
+        ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+        ItemMeta glassMeta = glass.getItemMeta();
+        if (glassMeta != null) {
+            glassMeta.displayName(Component.empty());
+            glass.setItemMeta(glassMeta);
+        }
+
+        for (int i = 0; i < 54; i++) {
+            if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) {
+                inv.setItem(i, glass);
+            }
+        }
+
+        // Available slots for entries: 10-16, 19-25, 28-34, 37-43
+        int[] slots = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34,
+            37, 38, 39, 40, 41, 42, 43
+        };
+
+        for (int i = 0; i < slots.length; i++) {
             int index = start + i;
             if (index < top.size()) {
                 BaltopManager.BaltopEntry entry = top.get(index);
                 ItemStack head = new ItemStack(Material.PLAYER_HEAD);
                 SkullMeta meta = (SkullMeta) head.getItemMeta();
 
-                meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.uuid()));
-
-                meta.displayName(FontUtils.parse("&#ffbb00" + (index + 1) + ". §f" + entry.name()));
-                meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $")));
-                head.setItemMeta(meta);
-                inv.setItem(i, head);
+                if (meta != null) {
+                    meta.setOwningPlayer(Bukkit.getOfflinePlayer(entry.uuid()));
+                    meta.displayName(FontUtils.parse("&#ffbb00" + (index + 1) + ". §f" + entry.name()));
+                    meta.lore(List.of(FontUtils.parse("§7" + "ʙᴀʟᴀɴᴄᴇ" + ": &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $")));
+                    head.setItemMeta(meta);
+                }
+                inv.setItem(slots[i], head);
             }
         }
 
         // Navigation
-        inv.setItem(45, createNav("§c" + "ᴢᴘěᴛ", Material.ARROW));
+        inv.setItem(48, createNav("§c" + "ᴢᴘěᴛ", Material.ARROW));
         inv.setItem(49, createNav("&#ffbb00" + "ʜʟᴇᴅᴀᴛ ʜʀáčᴇ", Material.OAK_SIGN));
-        inv.setItem(53, createNav("&#00ff44" + "ᴅᴀʟší", Material.ARROW));
+        inv.setItem(50, createNav("&#00ff44" + "ᴅᴀʟší", Material.ARROW));
 
         player.openInventory(inv);
-    }
-
-    private void applyTexture(SkullMeta meta, String base64) {
-        UUID uuid = UUID.nameUUIDFromBytes(base64.getBytes());
-        PlayerProfile profile = Bukkit.createProfile(uuid, "BaltopHead");
-        PlayerTextures textures = profile.getTextures();
-
-        try {
-            String decoded = new String(Base64.getDecoder().decode(base64));
-            String urlStr = decoded.substring(decoded.indexOf("http"), decoded.lastIndexOf("\""));
-            textures.setSkin(new URL(urlStr));
-        } catch (Exception e) {
-            // ignore
-        }
-
-        profile.setTextures(textures);
-        meta.setOwnerProfile(profile);
     }
 
     private ItemStack createNav(String name, Material mat) {
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(FontUtils.parse(name));
-        item.setItemMeta(meta);
+        if (meta != null) {
+            meta.displayName(FontUtils.parse(name));
+            item.setItemMeta(meta);
+        }
         return item;
     }
 
@@ -104,10 +109,10 @@ public class BaltopGui implements Listener {
         int slot = event.getRawSlot();
         int page = playerPages.getOrDefault(player.getUniqueId(), 1);
 
-        if (slot == 45) { // Back
+        if (slot == 48) { // Back
             if (page > 1) open(player, page - 1);
-        } else if (slot == 53) { // Next
-            if (page * 45 < manager.getCachedTop().size()) open(player, page + 1);
+        } else if (slot == 50) { // Next
+            if (page * 28 < manager.getCachedTop().size()) open(player, page + 1);
         } else if (slot == 49) { // Search
             player.closeInventory();
             player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ɴᴀᴘɪš ᴊᴍéɴᴏ ʜʀáčᴇ ᴅᴏ ᴄʜᴀᴛᴜ:"));
