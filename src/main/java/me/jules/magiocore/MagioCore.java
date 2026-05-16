@@ -29,11 +29,14 @@ public class MagioCore extends JavaPlugin implements Listener {
     private WarpManager warpManager;
     private ModuleManager moduleManager;
     private me.jules.magiocore.modules.IgnoreModule ignoreModule;
+    private SettingsManager settingsManager;
+    private SettingsGui settingsGui;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         moduleManager = new ModuleManager(this);
+        settingsManager = new SettingsManager(this);
 
         // Disable advancement announcements in all worlds
         for (World world : Bukkit.getWorlds()) {
@@ -228,6 +231,14 @@ public class MagioCore extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
 
+        if (moduleManager.isEnabled("settings")) {
+            settingsGui = new SettingsGui(this, settingsManager);
+            getCommand("settings").setExecutor(settingsGui);
+            getCommand("sb").setExecutor(settingsGui);
+            getServer().getPluginManager().registerEvents(settingsGui, this);
+            new ScoreboardTask(this).runTaskTimer(this, 20L, 20L);
+        }
+
         registerModules();
 
         if (moduleManager.isEnabled("afkzone")) {
@@ -273,6 +284,10 @@ public class MagioCore extends JavaPlugin implements Listener {
 
     public me.jules.magiocore.modules.IgnoreModule getIgnoreModule() {
         return ignoreModule;
+    }
+
+    public SettingsManager getSettingsManager() {
+        return settingsManager;
     }
 
     private boolean setupEconomy() {

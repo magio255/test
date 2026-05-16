@@ -29,9 +29,17 @@ public class ChatListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
-        // Check ignored players
+        SettingsManager.PlayerSettings senderSettings = plugin.getSettingsManager().getSettings(player.getUniqueId());
+        if (!senderSettings.chat()) {
+            event.setCancelled(true);
+            player.sendMessage(FontUtils.parse("§c" + "ᴍáš ᴠʏᴘɴᴜᴛý ᴄʜᴀᴛ ᴠ ɴᴀsᴛᴀᴠᴇɴí."));
+            return;
+        }
+
+        // Check ignored players and global chat settings
         event.getRecipients().removeIf(viewerPlayer -> {
-            return plugin.getIgnoreModule().isIgnored(viewerPlayer.getUniqueId(), player.getUniqueId());
+            if (plugin.getIgnoreModule().isIgnored(viewerPlayer.getUniqueId(), player.getUniqueId())) return true;
+            return !plugin.getSettingsManager().getSettings(viewerPlayer.getUniqueId()).chat();
         });
 
         String message = event.getMessage();

@@ -209,6 +209,11 @@ commands:
     usage: /ignore <player>
   tpaignore:
     description: Toggle ignoring all TPA requests.
+  settings:
+    description: Open settings menu.
+    aliases: [options, setup]
+  sb:
+    description: Toggle scoreboard visibility.
 permissions:
   magiocore.home:
     description: Přístup k příkazům domovů.

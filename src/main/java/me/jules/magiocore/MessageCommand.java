@@ -85,6 +85,16 @@ public class MessageCommand implements CommandExecutor {
         MagioCore plugin = MagioCore.getPlugin(MagioCore.class);
         FileConfiguration config = plugin.getModuleManager().getModuleConfig("msg");
 
+        if (!plugin.getSettingsManager().getSettings(sender.getUniqueId()).msg()) {
+            sender.sendMessage(FontUtils.parse("§cᴍáš ᴠʏᴘɴᴜᴛé sᴏᴜᴋʀᴏᴍé ᴢᴘʀáᴠʏ ᴠ ɴᴀsᴛᴀᴠᴇɴí."));
+            return;
+        }
+
+        if (!plugin.getSettingsManager().getSettings(target.getUniqueId()).msg()) {
+            sender.sendMessage(FontUtils.parse("§cʜʀáč ᴍá ᴠʏᴘɴᴜᴛé sᴏᴜᴋʀᴏᴍé ᴢᴘʀáᴠʏ."));
+            return;
+        }
+
         if (plugin.getIgnoreModule().isIgnored(target.getUniqueId(), sender.getUniqueId())) {
             sender.sendMessage(FontUtils.parse(config.getString("messages.ignored", "§cᴛᴇɴᴛᴏ ʜʀáč ᴛě ɪɢɴᴏʀᴜᴊᴇ.")));
             return;
