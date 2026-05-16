@@ -6,6 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,22 +23,23 @@ public class SocialsModule implements CommandExecutor {
     }
 
     private void startBroadcastTask() {
-        int interval = plugin.getConfig().getInt("socials.broadcast.interval", 15) * 1200;
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("socials");
+        int interval = config.getInt("broadcast.interval", 15) * 1200;
         new BukkitRunnable() {
             @Override
             public void run() {
-                Bukkit.broadcast(Component.empty());
-                Bukkit.broadcast(FontUtils.parse("&#5865F2&l                    ᴘŘɪᴘᴏᴊ sᴇ ɴᴀ ɴáš ᴅɪsᴄᴏʀᴅ"));
-                Bukkit.broadcast(Component.empty());
-                Bukkit.broadcast(FontUtils.parse("§7       ʙᴜď ᴠ ᴏʙʀᴀᴢᴇ, ᴄʜᴀᴛᴜᴊ s ᴏsᴛᴀᴛɴíᴍɪ ᴀ ᴢísᴋᴇᴊ ᴘᴏᴅᴘᴏʀᴜ!"));
-                Bukkit.broadcast(FontUtils.parse("§7              ᴘŘɪᴘᴏᴊ sᴇ ᴋ ɴáᴍ ɴᴀ &#5865F2&nᴅɪsᴄᴏʀᴅ ᴊᴇšᴛě ᴅɴᴇs!"));
-                Bukkit.broadcast(Component.empty());
-                Bukkit.broadcast(FontUtils.parse("§f                           → &#5865F2&l/ᴅɪsᴄᴏʀᴅ &f←"));
-                Bukkit.broadcast(Component.empty());
+                FileConfiguration c = plugin.getModuleManager().getModuleConfig("socials");
+                for (String msg : c.getStringList("broadcast.messages")) {
+                    if (msg.isEmpty()) {
+                        Bukkit.broadcast(Component.empty());
+                    } else {
+                        Bukkit.broadcast(FontUtils.parse(msg));
+                    }
+                }
 
-                String soundName = plugin.getConfig().getString("socials.broadcast.sound", "BLOCK_NOTE_BLOCK_PLING");
-                float vol = (float) plugin.getConfig().getDouble("socials.broadcast.volume", 1.0);
-                float pitch = (float) plugin.getConfig().getDouble("socials.broadcast.pitch", 2.0);
+                String soundName = c.getString("broadcast.sound", "BLOCK_NOTE_BLOCK_PLING");
+                float vol = (float) c.getDouble("broadcast.volume", 1.0);
+                float pitch = (float) c.getDouble("broadcast.pitch", 2.0);
 
                 try {
                     Sound sound = Sound.valueOf(soundName);
@@ -51,10 +53,11 @@ public class SocialsModule implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("socials");
         if (command.getName().equalsIgnoreCase("discord")) {
-            String prefix = plugin.getConfig().getString("socials.discord.prefix");
-            String message = plugin.getConfig().getString("socials.discord.message");
-            String link = plugin.getConfig().getString("socials.discord.link");
+            String prefix = config.getString("discord.prefix");
+            String message = config.getString("discord.message");
+            String link = config.getString("discord.link");
 
             sender.sendMessage(FontUtils.parse(prefix));
             sender.sendMessage("");
@@ -67,9 +70,9 @@ public class SocialsModule implements CommandExecutor {
         }
 
         if (command.getName().equalsIgnoreCase("store")) {
-            String prefix = plugin.getConfig().getString("socials.store.prefix");
-            String message = plugin.getConfig().getString("socials.store.message");
-            String link = plugin.getConfig().getString("socials.store.link");
+            String prefix = config.getString("store.prefix");
+            String message = config.getString("store.message");
+            String link = config.getString("store.link");
 
             sender.sendMessage(FontUtils.parse(prefix));
             sender.sendMessage("");

@@ -4,15 +4,18 @@ import me.jules.magiocore.FontUtils;
 import me.jules.magiocore.MagioCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class KeyAllModule implements CommandExecutor {
     private final MagioCore plugin;
@@ -29,35 +32,33 @@ public class KeyAllModule implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(FontUtils.parse("&#888888" + "ᴘᴏᴜžɪᴛí: &f/ᴋᴇʏᴀʟʟ <ᴍᴏɴᴇʏ|ᴋᴇʏ|sᴘᴀᴡɴᴇʀ|ᴀɴɪᴍᴀʟ>"));
+            sender.sendMessage(FontUtils.parse("&#888888" + "ᴘᴏᴜžɪᴛí: &f/ᴋᴇʏᴀʟʟ <ᴛʏᴘ>"));
             return true;
         }
 
         String type = args[0].toLowerCase();
-        switch (type) {
-            case "money":
-                startKeyAll("&#FCD05C&lᴍᴏɴᴇʏ ᴋᴇʏᴀʟʟ ʙʏʟ sᴘᴜšᴛěɴ", "§7Všichni obdrží peníze!", "Money", Particle.TOTEM_OF_UNDYING, Particle.FLAME, Particle.GLOW, "money giveall " + plugin.getConfig().getInt("keyall.money-amount", 30000));
-                break;
-            case "key":
-                startKeyAll("&#5CE0FC&lᴋᴇʏ ᴋᴇʏᴀʟʟ ʙʏʟ sᴘᴜšᴛěɴ", "§7Všichni obdrží klíče!", "Key", Particle.SOUL_FIRE_FLAME, Particle.ENCHANT, Particle.WAX_OFF, "crate giveall vote " + plugin.getConfig().getInt("keyall.vote-key-amount", 1));
-                break;
-            case "spawner":
-                startKeyAll("&#FC5C5C&lspawner ᴋᴇʏᴀʟʟ ʙʏʟ sᴘᴜšᴛěɴ", "§7Všichni obdrží spawner!", "Spawner", Particle.LAVA, Particle.LARGE_SMOKE, Particle.FLAME, "ss give @a skeleton 1");
-                break;
-            case "animal":
-                startKeyAll("&#A4FC5C&lᴀɴɪᴍᴀʟ ᴋᴇʏᴀʟʟ ʙʏʟ sᴘᴜšᴛěɴ", "§7Všichni obdrží zvířátka!", "Animal", Particle.HAPPY_VILLAGER, Particle.HEART, Particle.COMPOSTER, "give @a camel_spawn_egg 1", "give @a lead 1", "give @a oak_fence 1", "give @a name_tag 1");
-                break;
-            default:
-                sender.sendMessage(FontUtils.parse("&#888888" + "ᴘᴏᴜžɪᴛí: &f/ᴋᴇʏᴀʟʟ <ᴍᴏɴᴇʏ|ᴋᴇʏ|sᴘᴀᴡɴᴇʀ|ᴀɴɪᴍᴀʟ>"));
-                break;
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("keyall");
+        ConfigurationSection typeSection = config.getConfigurationSection("types." + type);
+
+        if (typeSection == null) {
+            sender.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ ᴛʏᴘ ɴᴇᴇxɪsᴛᴜᴊᴇ."));
+            return true;
         }
 
+        startKeyAll(typeSection);
         return true;
     }
 
-    private void startKeyAll(String title, String subtitle, String prefix, Particle p1, Particle p2, Particle p3, String... commands) {
+    private void startKeyAll(ConfigurationSection section) {
+        String title = section.getString("title", "");
+        String subtitle = section.getString("subtitle", "");
+        List<String> commands = section.getStringList("commands");
+        String rewardMsg = section.getString("reward-message", "");
+        String prefix = section.getString("prefix", "KeyAll");
+
         String mainTitle = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse(title));
         String subTitle = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse(subtitle));
+
         for (Player p : Bukkit.getOnlinePlayers()) {
             p.sendTitle(mainTitle, subTitle, 10, 60, 10);
             p.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 60, 1, true, false));
@@ -65,31 +66,33 @@ public class KeyAllModule implements CommandExecutor {
 
         new BukkitRunnable() {
             int step = 3;
+            FileConfiguration config = plugin.getModuleManager().getModuleConfig("keyall");
 
             @Override
             public void run() {
                 if (step > 0) {
-                    Bukkit.broadcast(FontUtils.parse("&#888888[&6&lᴋᴇʏᴀʟʟ&r&#888888] §7" + prefix + " ᴋᴇʏᴀʟʟ ᴢᴀ &#f1c40f" + step + "..."));
-                    Particle currentParticle = (step == 3) ? p1 : (step == 2) ? p2 : p3;
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.getWorld().spawnParticle(currentParticle, p.getLocation().add(0, 1, 0), 100, 0.5, 0.5, 0.5, 0.1);
+                    String countdownFormat = config.getString("messages.countdown", "&#888888[&6&lᴋᴇʏᴀʟʟ&r&#888888] §7%type% ᴋᴇʏᴀʟʟ ᴢᴀ &#f1c40f%time%...");
+                    Bukkit.broadcast(FontUtils.parse(countdownFormat.replace("%type%", prefix).replace("%time%", String.valueOf(step))));
+
+                    Particle p;
+                    try {
+                        p = Particle.valueOf(section.getString("particles.step-" + step, "FLAME"));
+                    } catch (Exception e) { p = Particle.FLAME; }
+
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.getWorld().spawnParticle(p, player.getLocation().add(0, 1, 0), 100, 0.5, 0.5, 0.5, 0.1);
                     }
                     step--;
                 } else {
                     for (String cmd : commands) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
                     }
-                    for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.getWorld().spawnParticle(Particle.EXPLOSION_EMITTER, p.getLocation().add(0, 1, 0), 1, 0, 0, 0, 0);
+                    for (Player player : Bukkit.getOnlinePlayers()) {
+                        player.getWorld().spawnParticle(Particle.EXPLOSION_EMITTER, player.getLocation().add(0, 1, 0), 1, 0, 0, 0, 0);
                     }
-                    String rewardMsg = switch (prefix) {
-                        case "Money" -> "§7Všichni dostali &#f1c40f" + plugin.getConfig().getInt("keyall.money-amount", 30000) + "$!";
-                        case "Key" -> "§7Všichni dostali &#00fbffᴋʟíč!";
-                        case "Spawner" -> "§7Všichni dostali &#ff0000sᴘᴀᴡɴᴇʀ!";
-                        case "Animal" -> "§7Všichni dostali velblouda a výbavu s jmenovkou!";
-                        default -> "";
-                    };
-                    Bukkit.broadcast(FontUtils.parse("&#888888[&6&lᴋᴇʏᴀʟʟ&r&#888888] &#00ff44&lʙᴜᴍ! " + rewardMsg));
+
+                    String finishFormat = config.getString("messages.finished", "&#888888[&6&lᴋᴇʏᴀʟʟ&r&#888888] &#00ff44&lʙᴜᴍ! %reward%");
+                    Bukkit.broadcast(FontUtils.parse(finishFormat.replace("%reward%", rewardMsg)));
                     cancel();
                 }
             }
