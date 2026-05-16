@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlaytimeRewardGui implements Listener {
     private final MagioCore plugin;
@@ -35,9 +37,8 @@ public class PlaytimeRewardGui implements Listener {
             1100000, 1300000, 1500000, 1600000, 1700000, 2000000, 2100000, 2300000
         };
 
-        // Generate 147 levels
         for (int i = 1; i <= 147; i++) {
-            int hours = (int) (i * 8.85); // Approx 1300 hours / 147 levels
+            int hours = (int) (i * 8.85);
             if (i == 1) hours = 1;
             if (i == 147) hours = 1300;
 
@@ -45,7 +46,6 @@ public class PlaytimeRewardGui implements Listener {
             if (i <= fixedRewards.length) {
                 amount = fixedRewards[i - 1];
             } else {
-                // Continue trend: 2.3m + 250k per level after 16
                 amount = 2300000L + (long) (i - 16) * 250000L;
             }
 
@@ -64,9 +64,11 @@ public class PlaytimeRewardGui implements Listener {
     }
 
     public void open(Player player, int page) {
-        Inventory inv = Bukkit.createInventory(new PlaytimeRewardHolder(page), 54, FontUtils.parse("ᴏᴅᴇʜʀᴀɴý čᴀs - sᴛʀᴀɴᴀ " + (page + 1)));
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("playtimerewards");
+        String title = config.getString("gui.title", "ᴏᴅᴇʜʀᴀɴý čᴀs - sᴛʀᴀɴᴀ %page%").replace("%page%", String.valueOf(page + 1));
 
-        // Border and navigation
+        Inventory inv = Bukkit.createInventory(new PlaytimeRewardHolder(page), 54, FontUtils.parse(title));
+
         ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
         if (glassMeta != null) {
@@ -78,8 +80,8 @@ public class PlaytimeRewardGui implements Listener {
         for (int i = 0; i < 54; i += 9) inv.setItem(i, glass);
         for (int i = 8; i < 54; i += 9) inv.setItem(i, glass);
 
-        if (page > 0) inv.setItem(48, createItem(Material.ARROW, "&#00fbffᴘřᴇᴅᴄʜᴏᴢí sᴛʀᴀɴᴀ"));
-        if (page < 6) inv.setItem(50, createItem(Material.ARROW, "&#00fbffᴅᴀʟší sᴛʀᴀɴᴀ"));
+        if (page > 0) inv.setItem(48, createItem(Material.ARROW, config.getString("gui.nav-back", "&#00fbffᴘřᴇᴅᴄʜᴏᴢí sᴛʀᴀɴᴀ")));
+        if (page < 6) inv.setItem(50, createItem(Material.ARROW, config.getString("gui.nav-next", "&#00fbffᴅᴀʟší sᴛʀᴀɴᴀ")));
 
         int start = page * 21;
         int[] slots = {
@@ -99,18 +101,19 @@ public class PlaytimeRewardGui implements Listener {
             ItemStack item = new ItemStack(level.material);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.displayName(FontUtils.parse("&#ffbb00úʀᴏᴠᴇň " + level.id));
-                List<Component> lore = new ArrayList<>();
-                lore.add(FontUtils.parse("§7ᴘᴏᴛřᴇʙɴý čᴀs: &#00fbff" + level.hours + "ʜ"));
-                lore.add(FontUtils.parse("§7ᴏᴅᴍěɴᴀ: &#00ff44" + FontUtils.formatMoney(level.amount) + " $"));
-                lore.add(Component.empty());
-                if (claimed) {
-                    lore.add(FontUtils.parse("&#EA427F" + "ᴊɪž ᴠʏʙʀáɴᴏ"));
-                } else if (unlocked) {
-                    lore.add(FontUtils.parse("&#00ff44" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ᴠʏʙʀáɴí"));
-                } else {
-                    lore.add(FontUtils.parse("§c" + "ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ čᴀsᴜ"));
-                }
+                meta.displayName(FontUtils.parse(config.getString("gui.level-name", "&#ffbb00úʀᴏᴠᴇň %id%").replace("%id%", String.valueOf(level.id))));
+
+                String status = claimed ? config.getString("gui.status-claimed", "&#EA427Fᴊɪž ᴠʏʙʀáɴᴏ") :
+                                unlocked ? config.getString("gui.status-unlocked", "&#00ff44ᴋʟɪᴋɴɪ ᴘʀᴏ ᴠʏʙʀáɴí") :
+                                config.getString("gui.status-locked", "§cɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇᴋ čᴀsᴜ");
+
+                List<Component> lore = config.getStringList("gui.level-lore").stream()
+                        .map(s -> s.replace("%hours%", String.valueOf(level.hours))
+                                  .replace("%amount%", FontUtils.formatMoney(level.amount))
+                                  .replace("%status%", status))
+                        .map(FontUtils::parse)
+                        .collect(Collectors.toList());
+
                 meta.lore(lore);
                 item.setItemMeta(meta);
             }
@@ -138,6 +141,8 @@ public class PlaytimeRewardGui implements Listener {
         event.setCancelled(true);
         int slot = event.getRawSlot();
 
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("playtimerewards");
+
         if (slot == 48 && holder.page > 0) {
             open(player, holder.page - 1);
             return;
@@ -164,7 +169,7 @@ public class PlaytimeRewardGui implements Listener {
                     if (playtimeHours >= level.hours && !rewardManager.hasClaimedPlaytime(player.getUniqueId(), level.id)) {
                         rewardManager.setClaimedPlaytime(player.getUniqueId(), level.id);
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), level.command.replace("%player%", player.getName()));
-                        player.sendMessage(FontUtils.parse("&#00ff44" + "ᴏᴅᴍěɴᴀ ᴢᴀ úʀᴏᴠᴇň " + level.id + " ʙʏʟᴀ ᴠʏʙʀáɴᴀ!"));
+                        player.sendMessage(FontUtils.parse(config.getString("messages.claimed", "&#00ff44ᴏᴅᴍěɴᴀ ᴢᴀ úʀᴏᴠᴇň %id% ʙʏʟᴀ ᴠʏʙʀáɴᴀ!").replace("%id%", String.valueOf(level.id))));
                         open(player, holder.page); // Refresh
                     }
                 }

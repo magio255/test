@@ -14,76 +14,75 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class SocialsModule implements CommandExecutor {
     private final MagioCore plugin;
 
     public SocialsModule(MagioCore plugin) {
         this.plugin = plugin;
-        startBroadcastTask();
+        startAnnouncementTasks();
     }
 
-    private void startBroadcastTask() {
+    private void startAnnouncementTasks() {
         FileConfiguration config = plugin.getModuleManager().getModuleConfig("socials");
-        int interval = config.getInt("broadcast.interval", 15) * 1200;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                FileConfiguration c = plugin.getModuleManager().getModuleConfig("socials");
-                for (String msg : c.getStringList("broadcast.messages")) {
-                    if (msg.isEmpty()) {
-                        Bukkit.broadcast(Component.empty());
-                    } else {
-                        Bukkit.broadcast(FontUtils.parse(msg));
-                    }
+
+        // Discord Announcement
+        if (config.getBoolean("discord.periodic-announcement.enabled", false)) {
+            long interval = config.getInt("discord.periodic-announcement.interval", 15) * 1200L;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileConfiguration c = plugin.getModuleManager().getModuleConfig("socials");
+                    broadcast(c.getStringList("discord.periodic-announcement.messages"), c.getString("discord.periodic-announcement.sound"));
                 }
+            }.runTaskTimer(plugin, interval, interval);
+        }
 
-                String soundName = c.getString("broadcast.sound", "BLOCK_NOTE_BLOCK_PLING");
-                float vol = (float) c.getDouble("broadcast.volume", 1.0);
-                float pitch = (float) c.getDouble("broadcast.pitch", 2.0);
+        // Store Announcement
+        if (config.getBoolean("store.periodic-announcement.enabled", false)) {
+            long interval = config.getInt("store.periodic-announcement.interval", 20) * 1200L;
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    FileConfiguration c = plugin.getModuleManager().getModuleConfig("socials");
+                    broadcast(c.getStringList("store.periodic-announcement.messages"), c.getString("store.periodic-announcement.sound"));
+                }
+            }.runTaskTimer(plugin, interval, interval);
+        }
+    }
 
-                try {
-                    Sound sound = Sound.valueOf(soundName);
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        player.playSound(player.getLocation(), sound, vol, pitch);
-                    }
-                } catch (Exception ignored) {}
-            }
-        }.runTaskTimer(plugin, interval, interval);
+    private void broadcast(List<String> messages, String soundName) {
+        for (String msg : messages) {
+            if (msg.isEmpty()) Bukkit.broadcast(Component.empty());
+            else Bukkit.broadcast(FontUtils.parse(msg));
+        }
+        if (soundName != null && !soundName.isEmpty()) {
+            try {
+                Sound sound = Sound.valueOf(soundName);
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    player.playSound(player.getLocation(), sound, 1f, 1f);
+                }
+            } catch (Exception ignored) {}
+        }
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         FileConfiguration config = plugin.getModuleManager().getModuleConfig("socials");
-        if (command.getName().equalsIgnoreCase("discord")) {
-            String prefix = config.getString("discord.prefix");
-            String message = config.getString("discord.message");
-            String link = config.getString("discord.link");
+        String type = command.getName().equalsIgnoreCase("discord") ? "discord" : "store";
 
-            sender.sendMessage(FontUtils.parse(prefix));
-            sender.sendMessage("");
-            sender.sendMessage(FontUtils.parse(message));
+        String prefix = config.getString(type + ".prefix");
+        String message = config.getString(type + ".message");
+        String link = config.getString(type + ".link");
 
-            Component linkComp = FontUtils.parse("&#888888⤷ &n" + link, false)
-                    .clickEvent(ClickEvent.openUrl(link));
-            sender.sendMessage(linkComp);
-            return true;
-        }
+        sender.sendMessage(FontUtils.parse(prefix));
+        sender.sendMessage("");
+        sender.sendMessage(FontUtils.parse(message));
 
-        if (command.getName().equalsIgnoreCase("store")) {
-            String prefix = config.getString("store.prefix");
-            String message = config.getString("store.message");
-            String link = config.getString("store.link");
-
-            sender.sendMessage(FontUtils.parse(prefix));
-            sender.sendMessage("");
-            sender.sendMessage(FontUtils.parse(message));
-
-            Component linkComp = FontUtils.parse("&#888888⤷ &n" + link, false)
-                    .clickEvent(ClickEvent.openUrl(link));
-            sender.sendMessage(linkComp);
-            return true;
-        }
-
-        return false;
+        Component linkComp = FontUtils.parse("&#888888⤷ &n" + link, false)
+                .clickEvent(ClickEvent.openUrl(link));
+        sender.sendMessage(linkComp);
+        return true;
     }
 }

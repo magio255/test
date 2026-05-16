@@ -1,18 +1,18 @@
 package me.jules.magiocore;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,77 +28,81 @@ public class WarpCommands implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) return true;
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("warp");
 
-        String cmd = command.getName().toLowerCase();
-
-        switch (cmd) {
-            case "setwarp" -> {
-                if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
-                    player.sendMessage(FontUtils.parse("§c" + "ɴᴀ ᴛᴏʜʟᴇ ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇčɴá ᴏᴘʀáᴠɴěɴí!"));
-                    return true;
-                }
-                if (args.length == 0) {
-                    player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /sᴇᴛᴡᴀʀᴘ <ɴáᴢᴇᴠ>"));
-                    return true;
-                }
-                String name = args[0];
-                manager.setWarp(name, player.getLocation());
-                player.sendMessage(FontUtils.parse("&#00ff44" + "ᴡᴀʀᴘ &#ffbb00" + name + " &#00ff44ʙʏʟ úsᴘěšɴě ɴᴀsᴛᴀᴠᴇɴ ɴᴀ ᴛᴠé ᴘᴏᴢɪᴄɪ."));
+        if (command.getName().equalsIgnoreCase("setwarp")) {
+            if (!(sender instanceof Player player)) return true;
+            if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
+                player.sendMessage(FontUtils.parse(config.getString("messages.no-permission", "§cᴡᴀʀᴘ &#888888» §7Nemáš oprávnění.")));
+                return true;
             }
-            case "delwarp" -> {
-                if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
-                    player.sendMessage(FontUtils.parse("§c" + "ɴᴀ ᴛᴏʜʟᴇ ɴᴇᴍáš ᴅᴏsᴛᴀᴛᴇčɴá ᴏᴘʀáᴠɴěɴí!"));
-                    return true;
-                }
-                if (args.length == 0) {
-                    player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ᴅᴇʟᴡᴀʀᴘ <ɴáᴢᴇᴠ>"));
-                    return true;
-                }
-                String name = args[0];
-                if (!manager.exists(name)) {
-                    player.sendMessage(FontUtils.parse("§c" + "ᴛᴇɴᴛᴏ ᴡᴀʀᴘ ɴᴇᴇxɪsᴛᴜᴊᴇ."));
-                    return true;
-                }
-                manager.deleteWarp(name);
-                player.sendMessage(FontUtils.parse("§c" + "ᴡᴀʀᴘ &#ffbb00" + name + " §cʙʏʟ sᴍᴀᴢáɴ."));
+            if (args.length == 0) {
+                player.sendMessage(FontUtils.parse(config.getString("messages.usage-set", "§cᴡᴀʀᴘ &#888888» §7Použití: /setwarp <název>")));
+                return true;
             }
-            case "warp" -> {
-                if (args.length == 0) {
-                    sendWarpList(player);
-                    return true;
-                }
-                String name = args[0];
-                Warp warp = manager.getWarp(name);
-                if (warp == null) {
-                    player.sendMessage(FontUtils.parse("§c" + "ᴡᴀʀᴘ s ɴáᴢᴠᴇᴍ &#ffbb00" + name + " §cɴᴇᴇxɪsᴛᴜᴊᴇ!"));
-                    return true;
-                }
-                player.sendMessage(FontUtils.parse("§7" + "ᴛᴇʟᴇᴘᴏʀᴛᴜᴊɪ ɴᴀ ᴡᴀʀᴘ &#ffbb00" + warp.getName() + "§7..."));
-                TeleportUtils.startTeleportCountdown(player, warp.getLocation(), plugin, success -> {});
-            }
+            manager.setWarp(args[0], player.getLocation());
+            player.sendMessage(FontUtils.parse(config.getString("messages.set", "&#00ff44ᴡᴀʀᴘ &#888888» §7Warp &#00ff44%name% §7byl nastaven.").replace("%name%", args[0])));
+            return true;
         }
 
-        return true;
+        if (command.getName().equalsIgnoreCase("delwarp")) {
+            if (!(sender instanceof Player player)) return true;
+            if (!player.hasPermission("magiocore.admin") && !player.isOp()) {
+                player.sendMessage(FontUtils.parse(config.getString("messages.no-permission", "§cᴡᴀʀᴘ &#888888» §7Nemáš oprávnění.")));
+                return true;
+            }
+            if (args.length == 0) {
+                player.sendMessage(FontUtils.parse(config.getString("messages.usage-del", "§cᴡᴀʀᴘ &#888888» §7Použití: /delwarp <název>")));
+                return true;
+            }
+            if (manager.getWarp(args[0]) == null) {
+                player.sendMessage(FontUtils.parse(config.getString("messages.not-found", "§cᴡᴀʀᴘ &#888888» §7Warp nebyl nalezen.")));
+                return true;
+            }
+            manager.deleteWarp(args[0]);
+            player.sendMessage(FontUtils.parse(config.getString("messages.deleted", "§cᴡᴀʀᴘ &#888888» §7Warp &#00fbff%name% §7byl smazán.").replace("%name%", args[0])));
+            return true;
+        }
+
+        if (command.getName().equalsIgnoreCase("warp")) {
+            if (!(sender instanceof Player player)) return true;
+            if (args.length == 0) {
+                showWarpList(player);
+                return true;
+            }
+
+            Warp warp = manager.getWarp(args[0]);
+            if (warp == null) {
+                player.sendMessage(FontUtils.parse(config.getString("messages.not-found", "§cᴡᴀʀᴘ &#888888» §7Warp nebyl nalezen.")));
+                return true;
+            }
+
+            player.sendMessage(FontUtils.parse(config.getString("messages.teleport", "&#00fbffᴡᴀʀᴘ &#888888» §7Teleportuji na warp &#00fbff%name%§7...").replace("%name%", warp.getName())));
+            TeleportUtils.startTeleportCountdown(player, warp.getLocation(), plugin, success -> {});
+            return true;
+        }
+
+        return false;
     }
 
-    private void sendWarpList(Player player) {
-        Collection<Warp> warps = manager.getWarps();
+    private void showWarpList(Player player) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("warp");
+        List<Warp> warps = new ArrayList<>(manager.getWarps());
         if (warps.isEmpty()) {
-            player.sendMessage(FontUtils.parse("&#ffbb00" + "ᴅᴏsᴛᴜᴘɴé ᴡᴀʀᴘʏ: §7" + "žáᴅɴé"));
+            player.sendMessage(FontUtils.parse(config.getString("messages.not-found", "§cᴡᴀʀᴘ &#888888» §7Žádné warpy nejsou nastaveny.")));
             return;
         }
 
-        List<Component> warpComponents = warps.stream()
-                .map(Warp::getName)
-                .sorted(String.CASE_INSENSITIVE_ORDER)
-                .map(name -> FontUtils.parse("&#00fbff" + name)
-                        .hoverEvent(HoverEvent.showText(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛ ɴᴀ ᴡᴀʀᴘ &#00fbff" + name)))
-                        .clickEvent(ClickEvent.runCommand("/warp " + name)))
-                .collect(Collectors.toList());
+        player.sendMessage(FontUtils.parse(config.getString("messages.list-header", "&#EA427F» ʟɪsᴛ ᴡᴀʀᴘů")));
+        for (Warp warp : warps) {
+            String format = config.getString("messages.list-format", " &#888888• &#00fbff%name%").replace("%name%", warp.getName());
+            String hover = config.getString("messages.list-hover", "&#00fbffᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛ");
 
-        Component list = Component.join(JoinConfiguration.separator(FontUtils.parse("§7, ")), warpComponents);
-        player.sendMessage(FontUtils.parse("&#ffbb00" + "ᴅᴏsᴛᴜᴘɴé ᴡᴀʀᴘʏ: ").append(list));
+            Component line = FontUtils.parse(format)
+                    .hoverEvent(HoverEvent.showText(FontUtils.parse(hover)))
+                    .clickEvent(ClickEvent.runCommand("/warp " + warp.getName()));
+            player.sendMessage(line);
+        }
     }
 
     @Override
@@ -106,7 +110,7 @@ public class WarpCommands implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             return manager.getWarps().stream()
                     .map(Warp::getName)
-                    .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
+                    .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();

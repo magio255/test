@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,8 @@ public class MessageCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        FileConfiguration config = MagioCore.getPlugin(MagioCore.class).getModuleManager().getModuleConfig("msg");
+
         if (command.getName().equalsIgnoreCase("msg")) {
             if (!(sender instanceof Player player)) {
                 sender.sendMessage("Pouze pro hráče.");
@@ -24,13 +27,13 @@ public class MessageCommand implements CommandExecutor {
             }
 
             if (args.length < 2) {
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ᴍsɢ <ʜʀáč> <ᴢᴘʀáᴠᴀ>"));
+                player.sendMessage(FontUtils.parse(config.getString("messages.usage", "§cᴘᴏᴜžɪᴛí: /ᴍsɢ <ʜʀáč> <ᴢᴘʀáᴠᴀ>")));
                 return true;
             }
 
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
-                player.sendMessage(FontUtils.parse("§c" + "ʜʀáč ɴᴇɴí ᴏɴʟɪɴᴇ."));
+                player.sendMessage(FontUtils.parse(config.getString("messages.offline", "§cʜʀáč ɴᴇɴí ᴏɴʟɪɴᴇ.")));
                 return true;
             }
 
@@ -50,19 +53,19 @@ public class MessageCommand implements CommandExecutor {
             }
 
             if (args.length < 1) {
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴜžɪᴛí: /ʀ <ᴢᴘʀáᴠᴀ>"));
+                player.sendMessage(FontUtils.parse(config.getString("messages.usage-reply", "§cᴘᴏᴜžɪᴛí: /ʀ <ᴢᴘʀáᴠᴀ>")));
                 return true;
             }
 
             UUID targetUUID = lastMessaged.get(player.getUniqueId());
             if (targetUUID == null) {
-                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴋᴏᴍᴜ ᴏᴅᴘᴏᴠěᴅěᴛ."));
+                player.sendMessage(FontUtils.parse(config.getString("messages.no-reply", "§cɴᴇᴍáš ᴋᴏᴍᴜ ᴏᴅᴘᴏᴠěᴅěᴛ.")));
                 return true;
             }
 
             Player target = Bukkit.getPlayer(targetUUID);
             if (target == null) {
-                player.sendMessage(FontUtils.parse("§c" + "ʜʀáč ᴊíž ɴᴇɴí ᴏɴʟɪɴᴇ."));
+                player.sendMessage(FontUtils.parse(config.getString("messages.offline", "§cʜʀáč ᴊíž ɴᴇɴí ᴏɴʟɪɴᴇ.")));
                 return true;
             }
 
@@ -79,18 +82,22 @@ public class MessageCommand implements CommandExecutor {
     }
 
     private void sendPrivateMessage(Player sender, Player target, String message) {
-        if (MagioCore.getPlugin(MagioCore.class).getIgnoreModule().isIgnored(target.getUniqueId(), sender.getUniqueId())) {
-            sender.sendMessage(FontUtils.parse("§cᴛᴇɴᴛᴏ ʜʀáč ᴛě ɪɢɴᴏʀᴜᴊᴇ."));
+        MagioCore plugin = MagioCore.getPlugin(MagioCore.class);
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("msg");
+
+        if (plugin.getIgnoreModule().isIgnored(target.getUniqueId(), sender.getUniqueId())) {
+            sender.sendMessage(FontUtils.parse(config.getString("messages.ignored", "§cᴛᴇɴᴛᴏ ʜʀáč ᴛě ɪɢɴᴏʀᴜᴊᴇ.")));
             return;
         }
 
-        // Format: Name » Name: Message
-        // Colors: Sender(Blue), Arrow(Gray), Target(Blue), Colon(Gray), Message(White)
         String senderName = sender.getName();
         String targetName = target.getName();
 
-        Component header = FontUtils.parse("&#00fbff" + senderName + " &#888888» &#00fbff" + targetName + "§7: ");
-        Component content = FontUtils.parse("§f" + message, false);
+        String headerFormat = config.getString("format.header", "&#00fbff%sender% &#888888» &#00fbff%receiver%§7: ");
+        String contentFormat = config.getString("format.content", "§f%message%");
+
+        Component header = FontUtils.parse(headerFormat.replace("%sender%", senderName).replace("%receiver%", targetName));
+        Component content = FontUtils.parse(contentFormat.replace("%message%", message), false);
         Component fullMessage = header.append(content);
 
         sender.sendMessage(fullMessage);

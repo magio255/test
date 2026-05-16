@@ -1,20 +1,19 @@
 package me.jules.magiocore;
 
-import io.papermc.paper.event.player.AsyncChatEvent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatListener implements Listener {
     private final MagioCore plugin;
-    private final Map<UUID, Long> lastMessage = new ConcurrentHashMap<>();
+    private final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
     private final Map<UUID, Boolean> searchMode = new ConcurrentHashMap<>();
 
     public ChatListener(MagioCore plugin) {
@@ -27,68 +26,46 @@ public class ChatListener implements Listener {
     }
 
     @EventHandler
-    public void onChat(AsyncChatEvent event) {
+    public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
         // Check ignored players
-        event.viewers().removeIf(viewer -> {
-            if (viewer instanceof Player viewerPlayer) {
-                return plugin.getIgnoreModule().isIgnored(viewerPlayer.getUniqueId(), player.getUniqueId());
-            }
-            return false;
+        event.getRecipients().removeIf(viewerPlayer -> {
+            return plugin.getIgnoreModule().isIgnored(viewerPlayer.getUniqueId(), player.getUniqueId());
         });
-        String message = LegacyComponentSerializer.legacySection().serialize(event.originalMessage());
+
+        String message = event.getMessage();
 
         if (ItemEditListener.pendingInput.containsKey(player.getUniqueId())) {
-            event.setCancelled(true);
-            String type = ItemEditListener.pendingInput.remove(player.getUniqueId());
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                player.performCommand("ie " + type.replace("_", " ") + " " + message);
-            });
-            return;
+            return; // Handled by ItemEditListener
         }
 
         if (searchMode.getOrDefault(player.getUniqueId(), false)) {
             event.setCancelled(true);
             setSearchMode(player.getUniqueId(), false);
-            handleBaltopSearch(player, message);
+            plugin.getBaltopGui().handleSearch(player, message);
             return;
         }
 
-        if (player.isOp()) return;
+        if (player.hasPermission("magiocore.admin") || player.isOp()) return;
 
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("chat");
+        long delay = config.getLong("anti-spam.delay", 2) * 1000L;
         long now = System.currentTimeMillis();
-        long delay = plugin.getConfig().getInt("anti-spam.delay", 2) * 1000L;
-
-        if (lastMessage.containsKey(player.getUniqueId())) {
-            long last = lastMessage.get(player.getUniqueId());
+        if (cooldowns.containsKey(player.getUniqueId())) {
+            long last = cooldowns.get(player.getUniqueId());
             if (now - last < delay) {
                 event.setCancelled(true);
-                player.sendMessage(FontUtils.parse("§c" + "ᴘᴏᴍᴀʟʏ! ᴍᴜsíš ᴘᴏčᴋᴀᴛ ᴘřᴇᴅ ᴅᴀʟšíᴍ ᴘᴏsʟáɴíᴍ ᴢᴘʀáᴠʏ"));
+                player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴘíš ᴛᴀᴋ ʀʏᴄʜʟᴇ."));
                 return;
             }
         }
-
-        lastMessage.put(player.getUniqueId(), now);
+        cooldowns.put(player.getUniqueId(), now);
     }
 
-    private void handleBaltopSearch(Player player, String message) {
-        List<BaltopManager.BaltopEntry> top = plugin.getBaltopManager().getCachedTop();
-        int rank = 0;
-        boolean found = false;
-
-        for (int i = 0; i < top.size(); i++) {
-            BaltopManager.BaltopEntry entry = top.get(i);
-            if (entry.name().equalsIgnoreCase(message)) {
-                found = true;
-                rank = i + 1;
-                player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00" + entry.name() + " §fᴊᴇ ɴᴀ &#00fbff" + rank + ". §fᴍísᴛě s ʙᴀʟᴀɴᴄí &#00ff44" + FontUtils.formatMoney(entry.balance()) + " $"));
-                break;
-            }
-        }
-
-        if (!found) {
-            player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ʜʀáč " + "&#ffbb00" + message + " §fɴᴇʙʏʟ ɴᴀʟᴇᴢᴇɴ ᴠ ʙᴀʟᴛᴏᴘᴜ"));
-        }
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        cooldowns.remove(event.getPlayer().getUniqueId());
+        searchMode.remove(event.getPlayer().getUniqueId());
     }
 }

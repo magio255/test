@@ -2,6 +2,7 @@ package me.jules.magiocore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,7 +24,6 @@ import java.util.UUID;
 public class BaltopGui implements Listener {
     private final MagioCore plugin;
     private final BaltopManager manager;
-    private final String title = "&#EA427F» " + "ʙᴀʟᴛᴏᴘ";
     private final Map<UUID, Integer> playerPages = new HashMap<>();
 
     public BaltopGui(MagioCore plugin, BaltopManager manager) {
@@ -32,6 +32,9 @@ public class BaltopGui implements Listener {
     }
 
     public void open(Player player, int page) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("baltop");
+        String title = config.getString("gui.title", "&#EA427F» ʙᴀʟᴛᴏᴘ");
+
         Inventory inv = Bukkit.createInventory(new BaltopGuiHolder(), 54, FontUtils.parse(title));
         List<BaltopManager.BaltopEntry> top = manager.getCachedTop();
 
@@ -83,11 +86,34 @@ public class BaltopGui implements Listener {
         }
 
         // Navigation
-        inv.setItem(48, createNav("§c" + "ᴢᴘěᴛ", Material.ARROW));
-        inv.setItem(49, createNav("&#ffbb00" + "ʜʟᴇᴅᴀᴛ ʜʀáčᴇ", Material.OAK_SIGN));
-        inv.setItem(50, createNav("&#00ff44" + "ᴅᴀʟší", Material.ARROW));
+        inv.setItem(48, createNav(config.getString("gui.nav-back", "§c" + "ᴢᴘěᴛ"), Material.ARROW));
+        inv.setItem(49, createNav(config.getString("gui.nav-search", "&#ffbb00" + "ʜʟᴇᴅᴀᴛ ʜʀáčᴇ"), Material.OAK_SIGN));
+        inv.setItem(50, createNav(config.getString("gui.nav-next", "&#00ff44" + "ᴅᴀʟší"), Material.ARROW));
 
         player.openInventory(inv);
+    }
+
+    public void handleSearch(Player player, String targetName) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("baltop");
+        BaltopManager.BaltopEntry entry = null;
+        for (BaltopManager.BaltopEntry e : manager.getCachedTop()) {
+            if (e.name().equalsIgnoreCase(targetName)) {
+                entry = e;
+                break;
+            }
+        }
+
+        if (entry != null) {
+            int rank = manager.getCachedTop().indexOf(entry) + 1;
+            String resultFormat = config.getString("gui.search-result", "&#EA427Fʙᴀʟᴛᴏᴘ &#888888» &#ffbb00%rank%. §f%player% §7- &#00ff44%balance% $");
+            player.sendMessage(FontUtils.parse(resultFormat
+                    .replace("%rank%", String.valueOf(rank))
+                    .replace("%player%", entry.name())
+                    .replace("%balance%", FontUtils.formatMoney(entry.balance()))));
+        } else {
+            String notFound = config.getString("gui.not-found", "&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §cʜʀáč ɴᴇʙʏʟ ɴᴀʟᴇᴢᴇɴ.");
+            player.sendMessage(FontUtils.parse(notFound));
+        }
     }
 
     private ItemStack createNav(String name, Material mat) {
@@ -114,8 +140,9 @@ public class BaltopGui implements Listener {
         } else if (slot == 50) { // Next
             if (page * 28 < manager.getCachedTop().size()) open(player, page + 1);
         } else if (slot == 49) { // Search
+            FileConfiguration config = plugin.getModuleManager().getModuleConfig("baltop");
             player.closeInventory();
-            player.sendMessage(FontUtils.parse("&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §f" + "ɴᴀᴘɪš ᴊᴍéɴᴏ ʜʀáčᴇ ᴅᴏ ᴄʜᴀᴛᴜ:"));
+            player.sendMessage(FontUtils.parse(config.getString("gui.search-prompt", "&#EA427Fʙᴀʟᴛᴏᴘ &#888888» §fɴᴀᴘɪš ᴊᴍéɴᴏ ʜʀáčᴇ ᴅᴏ ᴄʜᴀᴛᴜ:")));
             plugin.getChatListener().setSearchMode(player.getUniqueId(), true);
         }
     }
@@ -129,8 +156,6 @@ public class BaltopGui implements Listener {
 
     private static class BaltopGuiHolder implements InventoryHolder {
         @Override
-        public @NotNull Inventory getInventory() {
-            return null;
-        }
+        public @NotNull Inventory getInventory() { return null; }
     }
 }

@@ -3,6 +3,7 @@ package me.jules.magiocore.modules;
 import me.jules.magiocore.MagioCore;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -19,7 +20,8 @@ public class AntiGriefModule implements Listener {
     }
 
     private void startDifficultyTask() {
-        if (!plugin.getConfig().getBoolean("antigrief.difficulty-task", true)) return;
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("antigrief");
+        if (!config.getBoolean("difficulty-task", true)) return;
 
         new BukkitRunnable() {
             @Override
@@ -31,8 +33,9 @@ public class AntiGriefModule implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("antigrief");
         String message = event.getMessage().toLowerCase();
-        List<String> bannedWords = plugin.getConfig().getStringList("antigrief.banned-words");
+        List<String> bannedWords = config.getStringList("banned-words");
 
         for (String word : bannedWords) {
             if (message.contains(word.toLowerCase())) {

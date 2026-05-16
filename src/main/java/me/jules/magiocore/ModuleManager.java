@@ -50,7 +50,10 @@ public class ModuleManager {
     private void loadAllModuleConfigs() {
         String[] modules = {
             "home", "tpa", "spawn", "autorestart", "socials", "keyall", "freeze",
-            "antigrief", "deathsystem", "virtualspawner", "coinflip", "baltop"
+            "antigrief", "deathsystem", "virtualspawner", "coinflip", "baltop",
+            "gamemode", "rtp", "flyspeed", "playtime", "invsee", "dailyrewards",
+            "playtimerewards", "itemedit", "utilities", "vanish", "warp", "afkzone", "msg",
+            "join", "chat"
         };
         for (String module : modules) {
             File file = new File(modulesDir, module + ".yml");

@@ -58,7 +58,8 @@ public class VirtualSpawnerManager {
 
                 EntityType type = EntityType.valueOf(s.getString("type", "ZOMBIE"));
                 int count = s.getInt("count", 1);
-                int timeLeft = s.getInt("timeLeft", plugin.getConfig().getInt("spawner.delay", 25));
+                int delay = plugin.getModuleManager().getModuleConfig("virtualspawner").getInt("delay", 25);
+                int timeLeft = s.getInt("timeLeft", delay);
                 List<ItemStack> loot = (List<ItemStack>) s.getList("loot", new ArrayList<>());
                 Set<Material> blocked = new HashSet<>();
                 List<String> blockedNames = s.getStringList("blocked");
@@ -106,7 +107,8 @@ public class VirtualSpawnerManager {
                 if (playerNearby) {
                     data.timeLeft--;
                     if (data.timeLeft <= 0) {
-                        data.timeLeft = plugin.getConfig().getInt("spawner.delay", 25);
+                        int delay = plugin.getModuleManager().getModuleConfig("virtualspawner").getInt("delay", 25);
+                        data.timeLeft = delay;
                         generateLoot(data);
                     }
                 }
@@ -118,6 +120,7 @@ public class VirtualSpawnerManager {
     private void updateHologram(VirtualSpawnerData data) {
         if (data.location.getWorld() == null || !data.location.isChunkLoaded()) return;
 
+        FileConfiguration modConfig = plugin.getModuleManager().getModuleConfig("virtualspawner");
         if (data.hologram == null || !data.hologram.isValid()) {
             Location loc = data.location.clone().add(0.5, 1.5, 0.5);
 
@@ -142,6 +145,7 @@ public class VirtualSpawnerManager {
         }
 
         int lootCount = data.loot.stream().mapToInt(ItemStack::getAmount).sum();
+        String title = modConfig.getString("gui.title", "ᴠɪʀᴛᴜáʟɴí sᴘᴀᴡɴᴇʀ");
         String text = "&#00fbff&l" + data.type.name() + " sᴘᴀᴡɴᴇʀ §8(x" + data.count + ")\n" +
                      "&7ꜱᴇʀᴠᴇʀ ᴠɪʀᴛᴜᴀʟ ꜱʏꜱᴛᴇᴍ\n" +
                      "&r\n" +
@@ -229,7 +233,7 @@ public class VirtualSpawnerManager {
     }
 
     public void addSpawner(Location loc, EntityType type) {
-        int delay = plugin.getConfig().getInt("spawner.delay", 25);
+        int delay = plugin.getModuleManager().getModuleConfig("virtualspawner").getInt("delay", 25);
         VirtualSpawnerData data = new VirtualSpawnerData(loc, type, 1, delay, new ArrayList<>(), new HashSet<>());
         spawners.put(loc, data);
         updateHologram(data);

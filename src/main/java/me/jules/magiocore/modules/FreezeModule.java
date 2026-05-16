@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -42,13 +43,14 @@ public class FreezeModule implements CommandExecutor, Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
+                FileConfiguration config = plugin.getModuleManager().getModuleConfig("freeze");
                 for (UUID uuid : frozenPlayers) {
                     Player player = Bukkit.getPlayer(uuid);
                     if (player != null) {
-                        String title = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse("&#ff0000" + "ᴊsɪ ᴢᴍʀᴀžᴇɴ"));
-                        String sub = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse("§7Dostav se do čekárny na Discordu"));
+                        String title = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse(config.getString("messages.title", "&#ff0000ᴊsɪ ᴢᴍʀᴀžᴇɴ")));
+                        String sub = net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(FontUtils.parse(config.getString("messages.subtitle", "§7Dostav se do čekárny na Discordu")));
                         player.sendTitle(title, sub, 0, 40, 0);
-                        player.sendActionBar(FontUtils.parse("&#ff0000" + "ꜰʀᴇᴇᴢᴇ ᴀᴋᴛɪᴠɴí"));
+                        player.sendActionBar(FontUtils.parse(config.getString("messages.actionbar", "&#ff0000ꜰʀᴇᴇᴢᴇ ᴀᴋᴛɪᴠɴí")));
                     }
                 }
             }
@@ -70,6 +72,7 @@ public class FreezeModule implements CommandExecutor, Listener {
             return true;
         }
 
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("freeze");
         if (command.getName().equalsIgnoreCase("freeze")) {
             if (frozenPlayers.contains(target.getUniqueId())) {
                 sender.sendMessage(prefix + "Hráč už je frozen.");
@@ -82,8 +85,7 @@ public class FreezeModule implements CommandExecutor, Listener {
             target.playSound(target.getLocation(), Sound.ENTITY_ENDERMAN_STARE, 1f, 0.5f);
 
             sender.sendMessage(prefix + "Zmrazil jsi " + target.getName() + ".");
-            target.sendMessage(FontUtils.parse("&#ff0000" + "ʙʏʟ ᴊsɪ ꜰʀᴇᴇᴢɴᴜᴛ"));
-            target.sendMessage(FontUtils.parse("§7Nehýbej se a neodpojuj se."));
+            target.sendMessage(FontUtils.parse(config.getString("messages.frozen", "&#ff0000ʙʏʟ ᴊsɪ ꜰʀᴇᴇᴢɴᴜᴛ")));
             return true;
         }
 
@@ -98,7 +100,7 @@ public class FreezeModule implements CommandExecutor, Listener {
             target.playSound(target.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.5f);
 
             sender.sendMessage(prefix + "Odmrazil jsi " + target.getName() + ".");
-            target.sendMessage(FontUtils.parse("&#00ff44" + "ʙʏʟ ᴊsɪ ᴜɴꜰʀᴇᴇᴢɴᴜᴛ."));
+            target.sendMessage(FontUtils.parse(config.getString("messages.unfrozen", "&#00ff44ʙʏʟ ᴊsɪ ᴜɴꜰʀᴇᴇᴢɴᴜᴛ.")));
             return true;
         }
 
@@ -106,15 +108,16 @@ public class FreezeModule implements CommandExecutor, Listener {
     }
 
     private Location getFreezeLocation() {
-        String worldName = plugin.getConfig().getString("freeze.spawn-location.world", "spawn");
+        FileConfiguration config = plugin.getModuleManager().getModuleConfig("freeze");
+        String worldName = config.getString("spawn-location.world", "spawn");
         World world = Bukkit.getWorld(worldName);
         if (world == null) world = Bukkit.getWorlds().get(0);
 
-        double x = plugin.getConfig().getDouble("freeze.spawn-location.x", 39.5);
-        double y = plugin.getConfig().getDouble("freeze.spawn-location.y", 94.0);
-        double z = plugin.getConfig().getDouble("freeze.spawn-location.z", -13.5);
-        float yaw = (float) plugin.getConfig().getDouble("freeze.spawn-location.yaw", 0.0);
-        float pitch = (float) plugin.getConfig().getDouble("freeze.spawn-location.pitch", 0.0);
+        double x = config.getDouble("spawn-location.x", 39.5);
+        double y = config.getDouble("spawn-location.y", 94.0);
+        double z = config.getDouble("spawn-location.z", -13.5);
+        float yaw = (float) config.getDouble("spawn-location.yaw", 0.0);
+        float pitch = (float) config.getDouble("spawn-location.pitch", 0.0);
 
         return new Location(world, x, y, z, yaw, pitch);
     }
