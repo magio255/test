@@ -114,7 +114,9 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
         String sentMsg = config.getString("messages.sent", "&#00fbffᴛᴘᴀ &#888888» §7Zaslal jsi žádost hráči &#00fbff%player%").replace("%player%", target.getName());
         player.sendMessage(FontUtils.parse(sentMsg));
 
-        String receivedMsg = config.getString("messages.received", "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7se chce k tobě teleportovat.").replace("%player%", player.getName());
+        String key = type.equals("to") ? "messages.received-tpa" : "messages.received-tpahere";
+        String def = type.equals("to") ? "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7se chce k tobě teleportovat." : "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7chce, abys se k němu teleportoval.";
+        String receivedMsg = config.getString(key, def).replace("%player%", player.getName());
         target.sendMessage(FontUtils.parse(receivedMsg));
 
         Component accept = FontUtils.parse("&#00ff44[ᴘᴏᴛᴠʀᴅɪᴛ]")

@@ -1,7 +1,8 @@
 delay: 60 # seconds
 messages:
   sent: "&#00fbffᴛᴘᴀ &#888888» §7Zaslal jsi žádost hráči &#00fbff%player%"
-  received: "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7se chce k tobě teleportovat."
+  received-tpa: "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7se chce k tobě teleportovat."
+  received-tpahere: "&#00fbffᴛᴘᴀ &#888888» §7Hráč &#00fbff%player% §7chce, abys se k němu teleportoval."
   accepted: "&#00fbffᴛᴘᴀ &#888888» §7Žádost přijata."
   denied: "§cᴛᴘᴀ &#888888» §7Žádost odmítnuta."
   cooldown: "§cᴛᴘᴀ &#888888» §7Musíš počkat ještě %time%s."
