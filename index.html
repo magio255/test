@@ -451,9 +451,10 @@
             <div class="nav-links">
                 <a href="#features">Funkce</a>
                 <a href="#commands">Příkazy</a>
-                <a href="#permissions">Oprávnění</a>
+                <a href="#design">Design</a>
+                <a href="#gallery">Galerie</a>
             </div>
-            <a href="monitor.html" class="btn btn-secondary" style="padding: 8px 16px; font-size: 12px;">Monitor</a>
+            <div style="width: 80px;"></div> <!-- Spacer for symmetry -->
         </div>
     </nav>
 
@@ -537,12 +538,31 @@
         </div>
     </section>
 
-    <section id="permissions" class="perms-section">
-        <div class="container">
-            <h2 class="section-title">Oprávnění</h2>
-            <div class="perms-list" id="perms-container">
-                <!-- Permissions will be inserted here -->
+    <section id="design" class="container" style="padding: 100px 0;">
+        <h2 class="section-title">Minimalistický Design</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Hex Barvy</h3>
+                <p>Používáme přesné Hex barevné kódy pro moderní a čistý vzhled všech zpráv a menu.</p>
             </div>
+            <div class="feature-card">
+                <div class="feature-icon">🅰️</div>
+                <h3>Small Caps</h3>
+                <p>Unikátní písmo Small Caps dodává serveru profesionální a sjednocenou identitu.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <h3>Čistota</h3>
+                <p>Žádné zbytečné emodži ani tučné písmo. Jen čistý, funkční a estetický zážitek.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="container" style="padding: 100px 0; border-top: 1px solid var(--border);">
+        <h2 class="section-title">Galerie</h2>
+        <div class="features-grid" id="showcase-gallery">
+            <!-- Gallery items will be inserted here -->
         </div>
     </section>
 
@@ -578,10 +598,9 @@
                 { name: '/spawn', usage: '/spawn', desc: 'Teleport na spawn.' },
                 { name: '/rtp', usage: '/rtp', desc: 'Náhodný teleport.',
                   images: [
-                    { src: 'assets/rtp/gui.png', title: 'Výběr světa' },
-                    { src: 'assets/rtp/overworld.png', title: 'Overworld' },
-                    { src: 'assets/rtp/nether.png', title: 'Nether' },
-                    { src: 'assets/rtp/end.png', title: 'End' }
+                    { src: 'assets/gallery/rtp_overworld.png', title: 'Overworld' },
+                    { src: 'assets/gallery/rtp_nether.png', title: 'Nether' },
+                    { src: 'assets/gallery/rtp_end.png', title: 'End' }
                   ]
                 },
                 { name: '/warp', usage: '/warp [název]', desc: 'Teleportuje tě na warp.' },
@@ -591,7 +610,11 @@
                 { name: '/playtime', usage: '/playtime [hráč]', desc: 'Ukáže odehraný čas.' },
                 { name: '/dailyrewards', usage: '/dailyrewards', desc: 'Otevře menu denních odměn.' },
                 { name: '/playtimerewards', usage: '/playtimerewards', desc: 'Otevře menu odměn za odehraný čas.' },
-                { name: '/coinflip', usage: '/coinflip [částka]', desc: 'Hazardní hra coinflip.', alias: 'cf' },
+                { name: '/coinflip', usage: '/coinflip [částka]', desc: 'Hazardní hra coinflip.', alias: 'cf',
+                  images: [
+                    { src: 'assets/gallery/coinflip.png', title: 'Coinflip Menu' }
+                  ]
+                },
                 { name: '/baltop', usage: '/baltop [strana]', desc: 'Zobrazí žebříček nejbohatších hráčů.' },
                 { name: '/flyspeed', usage: '/flyspeed [1-10]', desc: 'Nastaví tvou rychlost létání.' },
                 { name: '/hat', usage: '/hat [remove]', desc: 'Nasadí si předmět na hlavu.', alias: 'head' },
@@ -644,27 +667,11 @@
             ]
         };
 
-        const permissions = [
-            { node: 'magiocore.home', desc: 'Přístup k příkazům domovů.' },
-            { node: 'magiocore.tpa', desc: 'Přístup k TPA příkazům.' },
-            { node: 'magiocore.spawn', desc: 'Přístup k příkazům spawnu.' },
-            { node: 'magiocore.admin', desc: 'Administrátorská práva (OP).' },
-            { node: 'magiocore.gmc/gms/gmsp/gma', desc: 'Přístup k jednotlivým herním módům.' },
-            { node: 'magiocore.rtp', desc: 'Přístup k náhodnému teleportu.' },
-            { node: 'magiocore.flyspeed', desc: 'Nastavení rychlosti létání.' },
-            { node: 'magiocore.playtime', desc: 'Zobrazení odehraného času.' },
-            { node: 'magiocore.coinflip', desc: 'Přístup k hazardní hře Coinflip.' },
-            { node: 'magiocore.invsee', desc: 'Nahlížení do inventářů ostatních.' },
-            { node: 'magiocore.baltop', desc: 'Zobrazení žebříčku bohatství.' },
-            { node: 'magiocore.rewards', desc: 'Přístup k denním a playtime odměnám.' },
-            { node: 'itemedit.itemedit.*', desc: 'Plný přístup k vizuálnímu editoru předmětů.' },
-            { node: 'magiocore.broadcast', desc: 'Rozesílání globálních zpráv.' },
-            { node: 'magiocore.vanish', desc: 'Možnost zneviditelnění pro ostatní.' },
-            { node: 'magiocore.vanish.see', desc: 'Schopnost vidět neviditelné hráče.' },
-            { node: 'magiocore.virtualspawner', desc: 'Správa virtuálních spawnerů.' },
-            { node: 'magiocore.hat', desc: 'Možnost nasadit si blok na hlavu.' },
-            { node: 'magiocore.ptime/pweather', desc: 'Změna klientského času a počasí.' },
-            { node: 'magiocore.home.X', desc: 'Nastavení limitu domovů (0-7).' }
+        const galleryItems = [
+            { src: 'assets/gallery/rtp_overworld.png', title: 'RTP - Hlavní svět' },
+            { src: 'assets/gallery/rtp_nether.png', title: 'RTP - Nether' },
+            { src: 'assets/gallery/rtp_end.png', title: 'RTP - End' },
+            { src: 'assets/gallery/coinflip.png', title: 'Coinflip Menu' }
         ];
 
         let currentGallery = [];
@@ -718,16 +725,27 @@
             });
         }
 
-        function renderPermissions() {
-            const container = document.getElementById('perms-container');
-            permissions.forEach(p => {
-                const item = document.createElement('div');
-                item.className = 'perm-item';
-                item.innerHTML = `
-                    <span class="perm-node">${p.node}</span>
-                    <span class="perm-desc">${p.desc}</span>
+        function renderGallery() {
+            const container = document.getElementById('showcase-gallery');
+            galleryItems.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+                card.style.padding = '0';
+                card.style.overflow = 'hidden';
+                card.style.cursor = 'pointer';
+                card.onclick = () => {
+                    currentGallery = galleryItems;
+                    currentIndex = idx;
+                    showImage();
+                    document.getElementById('galleryModal').classList.add('active');
+                };
+                card.innerHTML = `
+                    <img src="${item.src}" alt="${item.title}" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 20px;">
+                        <h3 style="font-size: 16px; margin-bottom: 0;">${item.title}</h3>
+                    </div>
                 `;
-                container.appendChild(item);
+                container.appendChild(card);
             });
         }
 
@@ -790,7 +808,7 @@
         })();
 
         renderCommands();
-        renderPermissions();
+        renderGallery();
     </script>
 </body>
 </html>
