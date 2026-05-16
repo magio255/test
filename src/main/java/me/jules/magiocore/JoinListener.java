@@ -33,6 +33,12 @@ public class JoinListener implements Listener {
             if (config.getBoolean("join-message.show-head", true)) {
                 sendHeadMessage(player, config.getStringList("join-message.first-join.side-messages"));
             }
+
+            // Teleport to spawn on first join
+            org.bukkit.Location spawn = plugin.getConfig().getLocation("spawn");
+            if (spawn != null) {
+                player.teleport(spawn);
+            }
         } else {
             String format = config.getString("join-message.private-welcome.format", "§7Vítej zpět, &#00fbff%player%§7!");
             Component msg = FontUtils.parse(format.replace("%player%", player.getName()));
