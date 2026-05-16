@@ -43,7 +43,8 @@ public class UtilityCommands implements CommandExecutor, TabCompleter {
         switch (cmd) {
             case "afk" -> {
                 if (!(sender instanceof Player player)) return true;
-                Location afkLoc = plugin.getConfig().getLocation("afk-location");
+                FileConfiguration afkConfig = plugin.getModuleManager().getModuleConfig("afkzone");
+                Location afkLoc = afkConfig.getLocation("location");
                 if (afkLoc == null) {
                     player.sendMessage(FontUtils.parse(config.getString("messages.afk-not-set", "§cᴀꜰᴋ ᴢóɴᴀ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴᴀ.")));
                     return true;
@@ -57,8 +58,9 @@ public class UtilityCommands implements CommandExecutor, TabCompleter {
                     player.sendMessage(FontUtils.parse(noPerm));
                     return true;
                 }
-                plugin.getConfig().set("afk-location", player.getLocation());
-                plugin.saveConfig();
+                FileConfiguration afkConfig = plugin.getModuleManager().getModuleConfig("afkzone");
+                afkConfig.set("location", player.getLocation());
+                plugin.getModuleManager().saveModuleConfig("afkzone");
                 player.sendMessage(FontUtils.parse("&#00ff44" + "ᴀꜰᴋ ᴢóɴᴀ ʙʏʟᴀ ɴᴀsᴛᴀᴠᴇɴᴀ."));
             }
             case "book" -> {

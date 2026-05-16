@@ -1,6 +1,7 @@
 package me.jules.magiocore;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +22,8 @@ public class CombatListener implements Listener {
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
-        Location spawn = plugin.getConfig().getLocation("spawn");
+        FileConfiguration spawnConfig = plugin.getModuleManager().getModuleConfig("spawn");
+        Location spawn = spawnConfig.getLocation("location");
         if (spawn != null) {
             event.setRespawnLocation(spawn);
         }

@@ -26,14 +26,14 @@ public class SpawnCommands implements CommandExecutor {
                 player.sendMessage(FontUtils.parse("§c" + "ɴᴇᴍáš ᴏᴘʀáᴠɴěɴí"));
                 return true;
             }
-            plugin.getConfig().set("spawn", player.getLocation());
-            plugin.saveConfig();
+            config.set("location", player.getLocation());
+            plugin.getModuleManager().saveModuleConfig("spawn");
             player.sendMessage(FontUtils.parse(config.getString("messages.set", "&#00ff44sᴘᴀᴡɴ ʙʏʟ ɴᴀsᴛᴀᴠᴇɴ")));
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("spawn")) {
-            Location spawn = plugin.getConfig().getLocation("spawn");
+            Location spawn = config.getLocation("location");
             if (spawn == null) {
                 player.sendMessage(FontUtils.parse(config.getString("messages.not-set", "§csᴘᴀᴡɴ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ")));
                 return true;
