@@ -183,7 +183,7 @@ public class TpaCommands implements CommandExecutor, TabCompleter {
         Player toTeleport = req.type.equals("to") ? requester : player;
         Player targetLocPlayer = req.type.equals("to") ? player : requester;
 
-        TeleportUtils.startTeleportCountdown(toTeleport, targetLocPlayer, plugin, success -> {});
+        TeleportUtils.startTeleportCountdown(toTeleport, targetLocPlayer, "ᴛᴘᴀ", plugin, success -> {});
     }
 
     private void handleTpaDeny(Player player) {

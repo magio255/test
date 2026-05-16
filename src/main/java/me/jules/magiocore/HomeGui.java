@@ -124,7 +124,7 @@ public class HomeGui implements Listener {
                 player.closeInventory();
                 String teleMsg = config.getString("messages.teleport", "&#00fbffᴅᴏᴍᴏᴠ §7#%number% &#888888» §7Teleportuji...").replace("%number%", String.valueOf(homeNum));
                 player.sendMessage(FontUtils.parse(teleMsg));
-                TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
+                TeleportUtils.startTeleportCountdown(player, home.getLocation(), "ᴅᴏᴍᴏᴠ", plugin, success -> {});
             } else {
                 String notSetMsg = config.getString("messages.not-set", "§cᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ");
                 player.sendMessage(FontUtils.parse(notSetMsg));

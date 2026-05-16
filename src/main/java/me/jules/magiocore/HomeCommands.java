@@ -75,7 +75,7 @@ public class HomeCommands implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                TeleportUtils.startTeleportCountdown(player, home.getLocation(), plugin, success -> {});
+                TeleportUtils.startTeleportCountdown(player, home.getLocation(), "ᴅᴏᴍᴏᴠ", plugin, success -> {});
                 return true;
             } else {
                 plugin.getHomeGui().open(player);

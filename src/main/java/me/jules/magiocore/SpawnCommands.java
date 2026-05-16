@@ -40,7 +40,7 @@ public class SpawnCommands implements CommandExecutor {
             }
 
             player.sendMessage(FontUtils.parse(config.getString("messages.teleporting", "&#00fbffsᴘᴀᴡɴ &#888888» §7Teleportuji...")));
-            TeleportUtils.startTeleportCountdown(player, spawn, plugin, success -> {});
+            TeleportUtils.startTeleportCountdown(player, spawn, "sᴘᴀᴡɴ", plugin, success -> {});
             return true;
         }
 

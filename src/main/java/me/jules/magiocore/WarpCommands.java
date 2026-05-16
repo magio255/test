@@ -78,7 +78,7 @@ public class WarpCommands implements CommandExecutor, TabCompleter {
             }
 
             player.sendMessage(FontUtils.parse(config.getString("messages.teleport", "&#00fbffᴡᴀʀᴘ &#888888» §7Teleportuji na warp &#00fbff%name%§7...").replace("%name%", warp.getName())));
-            TeleportUtils.startTeleportCountdown(player, warp.getLocation(), plugin, success -> {});
+            TeleportUtils.startTeleportCountdown(player, warp.getLocation(), "ᴡᴀʀᴘ", plugin, success -> {});
             return true;
         }
 

@@ -131,6 +131,7 @@ public class RtpCommand implements CommandExecutor, TabCompleter, Listener {
     }
 
     private void teleportRandomly(Player player, String worldName) {
+        // RTP usually happens instantly or with a specific prefix
         FileConfiguration config = plugin.getModuleManager().getModuleConfig("rtp");
         World world = Bukkit.getWorld(worldName);
         if (world == null) {

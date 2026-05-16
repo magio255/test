@@ -50,7 +50,7 @@ public class UtilityCommands implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 player.sendMessage(FontUtils.parse(config.getString("messages.afk-teleporting", "&#00fbffᴀꜰᴋ &#888888» §7Teleportuji do AFK zóny...")));
-                TeleportUtils.startTeleportCountdown(player, afkLoc, plugin, success -> {});
+                TeleportUtils.startTeleportCountdown(player, afkLoc, "ᴀꜰᴋ", plugin, success -> {});
             }
             case "setafk" -> {
                 if (!(sender instanceof Player player)) return true;
