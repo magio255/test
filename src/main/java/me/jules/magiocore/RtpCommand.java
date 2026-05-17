@@ -117,7 +117,8 @@ public class RtpCommand implements CommandExecutor, TabCompleter, Listener {
         for (String key : worlds.getKeys(false)) {
             if (worlds.getInt(key + ".slot") == slot) {
                 player.closeInventory();
-                teleportRandomly(player, key);
+                String worldName = worlds.getString(key + ".world-name", key);
+                teleportRandomly(player, worldName);
                 break;
             }
         }
