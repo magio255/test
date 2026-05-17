@@ -35,6 +35,7 @@ public class SettingsGui implements CommandExecutor, Listener {
         if (!(sender instanceof Player player)) return true;
 
         if (command.getName().equalsIgnoreCase("sb")) {
+            if (!plugin.getModuleManager().isEnabled("scoreboard")) return true;
             SettingsManager.PlayerSettings s = manager.getSettings(player.getUniqueId());
             boolean newState = !s.scoreboard();
             manager.updateSettings(player.getUniqueId(), s.withScoreboard(newState));
@@ -70,7 +71,9 @@ public class SettingsGui implements CommandExecutor, Listener {
             addItem(inv, items.getConfigurationSection("chat"), s.chat());
             addItem(inv, items.getConfigurationSection("msg"), s.msg());
             addItem(inv, items.getConfigurationSection("bossbar"), s.bossbar());
-            addItem(inv, items.getConfigurationSection("scoreboard"), s.scoreboard());
+            if (plugin.getModuleManager().isEnabled("scoreboard")) {
+                addItem(inv, items.getConfigurationSection("scoreboard"), s.scoreboard());
+            }
         }
 
         player.openInventory(inv);
@@ -108,7 +111,7 @@ public class SettingsGui implements CommandExecutor, Listener {
             manager.updateSettings(player.getUniqueId(), s.withMsg(!s.msg()));
         } else if (slot == items.getInt("bossbar.slot")) {
             manager.updateSettings(player.getUniqueId(), s.withBossbar(!s.bossbar()));
-        } else if (slot == items.getInt("scoreboard.slot")) {
+        } else if (plugin.getModuleManager().isEnabled("scoreboard") && slot == items.getInt("scoreboard.slot")) {
             manager.updateSettings(player.getUniqueId(), s.withScoreboard(!s.scoreboard()));
         } else {
             return;

@@ -57,7 +57,8 @@ public class SettingsManager {
     }
 
     public PlayerSettings getSettings(UUID uuid) {
-        return playerSettings.computeIfAbsent(uuid, k -> new PlayerSettings(true, true, true, true));
+        // Default scoreboard to false so we don't overwrite existing ones from other plugins
+        return playerSettings.computeIfAbsent(uuid, k -> new PlayerSettings(true, true, true, false));
     }
 
     public void updateSettings(UUID uuid, PlayerSettings settings) {
