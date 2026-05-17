@@ -124,4 +124,11 @@ public class ItemEditListener implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onInventoryDrag(org.bukkit.event.inventory.InventoryDragEvent event) {
+        if (event.getInventory().getHolder() instanceof ItemEditGui) {
+            event.setCancelled(true);
+        }
+    }
 }

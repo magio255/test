@@ -114,6 +114,13 @@ public class FlySpeedCommand implements CommandExecutor, Listener {
         }
     }
 
+    @EventHandler
+    public void onInventoryDrag(org.bukkit.event.inventory.InventoryDragEvent event) {
+        if (event.getInventory().getHolder() instanceof FlySpeedGuiHolder) {
+            event.setCancelled(true);
+        }
+    }
+
     private static class FlySpeedGuiHolder implements InventoryHolder {
         @Override
         public @NotNull Inventory getInventory() { return null; }
