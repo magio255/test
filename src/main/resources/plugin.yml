@@ -211,7 +211,7 @@ commands:
     description: Toggle ignoring all TPA requests.
   settings:
     description: Open settings menu.
-    aliases: [options, setup]
+    aliases: [options, setup, nastaveni, nastavení]
   sb:
     description: Toggle scoreboard visibility.
 permissions:

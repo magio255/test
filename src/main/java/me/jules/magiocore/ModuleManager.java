@@ -35,7 +35,7 @@ public class ModuleManager {
         String[] modules = {
             "home", "tpa", "spawn", "gamemode", "rtp", "flyspeed", "playtime", "coinflip",
             "invsee", "baltop", "dailyrewards", "playtimerewards", "itemedit", "utilities",
-            "virtualspawner", "vanish", "warp", "afkzone",
+            "virtualspawner", "vanish", "warp", "afkzone", "msg", "join", "chat", "settings",
             "autorestart", "staffchat", "report", "socials", "keyall", "freeze", "antigrief", "deathsystem"
         };
         for (String module : modules) {

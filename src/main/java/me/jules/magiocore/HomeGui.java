@@ -39,8 +39,10 @@ public class HomeGui implements Listener {
         // Border Design
         ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
         ItemMeta glassMeta = glass.getItemMeta();
-        glassMeta.displayName(Component.empty());
-        glass.setItemMeta(glassMeta);
+        if (glassMeta != null) {
+            glassMeta.displayName(Component.empty());
+            glass.setItemMeta(glassMeta);
+        }
 
         for (int i = 0; i < 45; i++) {
             if (i < 9 || i >= 36 || i % 9 == 0 || i % 9 == 8) {
@@ -53,48 +55,56 @@ public class HomeGui implements Listener {
             boolean isLocked = i > maxHomes;
 
             // Bed (Teleport) - Row 2 (slots 10-16)
-            Material bedMaterial = isLocked ? Material.BARRIER : ((home != null) ? Material.BLUE_BED : Material.GREEN_BED);
-            String nameColor = isLocked ? "§8" : ((home != null) ? "&#00fbff" : "&#00ff44");
+            Material bedMaterial = (home != null) ? Material.BLUE_BED : Material.GREEN_BED;
+            String nameColor = (home != null) ? "&#00fbff" : "&#00ff44";
 
             ItemStack bed = new ItemStack(bedMaterial);
             ItemMeta bedMeta = bed.getItemMeta();
-            // User requested '#' not to be highlighted. We'll use §7 for it.
-            bedMeta.displayName(FontUtils.parse(nameColor + "ᴅᴏᴍᴏᴠ §7#" + i + (isLocked ? " (ᴢᴀᴍčᴇɴᴏ)" : "")));
-            if (isLocked) {
-                String lockedMsg = config.getString("messages.locked", "§cʟɪᴍɪᴛ ᴊᴇ %limit%").replace("%limit%", String.valueOf(maxHomes));
-                bedMeta.lore(List.of(FontUtils.parse(lockedMsg)));
-            } else if (home != null) {
-                bedMeta.lore(List.of(FontUtils.parse("§7ᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛᴀᴄɪ")));
-            } else {
-                String notSetMsg = config.getString("messages.not-set", "§cᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ");
-                bedMeta.lore(List.of(FontUtils.parse(notSetMsg)));
+            if (bedMeta != null) {
+                bedMeta.displayName(FontUtils.parse(nameColor + "ᴅᴏᴍᴏᴠ §7#" + i + (isLocked ? " §8(ᴢᴀᴍčᴇɴᴏ)" : "")));
+                if (isLocked) {
+                    String lockedMsg = config.getString("messages.locked", "§cɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ɴᴀ ᴅᴀʟší ᴅᴏᴍᴏᴠʏ. §7(ʟɪᴍɪᴛ: %limit%)").replace("%limit%", String.valueOf(maxHomes));
+                    String buyMore = config.getString("messages.buy-more", "§7ᴘʀᴏ ᴠíᴄᴇ ᴅᴏᴍᴏᴠů sɪ ᴋᴜᴘ ʀᴀɴᴋ ɴᴀ &#F1C40F/sᴛᴏʀᴇ");
+                    bedMeta.lore(List.of(FontUtils.parse(lockedMsg), FontUtils.parse(buyMore)));
+                } else if (home != null) {
+                    bedMeta.lore(List.of(FontUtils.parse("§7ᴋʟɪᴋɴɪ ᴘʀᴏ ᴛᴇʟᴇᴘᴏʀᴛᴀᴄɪ")));
+                } else {
+                    String notSetMsg = config.getString("messages.not-set", "§cᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ");
+                    bedMeta.lore(List.of(FontUtils.parse(notSetMsg)));
+                }
+                bed.setItemMeta(bedMeta);
             }
-            bed.setItemMeta(bedMeta);
             inv.setItem(i + 9, bed);
 
             // Pearl (Set) - Row 3 (slots 19-25)
-            ItemStack pearl = new ItemStack(isLocked ? Material.BARRIER : Material.ENDER_PEARL);
+            ItemStack pearl = new ItemStack(Material.ENDER_PEARL);
             ItemMeta pearlMeta = pearl.getItemMeta();
-            pearlMeta.displayName(FontUtils.parse(isLocked ? "§8" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ §7#" + i : "&#EA427F" + "ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ §7#" + i));
-            if (isLocked) {
-                pearlMeta.lore(List.of(FontUtils.parse("§c" + "ʟɪᴍɪᴛ ᴊᴇ " + maxHomes)));
-            } else {
-                pearlMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ᴅᴏᴍᴏᴠᴀ")));
+            if (pearlMeta != null) {
+                pearlMeta.displayName(FontUtils.parse(isLocked ? "§8ɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ §7#" + i : "&#EA427Fɴᴀsᴛᴀᴠɪᴛ ᴅᴏᴍᴏᴠ §7#" + i));
+                if (isLocked) {
+                    String lockedMsg = config.getString("messages.locked", "§cɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ɴᴀ ᴅᴀʟší ᴅᴏᴍᴏᴠʏ. §7(ʟɪᴍɪᴛ: %limit%)").replace("%limit%", String.valueOf(maxHomes));
+                    String buyMore = config.getString("messages.buy-more", "§7ᴘʀᴏ ᴠíᴄᴇ ᴅᴏᴍᴏᴠů sɪ ᴋᴜᴘ ʀᴀɴᴋ ɴᴀ &#F1C40F/sᴛᴏʀᴇ");
+                    pearlMeta.lore(List.of(FontUtils.parse(lockedMsg), FontUtils.parse(buyMore)));
+                } else {
+                    pearlMeta.lore(List.of(FontUtils.parse("§7ᴋʟɪᴋɴɪ ᴘʀᴏ ɴᴀsᴛᴀᴠᴇɴí ᴅᴏᴍᴏᴠᴀ")));
+                }
+                pearl.setItemMeta(pearlMeta);
             }
-            pearl.setItemMeta(pearlMeta);
             inv.setItem(i + 18, pearl);
 
             // Barrier (Delete) - Row 4 (slots 28-34)
             if (!isLocked) {
                 ItemStack barrier = new ItemStack(Material.BARRIER);
                 ItemMeta barrierMeta = barrier.getItemMeta();
-                barrierMeta.displayName(FontUtils.parse("§c" + "sᴍᴀᴢᴀᴛ ᴅᴏᴍᴏᴠ §7#" + i));
-                if (home != null) {
-                    barrierMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ sᴍᴀᴢáɴí ᴅᴏᴍᴏᴠᴀ")));
-                } else {
-                    barrierMeta.lore(List.of(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ")));
+                if (barrierMeta != null) {
+                    barrierMeta.displayName(FontUtils.parse("§c" + "sᴍᴀᴢᴀᴛ ᴅᴏᴍᴏᴠ §7#" + i));
+                    if (home != null) {
+                        barrierMeta.lore(List.of(FontUtils.parse("§7" + "ᴋʟɪᴋɴɪ ᴘʀᴏ sᴍᴀᴢáɴí ᴅᴏᴍᴏᴠᴀ")));
+                    } else {
+                        barrierMeta.lore(List.of(FontUtils.parse("§c" + "ᴅᴏᴍᴏᴠ ɴᴇɴí ɴᴀsᴛᴀᴠᴇɴ")));
+                    }
+                    barrier.setItemMeta(barrierMeta);
                 }
-                barrier.setItemMeta(barrierMeta);
                 inv.setItem(i + 27, barrier);
             }
         }
@@ -115,8 +125,10 @@ public class HomeGui implements Listener {
         if (slot >= 10 && slot <= 16) {
             int homeNum = slot - 9;
             if (homeNum > maxHomes) {
-                String lockedMsg = config.getString("messages.locked", "§cᴛᴇɴᴛᴏ sʟᴏᴛ ᴊᴇ ᴢᴀᴍčᴇɴý §7(ʟɪᴍɪᴛ: %limit%)").replace("%limit%", String.valueOf(maxHomes));
+                String lockedMsg = config.getString("messages.locked", "§cɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ɴᴀ ᴅᴀʟší ᴅᴏᴍᴏᴠʏ. §7(ʟɪᴍɪᴛ: %limit%)").replace("%limit%", String.valueOf(maxHomes));
+                String buyMore = config.getString("messages.buy-more", "§7ᴘʀᴏ ᴠíᴄᴇ ᴅᴏᴍᴏᴠů sɪ ᴋᴜᴘ ʀᴀɴᴋ ɴᴀ &#F1C40F/sᴛᴏʀᴇ");
                 player.sendMessage(FontUtils.parse(lockedMsg));
+                player.sendMessage(FontUtils.parse(buyMore));
                 return;
             }
             Home home = homeManager.getHome(player.getUniqueId(), homeNum);
@@ -132,8 +144,10 @@ public class HomeGui implements Listener {
         } else if (slot >= 19 && slot <= 25) {
             int homeNum = slot - 18;
             if (homeNum > maxHomes) {
-                String lockedMsg = config.getString("messages.locked", "§cᴛᴇɴᴛᴏ sʟᴏᴛ ᴊᴇ ᴢᴀᴍčᴇɴý §7(ʟɪᴍɪᴛ: %limit%)").replace("%limit%", String.valueOf(maxHomes));
+                String lockedMsg = config.getString("messages.locked", "§cɴᴇᴍáš ᴏᴘʀáᴠɴěɴí ɴᴀ ᴅᴀʟší ᴅᴏᴍᴏᴠʏ. §7(ʟɪᴍɪᴛ: %limit%)").replace("%limit%", String.valueOf(maxHomes));
+                String buyMore = config.getString("messages.buy-more", "§7ᴘʀᴏ ᴠíᴄᴇ ᴅᴏᴍᴏᴠů sɪ ᴋᴜᴘ ʀᴀɴᴋ ɴᴀ &#F1C40F/sᴛᴏʀᴇ");
                 player.sendMessage(FontUtils.parse(lockedMsg));
+                player.sendMessage(FontUtils.parse(buyMore));
                 return;
             }
             homeManager.setHome(player.getUniqueId(), homeNum, player.getLocation());
