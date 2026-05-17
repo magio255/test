@@ -34,6 +34,27 @@ public class JoinListener implements Listener {
                 sendHeadMessage(player, config.getStringList("join-message.first-join.side-messages"));
             }
 
+            // Starter Kit logic
+            if (config.getBoolean("starter-kit.enabled", true)) {
+                for (String entry : config.getStringList("starter-kit.items")) {
+                    try {
+                        String[] parts = entry.split(":");
+                        org.bukkit.Material mat = org.bukkit.Material.valueOf(parts[0]);
+                        int amount = Integer.parseInt(parts[1]);
+
+                        org.bukkit.inventory.ItemStack item = new org.bukkit.inventory.ItemStack(mat, amount);
+
+                        // Check if it's armor and equip it automatically if slots are empty
+                        if (mat.name().endsWith("_HELMET") && player.getInventory().getHelmet() == null) player.getInventory().setHelmet(item);
+                        else if (mat.name().endsWith("_CHESTPLATE") && player.getInventory().getChestplate() == null) player.getInventory().setChestplate(item);
+                        else if (mat.name().endsWith("_LEGGINGS") && player.getInventory().getLeggings() == null) player.getInventory().setLeggings(item);
+                        else if (mat.name().endsWith("_BOOTS") && player.getInventory().getBoots() == null) player.getInventory().setBoots(item);
+                        else player.getInventory().addItem(item);
+
+                    } catch (Exception ignored) {}
+                }
+            }
+
             // Teleport to spawn on first join
             FileConfiguration spawnConfig = plugin.getModuleManager().getModuleConfig("spawn");
             org.bukkit.Location spawn = spawnConfig.getLocation("location");

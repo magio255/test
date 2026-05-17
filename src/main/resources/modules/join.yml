@@ -22,3 +22,15 @@ join-message:
       - "§7užiješ spoustu"
       - "§7zábavy!"
       - "§7Šťastné hraní!"
+
+starter-kit:
+  enabled: true
+  items:
+    - "CHAINMAIL_HELMET:1"
+    - "CHAINMAIL_CHESTPLATE:1"
+    - "CHAINMAIL_LEGGINGS:1"
+    - "CHAINMAIL_BOOTS:1"
+    - "STONE_SWORD:1"
+    - "STONE_PICKAXE:1"
+    - "STONE_AXE:1"
+    - "STONE_SHOVEL:1"
